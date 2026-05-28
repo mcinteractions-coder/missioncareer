@@ -9,6 +9,7 @@ import { Success } from "@/components/sections/Success";
 import { Blog } from "@/components/sections/Blog";
 import { Contact } from "@/components/sections/Contact";
 import { Footer } from "@/components/sections/Footer";
+import { FestivalPopup } from "@/components/FestivalPopup";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -25,6 +26,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <main>
+      <FestivalPopup />
       <Navbar />
       <Hero />
       <About />

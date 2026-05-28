@@ -1,4 +1,5 @@
-import { Facebook, Instagram, Linkedin, Twitter, ArrowUp } from "lucide-react";
+import { Facebook, Instagram, Linkedin, Twitter, ArrowUp, Lock } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import logo from "@/assets/mission-logo.png";
 
 export function Footer() {
@@ -52,12 +53,20 @@ export function Footer() {
 
         <div className="mt-12 pt-6 border-t border-background/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-background/60">© 2026 Mission Career. All rights reserved.</p>
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="inline-flex items-center gap-2 rounded-full bg-background/10 hover:bg-primary px-4 py-2 text-sm font-semibold transition-colors"
-          >
-            <span>Back to Top</span> <ArrowUp className="h-4 w-4" />
-          </button>
+          <div className="flex items-center gap-3">
+            <Link
+              to="/admin"
+              className="inline-flex items-center gap-2 rounded-full bg-background/10 hover:bg-primary px-4 py-2 text-sm font-semibold transition-colors"
+            >
+              <Lock className="h-4 w-4" /> Admin
+            </Link>
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="inline-flex items-center gap-2 rounded-full bg-background/10 hover:bg-primary px-4 py-2 text-sm font-semibold transition-colors"
+            >
+              <span>Back to Top</span> <ArrowUp className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       </div>
     </footer>

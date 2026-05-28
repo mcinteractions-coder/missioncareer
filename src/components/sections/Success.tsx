@@ -44,18 +44,22 @@ export function Success() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {STORIES.map((s) => (
-            <div key={s.name} className="relative bg-card rounded-2xl p-6 shadow-card hover:shadow-soft transition-all hover:-translate-y-1">
+          {all.map((s) => (
+            <div key={s.key} className="relative bg-card rounded-2xl p-6 shadow-card hover:shadow-soft transition-all hover:-translate-y-1">
               <Quote className="absolute top-4 right-4 h-8 w-8 text-primary/20" />
               <div className="flex items-center gap-3 mb-4">
-                <div className="h-12 w-12 rounded-full bg-gradient-primary text-primary-foreground text-lg font-bold flex items-center justify-center">{s.i}</div>
+                {s.image ? (
+                  <img src={s.image} alt={s.name} className="h-12 w-12 rounded-full object-cover" />
+                ) : (
+                  <div className="h-12 w-12 rounded-full bg-gradient-primary text-primary-foreground text-lg font-bold flex items-center justify-center">{s.i}</div>
+                )}
                 <div>
                   <h3 className="font-bold text-foreground">{s.name}</h3>
-                  <p className="text-xs text-primary">{s.uni}</p>
+                  {s.uni && <p className="text-xs text-primary">{s.uni}</p>}
                 </div>
               </div>
               <div className="inline-block rounded-full bg-primary-soft px-3 py-1 text-xs font-semibold text-primary mb-3">{s.course}</div>
-              <p className="text-sm text-muted-foreground italic">"{s.quote}"</p>
+              <p className="text-sm text-muted-foreground italic whitespace-pre-wrap">"{s.quote}"</p>
               <div className="mt-3 text-amber-500">★★★★★</div>
             </div>
           ))}
