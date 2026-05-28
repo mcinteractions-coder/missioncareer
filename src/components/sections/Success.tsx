@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { Quote, ArrowRight } from "lucide-react";
+import { getPosts, type Post } from "@/lib/content-store";
 
 const STORIES = [
   { i: "M", name: "Martin Ronak Angello", uni: "TU Berlin, Germany", course: "Masters in Computer Science", quote: "Mission Career made my dream of studying in Germany a reality. Their guidance was exceptional!" },
