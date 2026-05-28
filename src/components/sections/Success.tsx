@@ -12,6 +12,26 @@ const STORIES = [
 ];
 
 export function Success() {
+  const [admin, setAdmin] = useState<Post[]>([]);
+  useEffect(() => {
+    const load = () => setAdmin(getPosts("success"));
+    load();
+    window.addEventListener("mc-content-updated", load);
+    return () => window.removeEventListener("mc-content-updated", load);
+  }, []);
+
+  const adminCards = admin.map((p) => ({
+    key: p.id,
+    i: p.title.charAt(0).toUpperCase(),
+    name: p.title,
+    uni: "",
+    course: "Student",
+    quote: p.text,
+    image: p.image,
+  }));
+  const defaults = STORIES.map((s) => ({ ...s, key: s.name, image: undefined as string | undefined }));
+  const all = [...adminCards, ...defaults];
+
   return (
     <section id="success" className="py-20 md:py-28 bg-background">
       <div className="container mx-auto px-4 md:px-8">
