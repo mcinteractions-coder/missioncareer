@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { Quote, ArrowRight } from "lucide-react";
+import { getPosts, type Post } from "@/lib/content-store";
 
 const STORIES = [
   { i: "M", name: "Martin Ronak Angello", uni: "TU Berlin, Germany", course: "Masters in Computer Science", quote: "Mission Career made my dream of studying in Germany a reality. Their guidance was exceptional!" },
@@ -10,6 +12,26 @@ const STORIES = [
 ];
 
 export function Success() {
+  const [admin, setAdmin] = useState<Post[]>([]);
+  useEffect(() => {
+    const load = () => setAdmin(getPosts("success"));
+    load();
+    window.addEventListener("mc-content-updated", load);
+    return () => window.removeEventListener("mc-content-updated", load);
+  }, []);
+
+  const adminCards = admin.map((p) => ({
+    key: p.id,
+    i: p.title.charAt(0).toUpperCase(),
+    name: p.title,
+    uni: "",
+    course: "Student",
+    quote: p.text,
+    image: p.image,
+  }));
+  const defaults = STORIES.map((s) => ({ ...s, key: s.name, image: undefined as string | undefined }));
+  const all = [...adminCards, ...defaults];
+
   return (
     <section id="success" className="py-20 md:py-28 bg-background">
       <div className="container mx-auto px-4 md:px-8">
@@ -22,18 +44,22 @@ export function Success() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {STORIES.map((s) => (
-            <div key={s.name} className="relative bg-card rounded-2xl p-6 shadow-card hover:shadow-soft transition-all hover:-translate-y-1">
+          {all.map((s) => (
+            <div key={s.key} className="relative bg-card rounded-2xl p-6 shadow-card hover:shadow-soft transition-all hover:-translate-y-1">
               <Quote className="absolute top-4 right-4 h-8 w-8 text-primary/20" />
               <div className="flex items-center gap-3 mb-4">
-                <div className="h-12 w-12 rounded-full bg-gradient-primary text-primary-foreground text-lg font-bold flex items-center justify-center">{s.i}</div>
+                {s.image ? (
+                  <img src={s.image} alt={s.name} className="h-12 w-12 rounded-full object-cover" />
+                ) : (
+                  <div className="h-12 w-12 rounded-full bg-gradient-primary text-primary-foreground text-lg font-bold flex items-center justify-center">{s.i}</div>
+                )}
                 <div>
                   <h3 className="font-bold text-foreground">{s.name}</h3>
-                  <p className="text-xs text-primary">{s.uni}</p>
+                  {s.uni && <p className="text-xs text-primary">{s.uni}</p>}
                 </div>
               </div>
               <div className="inline-block rounded-full bg-primary-soft px-3 py-1 text-xs font-semibold text-primary mb-3">{s.course}</div>
-              <p className="text-sm text-muted-foreground italic">"{s.quote}"</p>
+              <p className="text-sm text-muted-foreground italic whitespace-pre-wrap">"{s.quote}"</p>
               <div className="mt-3 text-amber-500">★★★★★</div>
             </div>
           ))}
