@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Newspaper } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { getPosts, type Post } from "@/lib/content-store";
 
 export function Blog() {
@@ -31,14 +32,20 @@ export function Blog() {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {posts.map((p) => (
-              <article key={p.id} className="bg-card rounded-2xl shadow-card overflow-hidden hover:shadow-soft transition hover:-translate-y-1">
+              <Link
+                key={p.id}
+                to="/blog/$id"
+                params={{ id: p.id }}
+                className="block bg-card rounded-2xl shadow-card overflow-hidden hover:shadow-soft transition hover:-translate-y-1"
+              >
                 {p.image && <img src={p.image} alt={p.title} className="w-full h-48 object-cover" />}
                 <div className="p-6">
                   <p className="text-xs text-primary font-semibold mb-2">{new Date(p.createdAt).toLocaleDateString()}</p>
                   <h3 className="font-bold text-lg text-foreground line-clamp-2">{p.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground line-clamp-4 whitespace-pre-wrap">{p.text}</p>
+                  <p className="mt-3 text-sm font-semibold text-primary">Read more →</p>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
         )}
