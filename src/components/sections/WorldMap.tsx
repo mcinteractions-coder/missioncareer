@@ -343,10 +343,10 @@ export function WorldMap() {
                   <div className="text-[10px] uppercase tracking-[0.2em] font-bold flex items-center gap-1" style={{ color: active.accent }}>
                     <Plane className="h-3 w-3" /> Destination
                   </div>
-                  <h3 className="text-2xl md:text-3xl font-extrabold text-white">{active.name}</h3>
+                  <h3 className="text-2xl md:text-3xl font-extrabold text-foreground">{active.name}</h3>
                 </div>
               </div>
-              <p className="text-sm text-white/60 italic mb-5">"{active.tagline}"</p>
+              <p className="text-sm text-muted-foreground italic mb-5">"{active.tagline}"</p>
 
               <div className="space-y-2.5">
                 <InfoRow icon={<GraduationCap className="h-4 w-4" />} label="Universities" value={active.unis} accent={active.accent} />
