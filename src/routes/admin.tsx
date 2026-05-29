@@ -68,9 +68,10 @@ function AdminPage() {
   return <AdminPanel />;
 }
 
-type TabKey = PostKind | "leads";
+type TabKey = PostKind | "leads" | "bookings";
 
 const TABS: { key: TabKey; label: string; icon: typeof Newspaper }[] = [
+  { key: "bookings", label: "Counseling Bookings", icon: CalendarDays },
   { key: "blog", label: "Blog Posts", icon: Newspaper },
   { key: "success", label: "Success Stories", icon: Star },
   { key: "review", label: "Reviews", icon: Star },
