@@ -9,6 +9,7 @@ import { Success } from "@/components/sections/Success";
 import { Blog } from "@/components/sections/Blog";
 import { Contact } from "@/components/sections/Contact";
 import { Reviews } from "@/components/sections/Reviews";
+import { Booking } from "@/components/sections/Booking";
 import { Footer } from "@/components/sections/Footer";
 import { FestivalPopup } from "@/components/FestivalPopup";
 import { ScrollReveal } from "@/components/ScrollReveal";
@@ -39,6 +40,7 @@ function Index() {
       <div data-reveal><Process /></div>
       <div data-reveal><Success /></div>
       <div data-reveal><Blog /></div>
+      <div data-reveal><Booking /></div>
       <div data-reveal><Contact /></div>
       <Footer />
     </main>
