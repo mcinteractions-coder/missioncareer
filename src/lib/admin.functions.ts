@@ -14,7 +14,7 @@ export const adminAddPost = createServerFn({ method: "POST" })
   .inputValidator(
     z.object({
       pin: z.string(),
-      kind: z.enum(["blog", "success", "festival"]),
+      kind: z.enum(["blog", "success", "festival", "review", "admit"]),
       title: z.string().min(1).max(200),
       text: z.string().max(5000).optional().default(""),
       image: z.string().max(3_500_000).optional(),
@@ -26,6 +26,7 @@ export const adminAddPost = createServerFn({ method: "POST" })
       prev_course: z.string().max(200).optional(),
       prev_college: z.string().max(200).optional(),
       gender: z.enum(["male", "female"]).optional(),
+      rating: z.number().int().min(1).max(5).optional(),
     }),
   )
   .handler(async ({ data }) => {
@@ -45,12 +46,14 @@ export const adminAddPost = createServerFn({ method: "POST" })
         prev_course: data.prev_course ?? null,
         prev_college: data.prev_college ?? null,
         gender: data.gender ?? null,
+        rating: data.rating ?? null,
       })
       .select()
       .single();
     if (error) throw new Error(error.message);
     return row;
   });
+
 
 export const adminDeletePost = createServerFn({ method: "POST" })
   .inputValidator(z.object({ pin: z.string(), id: z.string().uuid() }))
@@ -78,7 +81,9 @@ export const adminUpdatePost = createServerFn({ method: "POST" })
       prev_college: z.string().max(200).nullable().optional(),
       gender: z.enum(["male", "female"]).nullable().optional(),
       sort_order: z.number().int().optional(),
+      rating: z.number().int().min(1).max(5).nullable().optional(),
     }),
+
   )
   .handler(async ({ data }) => {
     checkPin(data.pin);

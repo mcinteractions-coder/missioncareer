@@ -1,7 +1,8 @@
-import { Search, MapPin, GraduationCap, DollarSign, Award, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { Search, MapPin, GraduationCap, DollarSign, Award, X, Quote } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { searchUniversities, type FinderFilters, BUDGET_BANDS } from "@/lib/universities";
 import { Counter } from "@/components/Counter";
+import { fetchPosts, type Post } from "@/lib/content-store";
 
 type FieldKey = keyof FinderFilters;
 const FIELDS: { key: FieldKey; label: string; options: string[] }[] = [
@@ -15,27 +16,27 @@ const FIELDS: { key: FieldKey; label: string; options: string[] }[] = [
   { key: "budget", label: "Budget", options: ["Low","Medium","High","Very High"] },
 ];
 
-const ADMITS = [
-  { i: "M", name: "Martin Ronak Angello", uni: "TU Berlin" },
-  { i: "J", name: "Jayesh Sharma", uni: "TU Dresden" },
-  { i: "R", name: "Riya Patil", uni: "TU Braunschweig" },
-  { i: "H", name: "Hrushikesh Shetty", uni: "Indiana University" },
-];
-
 const DESTS = ["USA","UK","Australia","Canada","Germany","Ireland","New Zealand","Italy","France"];
 
-const REVIEWS = [
-  { t: "Mission Career guided me step by step for Germany admission. Very professional and supportive staff.", n: "Rishikesh" },
-  { t: "Best consultancy in Kandivali. Very honest guidance.", n: "Karan" },
-  { t: "Got my visa smoothly without stress.", n: "Akshada" },
-  { t: "Staff is friendly and explains everything clearly.", n: "Pooja" },
-  { t: "Highly recommended for study abroad.", n: "Akshay" },
-  { t: "Helped me choose correct university.", n: "Sneha" },
+const GRADIENTS = [
+  "from-rose-500 to-orange-500",
+  "from-sky-500 to-indigo-500",
+  "from-emerald-500 to-teal-500",
+  "from-fuchsia-500 to-purple-500",
+  "from-amber-500 to-red-500",
+  "from-cyan-500 to-blue-500",
 ];
 
 export function About() {
   const [filters, setFilters] = useState<FinderFilters>({});
   const [submitted, setSubmitted] = useState(false);
+  const [admits, setAdmits] = useState<Post[]>([]);
+  const [reviews, setReviews] = useState<Post[]>([]);
+
+  useEffect(() => {
+    fetchPosts("admit").then(setAdmits);
+    fetchPosts("review").then(setReviews);
+  }, []);
 
   const results = useMemo(() => (submitted ? searchUniversities(filters) : []), [filters, submitted]);
 
@@ -50,6 +51,7 @@ export function About() {
   };
 
   const activeCount = Object.values(filters).filter(Boolean).length;
+
 
   return (
     <section id="about" className="py-12 md:py-24 bg-background relative overflow-hidden">
@@ -161,18 +163,25 @@ export function About() {
           <div className="space-y-4 md:space-y-6 min-w-0">
             <div className="bg-card rounded-2xl md:rounded-3xl shadow-card p-5 md:p-6">
               <h3 className="font-bold text-foreground flex items-center gap-2 mb-4">
-                <span className="h-2 w-2 rounded-full bg-primary" /> Recent Admits
+                <span className="h-2 w-2 rounded-full bg-primary animate-pulse" /> Recent Admits
               </h3>
               <div className="space-y-3">
-                {ADMITS.map((a) => (
-                  <div key={a.name} className="flex items-center gap-3 rounded-xl bg-secondary p-3">
-                    <div className="h-10 w-10 rounded-full bg-gradient-primary text-primary-foreground font-bold flex items-center justify-center">{a.i}</div>
-                    <div>
-                      <div className="font-semibold text-foreground text-sm">{a.name}</div>
-                      <div className="text-xs text-muted-foreground">{a.uni}</div>
+                {admits.map((a, i) => (
+                  <div key={a.id} className="group flex items-center gap-3 rounded-2xl bg-gradient-to-r from-secondary to-secondary/40 p-3 hover:shadow-soft hover:-translate-y-0.5 transition-all">
+                    {a.image ? (
+                      <img src={a.image} alt={a.title} className="h-11 w-11 rounded-full object-cover ring-2 ring-primary/30" />
+                    ) : (
+                      <div className={`h-11 w-11 rounded-full bg-gradient-to-br ${GRADIENTS[i % GRADIENTS.length]} text-white font-bold flex items-center justify-center ring-2 ring-white shadow-soft`}>
+                        {a.title.charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <div className="min-w-0">
+                      <div className="font-semibold text-foreground text-sm truncate">{a.title}</div>
+                      {a.university && <div className="text-xs text-muted-foreground truncate">🎓 {a.university}</div>}
                     </div>
                   </div>
                 ))}
+                {admits.length === 0 && <p className="text-xs text-muted-foreground">No recent admits yet.</p>}
               </div>
             </div>
 
@@ -187,19 +196,43 @@ export function About() {
               </div>
             </div>
 
-            <div className="bg-card rounded-2xl md:rounded-3xl shadow-card p-5 md:p-6">
-              <h3 className="font-bold text-foreground mb-4">Student Reviews</h3>
-              <div className="grid sm:grid-cols-2 gap-3 max-h-80 overflow-y-auto pr-2">
-                {REVIEWS.map((r) => (
-                  <div key={r.n} className="rounded-xl bg-secondary p-3">
-                    <div className="text-amber-500 text-sm">★★★★★</div>
-                    <p className="mt-1 text-sm text-foreground">{r.t}</p>
-                    <p className="mt-1 text-xs text-muted-foreground">– {r.n}</p>
+            <div className="relative bg-gradient-to-br from-primary/5 via-card to-accent/10 rounded-2xl md:rounded-3xl shadow-card p-5 md:p-6 overflow-hidden">
+              <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-primary/10 blur-2xl pointer-events-none" />
+              <div className="flex items-center justify-between mb-4 relative">
+                <h3 className="font-bold text-foreground flex items-center gap-2">
+                  <Quote className="h-4 w-4 text-primary" /> Student Reviews
+                </h3>
+                <div className="flex items-center gap-1 text-xs font-semibold bg-amber-500/10 text-amber-600 rounded-full px-2.5 py-1">
+                  <span className="text-amber-500">★</span> 4.9 · {reviews.length}
+                </div>
+              </div>
+              <div className="grid sm:grid-cols-2 gap-3 max-h-96 overflow-y-auto pr-2 relative">
+                {reviews.map((r, i) => (
+                  <div key={r.id} className="group relative rounded-2xl bg-card border border-border/60 p-4 hover:shadow-glow hover:border-primary/40 transition-all">
+                    <Quote className="absolute top-2 right-2 h-4 w-4 text-primary/20 group-hover:text-primary/40 transition" />
+                    <div className="flex items-center gap-2.5">
+                      {r.image ? (
+                        <img src={r.image} alt={r.title} className="h-9 w-9 rounded-full object-cover ring-2 ring-primary/20" />
+                      ) : (
+                        <div className={`h-9 w-9 rounded-full bg-gradient-to-br ${GRADIENTS[i % GRADIENTS.length]} text-white text-sm font-bold flex items-center justify-center`}>
+                          {r.title.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      <div className="min-w-0">
+                        <p className="font-semibold text-foreground text-sm truncate">{r.title}</p>
+                        <div className="text-amber-500 text-xs leading-none">
+                          {"★".repeat(r.rating ?? 5)}<span className="text-muted-foreground/40">{"★".repeat(5 - (r.rating ?? 5))}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <p className="mt-2.5 text-sm text-foreground/80 leading-relaxed">{r.text}</p>
                   </div>
                 ))}
+                {reviews.length === 0 && <p className="text-xs text-muted-foreground col-span-2">No reviews yet.</p>}
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
