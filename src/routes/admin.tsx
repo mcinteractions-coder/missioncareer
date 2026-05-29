@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowLeft, Trash2, Upload, Star, Newspaper, Sparkles, Lock, Inbox } from "lucide-react";
+import { ArrowLeft, Trash2, Upload, Star, Newspaper, Sparkles, Lock, Inbox, ArrowUp, ArrowDown, Pencil, X } from "lucide-react";
 import { fetchPosts, fileToDataURL, type Post, type PostKind } from "@/lib/content-store";
 import {
   adminAddPost,
@@ -9,6 +9,7 @@ import {
   adminUpdatePost,
   adminListLeads,
   adminDeleteLead,
+  adminSwapOrder,
 } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/admin")({
