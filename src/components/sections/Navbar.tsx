@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import logo from "@/assets/mission-logo.png";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const links = [
   { label: "Home", href: "#home" },
