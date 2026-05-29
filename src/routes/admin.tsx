@@ -433,14 +433,17 @@ function PostForm({ kind, pin, onCreated }: { kind: PostKind; pin: string; onCre
   const [prevCourse, setPrevCourse] = useState("");
   const [prevCollege, setPrevCollege] = useState("");
   const [gender, setGender] = useState<"male" | "female">("male");
+  const [rating, setRating] = useState<number>(5);
   const addFn = useServerFn(adminAddPost);
 
   const isSuccess = kind === "success";
+  const isReview = kind === "review";
+  const isAdmit = kind === "admit";
 
   const reset = () => {
     setTitle(""); setText(""); setImage(undefined); setActive(true);
     setUniversity(""); setCourse(""); setDestination(""); setFlagCode("");
-    setPrevCourse(""); setPrevCollege(""); setGender("male");
+    setPrevCourse(""); setPrevCollege(""); setGender("male"); setRating(5);
   };
 
   const onFile = async (f?: File) => {
@@ -452,7 +455,8 @@ function PostForm({ kind, pin, onCreated }: { kind: PostKind; pin: string; onCre
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) return;
-    if (!isSuccess && !text.trim()) return;
+    if (isReview && !text.trim()) return;
+    if (!isSuccess && !isReview && !isAdmit && !text.trim()) return;
     setBusy(true);
     try {
       await addFn({
@@ -463,13 +467,14 @@ function PostForm({ kind, pin, onCreated }: { kind: PostKind; pin: string; onCre
           text: text.trim() || (isSuccess ? `${title.trim()} — placed at ${university || destination}` : ""),
           image,
           active: kind === "festival" ? active : undefined,
-          university: isSuccess ? university.trim() || undefined : undefined,
+          university: (isSuccess || isAdmit) ? university.trim() || undefined : undefined,
           course: isSuccess ? course.trim() || undefined : undefined,
           destination: isSuccess ? destination.trim() || undefined : undefined,
           flag_code: isSuccess ? (flagCode.trim().toLowerCase() || undefined) : undefined,
           prev_course: isSuccess ? prevCourse.trim() || undefined : undefined,
           prev_college: isSuccess ? prevCollege.trim() || undefined : undefined,
           gender: isSuccess ? gender : undefined,
+          rating: isReview ? rating : undefined,
         },
       });
       reset();
@@ -485,9 +490,9 @@ function PostForm({ kind, pin, onCreated }: { kind: PostKind; pin: string; onCre
     <form onSubmit={submit} className="bg-card rounded-2xl shadow-card p-6 space-y-4 h-fit lg:sticky lg:top-32">
       <h2 className="font-bold text-lg">Add new {kind}</h2>
       <div>
-        <label className="text-sm font-semibold">{isSuccess ? "Student Name" : "Title"}</label>
+        <label className="text-sm font-semibold">{(isSuccess || isReview || isAdmit) ? "Name" : "Title"}</label>
         <input value={title} onChange={(e) => setTitle(e.target.value)} required maxLength={200}
-          placeholder={isSuccess ? "e.g. Martin Dsouza" : ""}
+          placeholder={isSuccess ? "e.g. Martin Dsouza" : isReview ? "e.g. Rishikesh" : isAdmit ? "e.g. Riya Patil" : ""}
           className="mt-1 w-full rounded-xl border border-input bg-background px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary" />
       </div>
 
@@ -543,6 +548,32 @@ function PostForm({ kind, pin, onCreated }: { kind: PostKind; pin: string; onCre
             </div>
           </div>
         </>
+      ) : isReview ? (
+        <>
+          <div>
+            <label className="text-sm font-semibold">Stars</label>
+            <div className="mt-1 flex gap-1">
+              {[1,2,3,4,5].map((n) => (
+                <button type="button" key={n} onClick={() => setRating(n)} className="text-3xl leading-none">
+                  <span className={n <= rating ? "text-amber-500" : "text-muted-foreground/40"}>★</span>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <label className="text-sm font-semibold">Review Text</label>
+            <textarea value={text} onChange={(e) => setText(e.target.value)} required maxLength={5000} rows={4}
+              placeholder="Mission Career guided me step by step..."
+              className="mt-1 w-full rounded-xl border border-input bg-background px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary" />
+          </div>
+        </>
+      ) : isAdmit ? (
+        <div>
+          <label className="text-sm font-semibold">University / College</label>
+          <input value={university} onChange={(e) => setUniversity(e.target.value)} maxLength={200}
+            placeholder="TU Berlin"
+            className="mt-1 w-full rounded-xl border border-input bg-background px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary" />
+        </div>
       ) : (
         <div>
           <label className="text-sm font-semibold">Text</label>
@@ -550,6 +581,7 @@ function PostForm({ kind, pin, onCreated }: { kind: PostKind; pin: string; onCre
             className="mt-1 w-full rounded-xl border border-input bg-background px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary" />
         </div>
       )}
+
 
       <div>
         <label className="text-sm font-semibold">{isSuccess ? "Student Photo (optional)" : "Image"}</label>
