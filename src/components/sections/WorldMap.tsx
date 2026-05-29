@@ -243,12 +243,12 @@ export function WorldMap() {
 
               {/* India origin marker */}
               <Marker coordinates={INDIA}>
-                <circle r={3} fill="#fbbf24" stroke="#fff" strokeWidth={1.2} />
-                <circle r={3} fill="none" stroke="#fbbf24" strokeWidth={1}>
+                <circle r={3} fill="#f59e0b" stroke={isDark ? "#fff" : "#1e293b"} strokeWidth={1.2} />
+                <circle r={3} fill="none" stroke="#f59e0b" strokeWidth={1}>
                   <animate attributeName="r" values="3;9;3" dur="1.8s" repeatCount="indefinite" />
                   <animate attributeName="opacity" values="0.9;0;0.9" dur="1.8s" repeatCount="indefinite" />
                 </circle>
-                <text textAnchor="middle" y={-8} fontSize={8} fill="#fbbf24" fontWeight="700" style={{ paintOrder: "stroke", stroke: "#070b1f", strokeWidth: 2 }}>
+                <text textAnchor="middle" y={-8} fontSize={8} fill="#f59e0b" fontWeight="700" style={{ paintOrder: "stroke", stroke: t.bg, strokeWidth: 2 }}>
                   India
                 </text>
               </Marker>
