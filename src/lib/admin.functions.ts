@@ -67,14 +67,46 @@ export const adminUpdatePost = createServerFn({ method: "POST" })
       pin: z.string(),
       id: z.string().uuid(),
       active: z.boolean().optional(),
+      title: z.string().min(1).max(200).optional(),
+      text: z.string().max(5000).optional(),
+      image: z.string().max(3_500_000).nullable().optional(),
+      university: z.string().max(200).nullable().optional(),
+      course: z.string().max(200).nullable().optional(),
+      destination: z.string().max(100).nullable().optional(),
+      flag_code: z.string().max(8).nullable().optional(),
+      prev_course: z.string().max(200).nullable().optional(),
+      prev_college: z.string().max(200).nullable().optional(),
+      gender: z.enum(["male", "female"]).nullable().optional(),
+      sort_order: z.number().int().optional(),
     }),
   )
   .handler(async ({ data }) => {
     checkPin(data.pin);
-    const patch: { active?: boolean } = {};
-    if (typeof data.active === "boolean") patch.active = data.active;
-    const { error } = await supabaseAdmin.from("posts").update(patch).eq("id", data.id);
+    const { pin: _p, id, ...patch } = data;
+    const clean: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(patch)) {
+      if (v !== undefined) clean[k] = v;
+    }
+    if (Object.keys(clean).length === 0) return { ok: true };
+    const { error } = await supabaseAdmin.from("posts").update(clean).eq("id", id);
     if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const adminSwapOrder = createServerFn({ method: "POST" })
+  .inputValidator(z.object({ pin: z.string(), a: z.string().uuid(), b: z.string().uuid() }))
+  .handler(async ({ data }) => {
+    checkPin(data.pin);
+    const { data: rows, error: e1 } = await supabaseAdmin
+      .from("posts").select("id, sort_order").in("id", [data.a, data.b]);
+    if (e1) throw new Error(e1.message);
+    const ra = rows?.find((r) => r.id === data.a);
+    const rb = rows?.find((r) => r.id === data.b);
+    if (!ra || !rb) throw new Error("Not found");
+    const { error: ea } = await supabaseAdmin.from("posts").update({ sort_order: rb.sort_order }).eq("id", ra.id);
+    if (ea) throw new Error(ea.message);
+    const { error: eb } = await supabaseAdmin.from("posts").update({ sort_order: ra.sort_order }).eq("id", rb.id);
+    if (eb) throw new Error(eb.message);
     return { ok: true };
   });
 
