@@ -1,48 +1,36 @@
-## Mobile UI Optimization Plan
+## Add a floating AI chatbot to the website
 
-Abhi har section desktop ke liye banaya gaya hai (py-20/28, text-5xl/6xl/7xl, bade gaps). Phone pe ye sab bohot bada aur "messy" lagta hai. Niche surgical changes har section me karenge — sirf mobile breakpoint (default classes) chhote karenge, `md:` aur upar wale sizes intact rahenge taaki desktop na bigde.
+A ChatGPT-style assistant that helps visitors with study-abroad queries (universities, courses, visa, costs, scholarships, MC Interactions services). Single ongoing conversation per user, persisted in Lovable Cloud, accessible from a floating bubble on every page.
 
-### 1. Hero (`src/components/sections/Hero.tsx`)
-- Padding: `pt-28 pb-20` → `pt-24 pb-12 md:pt-32 md:pb-20`
-- Heading: `text-5xl md:text-6xl lg:text-7xl` → `text-4xl md:text-6xl lg:text-7xl`
-- Subtext: `text-lg` → `text-base md:text-lg`
-- Feature pills grid: gap `gap-3` → `gap-2 md:gap-3`, padding `px-4 py-2.5` → `px-3 py-2`
-- Stats row: `gap-8` → `gap-5 md:gap-8`, counter `text-3xl md:text-4xl` → `text-2xl md:text-4xl`
-- Trust badge text smaller on mobile
-- Team grid: `gap-4` → `gap-3 md:gap-4`, TeamCard padding `p-5` → `p-3 md:p-5`, name/role text smaller on mobile
+### What the user will see
 
-### 2. Section wrappers (About, Services, Destinations, Process, Success, Blog, Contact)
-Standard pattern across all:
-- `py-20 md:py-28` → `py-12 md:py-24`
-- Section headings `text-4xl md:text-5xl` → `text-3xl md:text-5xl`
-- Header margin `mb-14` → `mb-10 md:mb-14`
-- Card grids: gap `gap-6` → `gap-4 md:gap-6`
-- Card padding `p-6` → `p-5 md:p-6`
+- A green WhatsApp-style floating chat bubble (bottom-right, above the existing FestivalPopup z-index) on every page.
+- Click → opens a chat panel (Sheet/drawer) with a header "MC Interactions Assistant", message transcript, and a composer at the bottom.
+- Assistant messages render with markdown (bold, lists, links).
+- A streaming "Thinking…" shimmer while the model responds, then tokens stream in live.
+- "New conversation" button in the header to clear and start fresh.
+- Works without login (anonymous visitors get a browser-scoped session id stored in localStorage; signed-in admins get their user_id).
 
-### 3. Destinations stats banner
-- Big stats box padding `p-8` → `p-6 md:p-8`, mt-16 → `mt-12 md:mt-16`
-- Counter `text-4xl` → `text-3xl md:text-4xl`
+### Tech approach
 
-### 4. Process steps
-- Step number `text-5xl` → `text-4xl md:text-5xl`
-- Icon box `h-12 w-12` → `h-10 w-10 md:h-12 md:w-12`
+- **AI**: Lovable AI Gateway via AI SDK (`ai`, `@ai-sdk/openai-compatible`). Default model `google/gemini-3-flash-preview`. `LOVABLE_API_KEY` already exists in secrets.
+- **Backend**: TanStack server route at `src/routes/api/chat.ts` for streaming chat (uses `streamText` + `toUIMessageStreamResponse`). A `createServerFn` (`saveChatMessage`) persists messages after streaming finishes via `onFinish`.
+- **DB**: New `chat_sessions` and `chat_messages` tables in Lovable Cloud, scoped by `session_key` (uuid stored in localStorage for anon users). Public insert/select policies scoped to `session_key` passed in queries (no PII; visitors can only see their own session because the key is the lookup).
+- **UI**: AI Elements (`Conversation`, `Message`, `MessageResponse`, `PromptInput`, `Shimmer`) installed via `bun x ai-elements@latest add`. Uses `useChat` from `@ai-sdk/react` with `DefaultChatTransport` pointing to `/api/chat`.
+- **System prompt**: Tuned for MC Interactions — study-abroad counseling, polite Hinglish-friendly tone, recommends booking a free counseling call (scrolls to #contact) when relevant.
 
-### 5. Services / Blog / Success / Contact / Footer
-- Same compactness: smaller titles, tighter gaps, reduced vertical padding on mobile.
-- Footer: padding-top reduction on mobile.
+### Files to add / change
 
-### 6. Navbar
-- Logo box already responsive, but tighten `py-4` (un-scrolled) → `py-3 md:py-4` to free up vertical space when hero loads.
+- **New**: `supabase/migrations/<ts>_chat_tables.sql` — `chat_sessions`, `chat_messages` tables with grants + RLS.
+- **New**: `src/lib/ai-gateway.server.ts` — Lovable AI Gateway provider helper.
+- **New**: `src/routes/api/chat.ts` — streaming POST route, loads prior messages by `session_key`, calls `streamText`, saves on finish.
+- **New**: `src/lib/chat.functions.ts` — `loadChatHistory`, `clearChatHistory` server functions.
+- **New**: `src/components/ChatBot.tsx` — floating bubble + Sheet panel + `useChat` integration + markdown rendering.
+- **New**: `src/components/ai-elements/*` — installed AI Elements primitives.
+- **Edit**: `src/routes/__root.tsx` — mount `<ChatBot />` globally so it appears on every page.
+- **Edit**: `package.json` (via `bun add`) — `ai`, `@ai-sdk/openai-compatible`, `@ai-sdk/react`, `zod` (if missing), `react-markdown`.
 
-### 7. FestivalPopup
-- Already max-w-md and responsive — minor: image height `h-56` → `h-44 md:h-56`, padding `p-6` → `p-5 md:p-6`.
+### Open question (optional)
 
-### What stays the same
-- All content, copy, animations, counter logic, and desktop layout unchanged.
-- No business logic / route / data changes.
-- Color tokens, gradients, design system — untouched.
+You skipped the "purpose" question. I'll tune the system prompt for **MC Interactions study-abroad counseling** (universities, courses, visa, scholarships, costs, and nudging users to the free counseling form). Tell me if you want a different focus.
 
-### Verification
-After edits: open preview at mobile viewport (375–414px) via the device toggle and visually confirm each section is compact and readable. Adjust any section that still feels too tall.
-
-Total: ~7-8 component files ko mobile-responsive utilities ke saath touch karna hai. Koi naya component nahi banega.
