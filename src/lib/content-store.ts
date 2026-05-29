@@ -1,7 +1,7 @@
 // Supabase-backed content store. Images are stored as base64 data URLs in the `image` column.
 import { supabase } from "@/integrations/supabase/client";
 
-export type PostKind = "blog" | "success" | "festival";
+export type PostKind = "blog" | "success" | "festival" | "review" | "admit";
 
 export interface Post {
   id: string;
@@ -19,7 +19,9 @@ export interface Post {
   prev_college?: string | null;
   gender?: string | null;
   sort_order?: number | null;
+  rating?: number | null;
 }
+
 
 export async function fetchPosts(kind?: PostKind): Promise<Post[]> {
   let q = supabase.from("posts").select("*").order("sort_order", { ascending: true }).order("created_at", { ascending: false });
