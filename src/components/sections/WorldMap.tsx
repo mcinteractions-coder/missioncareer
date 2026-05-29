@@ -314,7 +314,7 @@ export function WorldMap() {
                     className={`text-xs rounded-full px-3 py-1.5 font-semibold transition-all border ${
                       isActive
                         ? "text-white border-transparent shadow-lg scale-105"
-                        : "bg-white/5 text-white/80 border-white/10 hover:bg-white/10 hover:border-white/30"
+                        : "bg-foreground/5 dark:bg-white/5 text-foreground/80 dark:text-white/80 border-foreground/10 dark:border-white/10 hover:bg-foreground/10 dark:hover:bg-white/10 hover:border-foreground/30 dark:hover:border-white/30"
                     }`}
                     style={isActive ? { background: `linear-gradient(135deg, ${c.accent}, #6366f1)`, boxShadow: `0 8px 24px -8px ${c.accent}` } : undefined}
                   >
