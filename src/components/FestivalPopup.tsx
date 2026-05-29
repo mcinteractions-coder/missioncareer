@@ -13,30 +13,40 @@ export function FestivalPopup() {
     });
   }, []);
 
+  const handleGrabOffer = () => {
+    setOpen(false);
+    const el = document.getElementById("contact");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   if (!open || !post) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div className="relative bg-card rounded-3xl shadow-2xl max-w-md w-full overflow-hidden animate-in zoom-in-95 duration-300">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 md:p-8 animate-in fade-in duration-300">
+      <div className="relative bg-card rounded-3xl shadow-2xl w-full max-w-4xl h-[85vh] md:h-[80vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-300">
         <button
           onClick={() => setOpen(false)}
           aria-label="Close"
-          className="absolute top-3 right-3 z-10 h-9 w-9 rounded-full bg-background/90 hover:bg-background flex items-center justify-center shadow-md transition"
+          className="absolute top-4 right-4 z-10 h-10 w-10 rounded-full bg-background/90 hover:bg-background flex items-center justify-center shadow-md transition"
         >
           <X className="h-5 w-5" />
         </button>
         {post.image && (
-          <img src={post.image} alt={post.title} className="w-full h-44 md:h-56 object-cover" />
-        )}
-        <div className="p-5 md:p-6 text-center">
-          <div className="inline-flex items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1 text-xs font-semibold text-primary mb-3">
-            <Sparkles className="h-3.5 w-3.5" /> Festival Offer
+          <div className="flex-1 min-h-0">
+            <img src={post.image} alt={post.title} className="w-full h-full object-cover" />
           </div>
-          <h3 className="text-2xl font-extrabold text-foreground">{post.title}</h3>
-          <p className="mt-3 text-sm text-muted-foreground whitespace-pre-wrap">{post.text}</p>
+        )}
+        <div className="p-6 md:p-10 text-center shrink-0">
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-primary-soft px-4 py-1.5 text-sm font-semibold text-primary mb-4">
+            <Sparkles className="h-4 w-4" /> Festival Offer
+          </div>
+          <h3 className="text-3xl md:text-4xl font-extrabold text-foreground">{post.title}</h3>
+          <p className="mt-3 md:mt-4 text-base md:text-lg text-muted-foreground whitespace-pre-wrap max-w-2xl mx-auto">{post.text}</p>
           <button
-            onClick={() => setOpen(false)}
-            className="mt-5 inline-flex items-center justify-center rounded-full bg-gradient-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-soft hover:shadow-glow transition-shadow"
+            onClick={handleGrabOffer}
+            className="mt-6 inline-flex items-center justify-center rounded-full bg-gradient-primary px-8 py-3 text-base font-semibold text-primary-foreground shadow-soft hover:shadow-glow transition-shadow"
           >
             Grab the Offer
           </button>
