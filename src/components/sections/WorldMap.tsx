@@ -328,7 +328,7 @@ export function WorldMap() {
           {/* Info card */}
           <div
             key={active.name}
-            className="lg:col-span-2 relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-xl p-6 md:p-7 overflow-hidden animate-fade-in"
+            className="lg:col-span-2 relative rounded-3xl border border-foreground/10 dark:border-white/10 bg-card/80 dark:bg-white/[0.04] backdrop-blur-xl p-6 md:p-7 overflow-hidden animate-fade-in"
             style={{ boxShadow: `0 30px 80px -30px ${active.accent}80` }}
           >
             <div
