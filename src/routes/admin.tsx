@@ -171,6 +171,8 @@ function PostsPanel({ kind }: { kind: PostKind }) {
   };
 
   const isSuccess = kind === "success";
+  const isReview = kind === "review";
+  const isAdmit = kind === "admit";
 
   return (
     <div className="grid lg:grid-cols-2 gap-8">
@@ -187,6 +189,12 @@ function PostsPanel({ kind }: { kind: PostKind }) {
                   alt=""
                   className="h-10 w-14 rounded object-cover flex-shrink-0 ring-1 ring-black/10"
                 />
+              ) : (isReview || isAdmit) ? (
+                p.image ? (
+                  <img src={p.image} alt="" className="h-12 w-12 rounded-full object-cover flex-shrink-0 ring-2 ring-primary/20" />
+                ) : (
+                  <div className="h-12 w-12 rounded-full bg-gradient-primary text-primary-foreground font-bold flex items-center justify-center flex-shrink-0">{p.title.charAt(0)}</div>
+                )
               ) : p.image ? (
                 <img src={p.image} alt="" className="h-20 w-20 rounded-xl object-cover flex-shrink-0" />
               ) : null}
@@ -198,9 +206,17 @@ function PostsPanel({ kind }: { kind: PostKind }) {
                     {p.prev_college && <p className="truncate">🏫 {p.prev_college}{p.prev_course && ` — ${p.prev_course}`}</p>}
                     {p.destination && <p>📍 {p.destination}</p>}
                   </div>
+                ) : isReview ? (
+                  <>
+                    <div className="text-amber-500 text-sm">{"★".repeat(p.rating ?? 5)}{"☆".repeat(5 - (p.rating ?? 5))}</div>
+                    <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">{p.text}</p>
+                  </>
+                ) : isAdmit ? (
+                  <p className="text-xs text-muted-foreground truncate mt-1">🎓 {p.university || "—"}</p>
                 ) : (
                   <p className="text-xs text-muted-foreground line-clamp-2">{p.text}</p>
                 )}
+
                 <div className="flex items-center flex-wrap gap-2 mt-2">
                   {p.kind === "festival" && (
                     <label className="text-xs flex items-center gap-1.5 cursor-pointer">
