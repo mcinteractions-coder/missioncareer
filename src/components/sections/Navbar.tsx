@@ -53,13 +53,25 @@ export function Navbar() {
           ))}
         </div>
 
-        <div className="hidden lg:block shrink-0">
+        <div className="hidden lg:flex items-center gap-2 shrink-0">
+          <ThemeToggle />
           <a
             href="#contact"
             className="inline-flex items-center rounded-full bg-gradient-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-soft hover:shadow-glow transition-shadow whitespace-nowrap"
           >
             Free Counseling
           </a>
+        </div>
+
+        <div className="lg:hidden flex items-center gap-1">
+          <ThemeToggle />
+          <button
+            className="p-2 rounded-md text-foreground"
+            onClick={() => setOpen(!open)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X /> : <Menu />}
+          </button>
         </div>
 
         <button
