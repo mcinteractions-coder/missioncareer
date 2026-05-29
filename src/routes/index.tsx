@@ -37,7 +37,8 @@ function Index() {
       <Hero />
       <div data-reveal><About /></div>
       <div data-reveal><Services /></div>
-      <div data-reveal><Destinations /></div>
+        <div data-reveal><Destinations /></div>
+        <div data-reveal><WorldMap /></div>
       <div data-reveal><Reviews /></div>
       <div data-reveal><Process /></div>
       <div data-reveal><Success /></div>
