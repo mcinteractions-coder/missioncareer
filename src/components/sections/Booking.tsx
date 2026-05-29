@@ -3,9 +3,8 @@ import { CalendarDays, Clock, CheckCircle2, Sparkles, User, Mail, Phone, Globe2,
 import { supabase } from "@/integrations/supabase/client";
 
 const SLOTS = [
-  "10:00 AM", "11:00 AM", "12:00 PM",
-  "02:00 PM", "03:00 PM", "04:00 PM",
-  "05:00 PM", "06:00 PM",
+  "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM",
+  "05:00 PM", "06:00 PM", "07:00 PM",
 ];
 
 function getNextDays(count: number) {
