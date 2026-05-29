@@ -1,7 +1,7 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
-import { getPosts, type Post } from "@/lib/content-store";
+import { fetchPosts, type Post } from "@/lib/content-store";
 import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
 
@@ -15,13 +15,9 @@ function BlogPostPage() {
   const [post, setPost] = useState<Post | null | undefined>(undefined);
 
   useEffect(() => {
-    const load = () => {
-      const found = getPosts("blog").find((p) => p.id === id) || null;
-      setPost(found);
-    };
-    load();
-    window.addEventListener("mc-content-updated", load);
-    return () => window.removeEventListener("mc-content-updated", load);
+    fetchPosts("blog").then((posts) => {
+      setPost(posts.find((p) => p.id === id) ?? null);
+    });
   }, [id]);
 
   if (post === undefined) {
@@ -47,7 +43,7 @@ function BlogPostPage() {
         <Link to="/" className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline mb-6">
           <ArrowLeft className="h-4 w-4" /> Back to blog
         </Link>
-        <p className="text-sm text-primary font-semibold mb-3">{new Date(post.createdAt).toLocaleDateString()}</p>
+        <p className="text-sm text-primary font-semibold mb-3">{new Date(post.created_at).toLocaleDateString()}</p>
         <h1 className="text-4xl md:text-5xl font-extrabold mb-6">{post.title}</h1>
         {post.image && (
           <img src={post.image} alt={post.title} className="w-full rounded-3xl shadow-card mb-8 object-cover max-h-[480px]" />

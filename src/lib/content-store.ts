@@ -1,5 +1,5 @@
-// Simple localStorage-backed content store for admin-managed posts.
-// Images are stored as base64 data URLs.
+// Supabase-backed content store. Images are stored as base64 data URLs in the `image` column.
+import { supabase } from "@/integrations/supabase/client";
 
 export type PostKind = "blog" | "success" | "festival";
 
@@ -8,48 +8,36 @@ export interface Post {
   kind: PostKind;
   title: string;
   text: string;
-  image?: string; // data URL
-  active?: boolean; // for festival
-  createdAt: number;
+  image?: string | null;
+  active?: boolean;
+  created_at: string;
 }
 
-const KEY = "mc_content_v1";
-
-function read(): Post[] {
-  if (typeof window === "undefined") return [];
-  try {
-    return JSON.parse(localStorage.getItem(KEY) || "[]");
-  } catch {
+export async function fetchPosts(kind?: PostKind): Promise<Post[]> {
+  let q = supabase.from("posts").select("*").order("created_at", { ascending: false });
+  if (kind) q = q.eq("kind", kind);
+  const { data, error } = await q;
+  if (error) {
+    console.error("fetchPosts", error);
     return [];
   }
+  return (data ?? []) as Post[];
 }
 
-function write(posts: Post[]) {
-  localStorage.setItem(KEY, JSON.stringify(posts));
-  window.dispatchEvent(new Event("mc-content-updated"));
-}
-
-export function getPosts(kind?: PostKind): Post[] {
-  const all = read().sort((a, b) => b.createdAt - a.createdAt);
-  return kind ? all.filter((p) => p.kind === kind) : all;
-}
-
-export function addPost(p: Omit<Post, "id" | "createdAt">): Post {
-  const post: Post = { ...p, id: crypto.randomUUID(), createdAt: Date.now() };
-  write([post, ...read()]);
-  return post;
-}
-
-export function deletePost(id: string) {
-  write(read().filter((p) => p.id !== id));
-}
-
-export function updatePost(id: string, patch: Partial<Post>) {
-  write(read().map((p) => (p.id === id ? { ...p, ...patch } : p)));
-}
-
-export function getActiveFestival(): Post | null {
-  return getPosts("festival").find((p) => p.active) || null;
+export async function fetchActiveFestival(): Promise<Post | null> {
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .eq("kind", "festival")
+    .eq("active", true)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (error) {
+    console.error("fetchActiveFestival", error);
+    return null;
+  }
+  return (data as Post | null) ?? null;
 }
 
 export function fileToDataURL(file: File): Promise<string> {
@@ -59,10 +47,4 @@ export function fileToDataURL(file: File): Promise<string> {
     r.onerror = reject;
     r.readAsDataURL(file);
   });
-}
-
-export function useContentVersion() {
-  // helper for components to re-render on updates
-  if (typeof window === "undefined") return 0;
-  return 0;
 }
