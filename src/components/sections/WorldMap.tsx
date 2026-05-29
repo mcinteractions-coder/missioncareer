@@ -1,5 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ComposableMap, Geographies, Geography, Marker, Line } from "react-simple-maps";
+
+function useIsDark() {
+  const [isDark, setIsDark] = useState(false);
+  useEffect(() => {
+    const el = document.documentElement;
+    const update = () => setIsDark(el.classList.contains("dark"));
+    update();
+    const obs = new MutationObserver(update);
+    obs.observe(el, { attributes: true, attributeFilter: ["class"] });
+    return () => obs.disconnect();
+  }, []);
+  return isDark;
+}
 import { GraduationCap, DollarSign, Briefcase, Sparkles, Plane, Globe2 } from "lucide-react";
 
 const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
@@ -66,23 +79,43 @@ const COUNTRIES: Record<string, CountryInfo> = {
 export function WorldMap() {
   const [active, setActive] = useState<CountryInfo>(COUNTRIES["United States of America"]);
   const [hover, setHover] = useState<string | null>(null);
+  const isDark = useIsDark();
+
+  // theme-aware palette
+  const t = isDark
+    ? {
+        bg: "#070b1f",
+        ocean: ["#1e293b", "#0b1224"] as const,
+        land: ["#1e2a4a", "#172041"] as const,
+        landIdle: "#3b4a7a",
+        stroke: "#0b1224",
+        star: "rgba(255,255,255,0.7)",
+        grid: "rgba(255,255,255,0.6)",
+        radial:
+          "radial-gradient(circle at 20% 30%, rgba(99,102,241,0.4), transparent 45%), radial-gradient(circle at 80% 70%, rgba(236,72,153,0.3), transparent 45%), radial-gradient(circle at 50% 100%, rgba(34,211,238,0.25), transparent 50%)",
+      }
+    : {
+        bg: "#f1f5fb",
+        ocean: ["#e0e7ff", "#dbeafe"] as const,
+        land: ["#e2e8f0", "#cbd5e1"] as const,
+        landIdle: "#a5b4fc",
+        stroke: "#ffffff",
+        star: "rgba(99,102,241,0.55)",
+        grid: "rgba(99,102,241,0.35)",
+        radial:
+          "radial-gradient(circle at 20% 30%, rgba(99,102,241,0.25), transparent 45%), radial-gradient(circle at 80% 70%, rgba(236,72,153,0.18), transparent 45%), radial-gradient(circle at 50% 100%, rgba(34,211,238,0.18), transparent 50%)",
+      };
+
 
   return (
     <section id="world-map" className="relative py-16 md:py-28 overflow-hidden">
       {/* Cinematic backdrop */}
-      <div className="absolute inset-0 -z-10 bg-[#070b1f]">
-        <div
-          className="absolute inset-0 opacity-[0.35]"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 20% 30%, rgba(99,102,241,0.4), transparent 45%), radial-gradient(circle at 80% 70%, rgba(236,72,153,0.3), transparent 45%), radial-gradient(circle at 50% 100%, rgba(34,211,238,0.25), transparent 50%)",
-          }}
-        />
+      <div className="absolute inset-0 -z-10" style={{ background: t.bg }}>
+        <div className="absolute inset-0 opacity-[0.55]" style={{ backgroundImage: t.radial }} />
         <div
           className="absolute inset-0 opacity-[0.08]"
           style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
+            backgroundImage: `linear-gradient(${t.grid} 1px, transparent 1px), linear-gradient(90deg, ${t.grid} 1px, transparent 1px)`,
             backgroundSize: "48px 48px",
           }}
         />
@@ -95,8 +128,8 @@ export function WorldMap() {
             return (
               <span
                 key={i}
-                className="absolute h-[2px] w-[2px] rounded-full bg-white/70 animate-pulse"
-                style={{ top: `${top}%`, left: `${left}%`, animationDelay: `${delay}s`, animationDuration: "2.4s" }}
+                className="absolute h-[2px] w-[2px] rounded-full animate-pulse"
+                style={{ top: `${top}%`, left: `${left}%`, background: t.star, animationDelay: `${delay}s`, animationDuration: "2.4s" }}
               />
             );
           })}
@@ -105,22 +138,22 @@ export function WorldMap() {
 
       <div className="container mx-auto px-4 md:px-8">
         <div className="text-center max-w-2xl mx-auto mb-10 md:mb-14">
-          <span className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur px-4 py-1.5 text-xs md:text-sm font-semibold text-white border border-white/20 mb-3">
+          <span className="inline-flex items-center gap-2 rounded-full bg-foreground/5 dark:bg-white/10 backdrop-blur px-4 py-1.5 text-xs md:text-sm font-semibold text-foreground border border-foreground/10 dark:border-white/20 mb-3">
             <Globe2 className="h-3.5 w-3.5" /> Hover · tap · explore
           </span>
-          <h2 className="text-3xl md:text-5xl font-extrabold text-white">
-            Your <span className="bg-gradient-to-r from-cyan-300 via-indigo-300 to-pink-300 bg-clip-text text-transparent">Global Classroom</span>
+          <h2 className="text-3xl md:text-5xl font-extrabold text-foreground">
+            Your <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 dark:from-cyan-300 dark:via-indigo-300 dark:to-pink-300 bg-clip-text text-transparent">Global Classroom</span>
           </h2>
-          <p className="mt-3 md:mt-4 text-sm md:text-base text-white/70">
+          <p className="mt-3 md:mt-4 text-sm md:text-base text-muted-foreground">
             7 flagship destinations · one tap from your dream university.
           </p>
         </div>
 
         <div className="grid lg:grid-cols-5 gap-6 items-stretch">
           {/* Map */}
-          <div className="lg:col-span-3 relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-white/[0.01] backdrop-blur-xl p-3 md:p-5 shadow-[0_30px_80px_-30px_rgba(99,102,241,0.6)]">
+          <div className="lg:col-span-3 relative rounded-3xl border border-foreground/10 dark:border-white/10 bg-card/70 dark:bg-white/[0.04] backdrop-blur-xl p-3 md:p-5 shadow-card">
             {/* glow ring */}
-            <div className="pointer-events-none absolute -inset-px rounded-3xl bg-gradient-to-br from-indigo-500/30 via-transparent to-pink-500/30 opacity-60 blur-xl -z-10" />
+            <div className="pointer-events-none absolute -inset-px rounded-3xl bg-gradient-to-br from-indigo-500/20 via-transparent to-pink-500/20 dark:from-indigo-500/30 dark:to-pink-500/30 opacity-60 blur-xl -z-10" />
 
             <ComposableMap
               projectionConfig={{ scale: 150 }}
@@ -132,8 +165,8 @@ export function WorldMap() {
                   <stop offset="100%" stopColor="#0b1224" />
                 </radialGradient>
                 <linearGradient id="landGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#1e2a4a" />
-                  <stop offset="100%" stopColor="#172041" />
+                  <stop offset="0%" stopColor={t.land[0]} />
+                  <stop offset="100%" stopColor={t.land[1]} />
                 </linearGradient>
                 <linearGradient id="activeGrad" x1="0" y1="0" x2="1" y2="1">
                   <stop offset="0%" stopColor="#6366f1" />
@@ -165,7 +198,7 @@ export function WorldMap() {
                       : isHover
                         ? "url(#hoverGrad)"
                         : info
-                          ? "#3b4a7a"
+                          ? t.landIdle
                           : "url(#landGrad)";
                     return (
                       <Geography
@@ -181,7 +214,7 @@ export function WorldMap() {
                         style={{
                           default: {
                             fill,
-                            stroke: "#0b1224",
+                            stroke: t.stroke,
                             strokeWidth: 0.5,
                             outline: "none",
                             transition: "fill 0.4s ease, transform 0.4s ease",
@@ -210,12 +243,12 @@ export function WorldMap() {
 
               {/* India origin marker */}
               <Marker coordinates={INDIA}>
-                <circle r={3} fill="#fbbf24" stroke="#fff" strokeWidth={1.2} />
-                <circle r={3} fill="none" stroke="#fbbf24" strokeWidth={1}>
+                <circle r={3} fill="#f59e0b" stroke={isDark ? "#fff" : "#1e293b"} strokeWidth={1.2} />
+                <circle r={3} fill="none" stroke="#f59e0b" strokeWidth={1}>
                   <animate attributeName="r" values="3;9;3" dur="1.8s" repeatCount="indefinite" />
                   <animate attributeName="opacity" values="0.9;0;0.9" dur="1.8s" repeatCount="indefinite" />
                 </circle>
-                <text textAnchor="middle" y={-8} fontSize={8} fill="#fbbf24" fontWeight="700" style={{ paintOrder: "stroke", stroke: "#070b1f", strokeWidth: 2 }}>
+                <text textAnchor="middle" y={-8} fontSize={8} fill="#f59e0b" fontWeight="700" style={{ paintOrder: "stroke", stroke: t.bg, strokeWidth: 2 }}>
                   India
                 </text>
               </Marker>
@@ -281,7 +314,7 @@ export function WorldMap() {
                     className={`text-xs rounded-full px-3 py-1.5 font-semibold transition-all border ${
                       isActive
                         ? "text-white border-transparent shadow-lg scale-105"
-                        : "bg-white/5 text-white/80 border-white/10 hover:bg-white/10 hover:border-white/30"
+                        : "bg-foreground/5 dark:bg-white/5 text-foreground/80 dark:text-white/80 border-foreground/10 dark:border-white/10 hover:bg-foreground/10 dark:hover:bg-white/10 hover:border-foreground/30 dark:hover:border-white/30"
                     }`}
                     style={isActive ? { background: `linear-gradient(135deg, ${c.accent}, #6366f1)`, boxShadow: `0 8px 24px -8px ${c.accent}` } : undefined}
                   >
@@ -295,7 +328,7 @@ export function WorldMap() {
           {/* Info card */}
           <div
             key={active.name}
-            className="lg:col-span-2 relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-xl p-6 md:p-7 overflow-hidden animate-fade-in"
+            className="lg:col-span-2 relative rounded-3xl border border-foreground/10 dark:border-white/10 bg-card/80 dark:bg-white/[0.04] backdrop-blur-xl p-6 md:p-7 overflow-hidden animate-fade-in"
             style={{ boxShadow: `0 30px 80px -30px ${active.accent}80` }}
           >
             <div
@@ -310,10 +343,10 @@ export function WorldMap() {
                   <div className="text-[10px] uppercase tracking-[0.2em] font-bold flex items-center gap-1" style={{ color: active.accent }}>
                     <Plane className="h-3 w-3" /> Destination
                   </div>
-                  <h3 className="text-2xl md:text-3xl font-extrabold text-white">{active.name}</h3>
+                  <h3 className="text-2xl md:text-3xl font-extrabold text-foreground">{active.name}</h3>
                 </div>
               </div>
-              <p className="text-sm text-white/60 italic mb-5">"{active.tagline}"</p>
+              <p className="text-sm text-muted-foreground italic mb-5">"{active.tagline}"</p>
 
               <div className="space-y-2.5">
                 <InfoRow icon={<GraduationCap className="h-4 w-4" />} label="Universities" value={active.unis} accent={active.accent} />
@@ -341,18 +374,18 @@ function InfoRow({ icon, label, value, accent, highlight = false }: { icon: Reac
   return (
     <div
       className={`flex items-center gap-3 rounded-xl p-3 border transition-all ${
-        highlight ? "bg-white/[0.06] border-white/20" : "bg-white/[0.03] border-white/10"
+        highlight ? "bg-foreground/[0.06] dark:bg-white/[0.06] border-foreground/20 dark:border-white/20" : "bg-foreground/[0.03] dark:bg-white/[0.03] border-foreground/10 dark:border-white/10"
       }`}
     >
       <div
-        className="h-9 w-9 shrink-0 rounded-lg flex items-center justify-center text-white shadow-md"
-        style={{ background: highlight ? `linear-gradient(135deg, ${accent}, #6366f1)` : "rgba(255,255,255,0.08)", color: highlight ? "#fff" : accent }}
+        className="h-9 w-9 shrink-0 rounded-lg flex items-center justify-center shadow-md"
+        style={{ background: highlight ? `linear-gradient(135deg, ${accent}, #6366f1)` : "hsl(var(--muted))", color: highlight ? "#fff" : accent }}
       >
         {icon}
       </div>
       <div className="min-w-0 flex-1">
-        <div className="text-[10px] uppercase tracking-wider text-white/50 font-semibold">{label}</div>
-        <div className="text-sm font-bold text-white truncate">{value}</div>
+        <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">{label}</div>
+        <div className="text-sm font-bold text-foreground truncate">{value}</div>
       </div>
     </div>
   );
