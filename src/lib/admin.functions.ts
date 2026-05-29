@@ -81,7 +81,9 @@ export const adminUpdatePost = createServerFn({ method: "POST" })
       prev_college: z.string().max(200).nullable().optional(),
       gender: z.enum(["male", "female"]).nullable().optional(),
       sort_order: z.number().int().optional(),
+      rating: z.number().int().min(1).max(5).nullable().optional(),
     }),
+
   )
   .handler(async ({ data }) => {
     checkPin(data.pin);
