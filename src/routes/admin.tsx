@@ -71,9 +71,12 @@ type TabKey = PostKind | "leads";
 const TABS: { key: TabKey; label: string; icon: typeof Newspaper }[] = [
   { key: "blog", label: "Blog Posts", icon: Newspaper },
   { key: "success", label: "Success Stories", icon: Star },
+  { key: "review", label: "Reviews", icon: Star },
+  { key: "admit", label: "Recent Admits", icon: Star },
   { key: "festival", label: "Festival Offers", icon: Sparkles },
   { key: "leads", label: "Counseling Leads", icon: Inbox },
 ];
+
 
 function AdminPanel() {
   const [tab, setTab] = useState<TabKey>("blog");
