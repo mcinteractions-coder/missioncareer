@@ -57,7 +57,7 @@ export function About() {
 
       <div className="container mx-auto px-4 md:px-8 relative">
         <div className="grid lg:grid-cols-2 gap-8 md:gap-10">
-          <div>
+          <div className="min-w-0">
             <h2 className="text-3xl md:text-5xl font-extrabold leading-tight">
               Study Abroad <br />
               <span className="text-gradient">Made Simple</span>
