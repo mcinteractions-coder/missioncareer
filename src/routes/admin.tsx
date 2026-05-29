@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowLeft, Trash2, Upload, Star, Newspaper, Sparkles, Lock, Inbox } from "lucide-react";
+import { ArrowLeft, Trash2, Upload, Star, Newspaper, Sparkles, Lock, Inbox, ArrowUp, ArrowDown, Pencil, X } from "lucide-react";
 import { fetchPosts, fileToDataURL, type Post, type PostKind } from "@/lib/content-store";
 import {
   adminAddPost,
@@ -9,6 +9,7 @@ import {
   adminUpdatePost,
   adminListLeads,
   adminDeleteLead,
+  adminSwapOrder,
 } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/admin")({
@@ -117,8 +118,10 @@ function AdminPanel() {
 function PostsPanel({ kind }: { kind: PostKind }) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [busy, setBusy] = useState(false);
+  const [editing, setEditing] = useState<Post | null>(null);
   const deleteFn = useServerFn(adminDeletePost);
   const updateFn = useServerFn(adminUpdatePost);
+  const swapFn = useServerFn(adminSwapOrder);
   const pin = sessionStorage.getItem("mc_admin_pin") || "";
 
   const refresh = useCallback(() => {
@@ -149,20 +152,53 @@ function PostsPanel({ kind }: { kind: PostKind }) {
     }
   };
 
+  const move = async (idx: number, dir: -1 | 1) => {
+    const a = posts[idx];
+    const b = posts[idx + dir];
+    if (!a || !b) return;
+    setBusy(true);
+    try {
+      await swapFn({ data: { pin, a: a.id, b: b.id } });
+      refresh();
+    } catch (e) {
+      alert("Reorder failed: " + (e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const isSuccess = kind === "success";
+
   return (
     <div className="grid lg:grid-cols-2 gap-8">
       <PostForm kind={kind} pin={pin} onCreated={refresh} />
       <div>
         <h2 className="font-bold text-lg mb-4">Existing ({posts.length})</h2>
-        <div className="space-y-4">
+        <div className="space-y-3">
           {posts.length === 0 && <p className="text-sm text-muted-foreground">No posts yet.</p>}
-          {posts.map((p) => (
+          {posts.map((p, i) => (
             <div key={p.id} className="bg-card rounded-2xl shadow-card p-4 flex gap-3">
-              {p.image && <img src={p.image} alt="" className="h-20 w-20 rounded-xl object-cover flex-shrink-0" />}
+              {isSuccess ? (
+                <img
+                  src={`https://flagcdn.com/w80/${(p.flag_code || "un").toLowerCase()}.png`}
+                  alt=""
+                  className="h-10 w-14 rounded object-cover flex-shrink-0 ring-1 ring-black/10"
+                />
+              ) : p.image ? (
+                <img src={p.image} alt="" className="h-20 w-20 rounded-xl object-cover flex-shrink-0" />
+              ) : null}
               <div className="flex-1 min-w-0">
                 <h3 className="font-bold text-foreground truncate">{p.title}</h3>
-                <p className="text-xs text-muted-foreground line-clamp-2">{p.text}</p>
-                <div className="flex items-center gap-3 mt-2">
+                {isSuccess ? (
+                  <div className="text-xs text-muted-foreground space-y-0.5 mt-1">
+                    {p.university && <p className="truncate">🎓 {p.university}{p.course && ` — ${p.course}`}</p>}
+                    {p.prev_college && <p className="truncate">🏫 {p.prev_college}{p.prev_course && ` — ${p.prev_course}`}</p>}
+                    {p.destination && <p>📍 {p.destination}</p>}
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground line-clamp-2">{p.text}</p>
+                )}
+                <div className="flex items-center flex-wrap gap-2 mt-2">
                   {p.kind === "festival" && (
                     <label className="text-xs flex items-center gap-1.5 cursor-pointer">
                       <input
@@ -172,6 +208,22 @@ function PostsPanel({ kind }: { kind: PostKind }) {
                       /> Show popup
                     </label>
                   )}
+                  <button
+                    disabled={busy || i === 0}
+                    onClick={() => move(i, -1)}
+                    className="inline-flex items-center rounded-full bg-secondary px-2 py-1 disabled:opacity-30 hover:bg-accent"
+                    title="Move up"
+                  ><ArrowUp className="h-3.5 w-3.5" /></button>
+                  <button
+                    disabled={busy || i === posts.length - 1}
+                    onClick={() => move(i, 1)}
+                    className="inline-flex items-center rounded-full bg-secondary px-2 py-1 disabled:opacity-30 hover:bg-accent"
+                    title="Move down"
+                  ><ArrowDown className="h-3.5 w-3.5" /></button>
+                  <button
+                    onClick={() => setEditing(p)}
+                    className="text-xs inline-flex items-center gap-1 rounded-full bg-primary-soft text-primary px-2.5 py-1 font-semibold"
+                  ><Pencil className="h-3.5 w-3.5" /> Edit</button>
                   <button
                     disabled={busy}
                     onClick={() => onDelete(p.id)}
@@ -185,6 +237,141 @@ function PostsPanel({ kind }: { kind: PostKind }) {
           ))}
         </div>
       </div>
+      {editing && (
+        <EditModal
+          post={editing}
+          pin={pin}
+          onClose={() => setEditing(null)}
+          onSaved={() => { setEditing(null); refresh(); }}
+        />
+      )}
+    </div>
+  );
+}
+
+function EditModal({ post, pin, onClose, onSaved }: { post: Post; pin: string; onClose: () => void; onSaved: () => void }) {
+  const updateFn = useServerFn(adminUpdatePost);
+  const [title, setTitle] = useState(post.title);
+  const [text, setText] = useState(post.text || "");
+  const [image, setImage] = useState<string | null | undefined>(post.image);
+  const [university, setUniversity] = useState(post.university || "");
+  const [course, setCourse] = useState(post.course || "");
+  const [destination, setDestination] = useState(post.destination || "");
+  const [flagCode, setFlagCode] = useState(post.flag_code || "");
+  const [prevCourse, setPrevCourse] = useState(post.prev_course || "");
+  const [prevCollege, setPrevCollege] = useState(post.prev_college || "");
+  const [gender, setGender] = useState<"male" | "female">((post.gender as "male" | "female") || "male");
+  const [busy, setBusy] = useState(false);
+  const isSuccess = post.kind === "success";
+
+  const onFile = async (f?: File) => {
+    if (!f) return;
+    if (f.size > 2_500_000) { alert("Image too large. Use under 2.5MB."); return; }
+    setImage(await fileToDataURL(f));
+  };
+
+  const save = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setBusy(true);
+    try {
+      await updateFn({
+        data: {
+          pin,
+          id: post.id,
+          title: title.trim(),
+          text: text.trim(),
+          image: image ?? null,
+          university: isSuccess ? (university.trim() || null) : undefined,
+          course: isSuccess ? (course.trim() || null) : undefined,
+          destination: isSuccess ? (destination.trim() || null) : undefined,
+          flag_code: isSuccess ? (flagCode.trim().toLowerCase() || null) : undefined,
+          prev_course: isSuccess ? (prevCourse.trim() || null) : undefined,
+          prev_college: isSuccess ? (prevCollege.trim() || null) : undefined,
+          gender: isSuccess ? gender : undefined,
+        },
+      });
+      onSaved();
+    } catch (e) {
+      alert("Save failed: " + (e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/60 flex items-start justify-center p-4 overflow-y-auto" onClick={onClose}>
+      <form
+        onSubmit={save}
+        onClick={(e) => e.stopPropagation()}
+        className="bg-card rounded-2xl shadow-card p-6 w-full max-w-lg space-y-3 my-8"
+      >
+        <div className="flex items-center justify-between">
+          <h3 className="font-bold text-lg">Edit {post.kind}</h3>
+          <button type="button" onClick={onClose} className="h-8 w-8 rounded-full hover:bg-accent flex items-center justify-center"><X className="h-4 w-4" /></button>
+        </div>
+        <Field label={isSuccess ? "Student Name" : "Title"}>
+          <input value={title} onChange={(e) => setTitle(e.target.value)} required className="w-full rounded-xl border border-input bg-background px-3 py-2" />
+        </Field>
+        {isSuccess ? (
+          <>
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="Destination">
+                <input value={destination} onChange={(e) => setDestination(e.target.value)} className="w-full rounded-xl border border-input bg-background px-3 py-2" />
+              </Field>
+              <Field label="Flag Code (2 letters)">
+                <input value={flagCode} onChange={(e) => setFlagCode(e.target.value)} maxLength={4} className="w-full rounded-xl border border-input bg-background px-3 py-2" />
+              </Field>
+            </div>
+            <Field label="Abroad University">
+              <input value={university} onChange={(e) => setUniversity(e.target.value)} className="w-full rounded-xl border border-input bg-background px-3 py-2" />
+            </Field>
+            <Field label="Abroad Course">
+              <input value={course} onChange={(e) => setCourse(e.target.value)} className="w-full rounded-xl border border-input bg-background px-3 py-2" />
+            </Field>
+            <Field label="Indian College">
+              <input value={prevCollege} onChange={(e) => setPrevCollege(e.target.value)} className="w-full rounded-xl border border-input bg-background px-3 py-2" />
+            </Field>
+            <Field label="Indian Course">
+              <input value={prevCourse} onChange={(e) => setPrevCourse(e.target.value)} className="w-full rounded-xl border border-input bg-background px-3 py-2" />
+            </Field>
+            <Field label="Gender">
+              <div className="flex gap-2">
+                {(["male", "female"] as const).map((g) => (
+                  <button type="button" key={g} onClick={() => setGender(g)}
+                    className={`flex-1 rounded-xl border px-3 py-2 text-sm font-semibold capitalize ${
+                      gender === g ? "bg-gradient-primary text-primary-foreground border-transparent" : "bg-background border-input"
+                    }`}>{g}</button>
+                ))}
+              </div>
+            </Field>
+          </>
+        ) : (
+          <Field label="Text">
+            <textarea value={text} onChange={(e) => setText(e.target.value)} rows={5} className="w-full rounded-xl border border-input bg-background px-3 py-2" />
+          </Field>
+        )}
+        <Field label="Photo">
+          <label className="flex items-center gap-3 rounded-xl border-2 border-dashed border-border p-3 cursor-pointer hover:border-primary">
+            {image ? <img src={image} alt="" className="h-12 w-12 rounded-lg object-cover" /> : <Upload className="h-5 w-5 text-muted-foreground" />}
+            <span className="text-xs text-muted-foreground">{image ? "Change" : "Upload"}</span>
+            {image && <button type="button" onClick={(e) => { e.preventDefault(); setImage(null); }} className="ml-auto text-xs text-destructive">Remove</button>}
+            <input type="file" accept="image/*" className="hidden" onChange={(e) => onFile(e.target.files?.[0])} />
+          </label>
+        </Field>
+        <div className="flex gap-2 pt-2">
+          <button type="button" onClick={onClose} className="flex-1 rounded-full border border-input py-2.5 font-semibold">Cancel</button>
+          <button disabled={busy} className="flex-1 rounded-full bg-gradient-primary py-2.5 font-semibold text-primary-foreground disabled:opacity-60">{busy ? "Saving…" : "Save"}</button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <label className="text-xs font-semibold text-muted-foreground">{label}</label>
+      <div className="mt-1">{children}</div>
     </div>
   );
 }

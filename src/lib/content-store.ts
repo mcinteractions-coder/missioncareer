@@ -18,10 +18,11 @@ export interface Post {
   prev_course?: string | null;
   prev_college?: string | null;
   gender?: string | null;
+  sort_order?: number | null;
 }
 
 export async function fetchPosts(kind?: PostKind): Promise<Post[]> {
-  let q = supabase.from("posts").select("*").order("created_at", { ascending: false });
+  let q = supabase.from("posts").select("*").order("sort_order", { ascending: true }).order("created_at", { ascending: false });
   if (kind) q = q.eq("kind", kind);
   const { data, error } = await q;
   if (error) {

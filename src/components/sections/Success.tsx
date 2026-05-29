@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, GraduationCap, MapPin, BookOpen, School, Building2, BookMarked } from "lucide-react";
 import { fetchPosts, type Post } from "@/lib/content-store";
-import { DEFAULT_STORIES } from "@/lib/default-stories";
 
 interface StoryCard {
   key: string;
@@ -18,7 +17,6 @@ interface StoryCard {
 
 const INITIAL_COUNT = 6;
 
-// Country to flag fallback
 function flagFromCountry(country: string): string {
   const map: Record<string, string> = {
     Germany: "de", USA: "us", "United States": "us", UK: "gb",
@@ -30,49 +28,31 @@ function flagFromCountry(country: string): string {
 }
 
 function avatarFor(gender: "male" | "female", name: string) {
-  // Use UI Avatars with initials – clean, no broken icons
   const bg = gender === "female" ? "fbcfe8" : "bfdbfe";
   const fg = gender === "female" ? "9d174d" : "1e3a8a";
   return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=${bg}&color=${fg}&bold=true&size=128`;
 }
 
 export function Success() {
-  const [admin, setAdmin] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    fetchPosts("success").then(setAdmin);
+    fetchPosts("success").then(setPosts);
   }, []);
 
-  const adminCards: StoryCard[] = admin.map((p) => {
-    const gender = (p.gender === "female" ? "female" : "male") as "male" | "female";
-    return {
-      key: p.id,
-      name: p.title,
-      flag_code: p.flag_code || flagFromCountry(p.destination || ""),
-      gender,
-      prev_course: p.prev_course || "",
-      prev_college: p.prev_college || "",
-      uni: p.university || "",
-      course: p.course || "",
-      destination: p.destination || "",
-      image: p.image,
-    };
-  });
-
-  const defaultCards: StoryCard[] = DEFAULT_STORIES.map((s) => ({
-    key: s.name + s.uni,
-    name: s.name,
-    flag_code: s.flag_code,
-    gender: (s.gender === "female" ? "female" : "male") as "male" | "female",
-    prev_course: s.prev_course,
-    prev_college: s.prev_college,
-    uni: s.uni,
-    course: s.course,
-    destination: s.destination,
+  const all: StoryCard[] = posts.map((p) => ({
+    key: p.id,
+    name: p.title,
+    flag_code: p.flag_code || flagFromCountry(p.destination || ""),
+    gender: (p.gender === "female" ? "female" : "male") as "male" | "female",
+    prev_course: p.prev_course || "",
+    prev_college: p.prev_college || "",
+    uni: p.university || "",
+    course: p.course || "",
+    destination: p.destination || "",
+    image: p.image,
   }));
-
-  const all = [...adminCards, ...defaultCards];
   const visible = showAll ? all : all.slice(0, INITIAL_COUNT);
 
   return (

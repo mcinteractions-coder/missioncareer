@@ -60,6 +60,7 @@ export type Database = {
           kind: string
           prev_college: string | null
           prev_course: string | null
+          sort_order: number
           text: string
           title: string
           university: string | null
@@ -76,6 +77,7 @@ export type Database = {
           kind: string
           prev_college?: string | null
           prev_course?: string | null
+          sort_order?: number
           text: string
           title: string
           university?: string | null
@@ -92,6 +94,7 @@ export type Database = {
           kind?: string
           prev_college?: string | null
           prev_course?: string | null
+          sort_order?: number
           text?: string
           title?: string
           university?: string | null
