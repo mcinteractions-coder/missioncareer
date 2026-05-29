@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Quote, ArrowRight } from "lucide-react";
-import { getPosts, type Post } from "@/lib/content-store";
+import { fetchPosts, type Post } from "@/lib/content-store";
 
 const STORIES = [
   { i: "M", name: "Martin Ronak Angello", uni: "TU Berlin, Germany", course: "Masters in Computer Science", quote: "Mission Career made my dream of studying in Germany a reality. Their guidance was exceptional!" },
@@ -14,10 +14,7 @@ const STORIES = [
 export function Success() {
   const [admin, setAdmin] = useState<Post[]>([]);
   useEffect(() => {
-    const load = () => setAdmin(getPosts("success"));
-    load();
-    window.addEventListener("mc-content-updated", load);
-    return () => window.removeEventListener("mc-content-updated", load);
+    fetchPosts("success").then(setAdmin);
   }, []);
 
   const adminCards = admin.map((p) => ({
@@ -27,7 +24,7 @@ export function Success() {
     uni: "",
     course: "Student",
     quote: p.text,
-    image: p.image,
+    image: p.image ?? undefined,
   }));
   const defaults = STORIES.map((s) => ({ ...s, key: s.name, image: undefined as string | undefined }));
   const all = [...adminCards, ...defaults];

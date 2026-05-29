@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
 import { Newspaper } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { getPosts, type Post } from "@/lib/content-store";
+import { fetchPosts, type Post } from "@/lib/content-store";
 
 export function Blog() {
   const [posts, setPosts] = useState<Post[]>([]);
   useEffect(() => {
-    const load = () => setPosts(getPosts("blog"));
-    load();
-    window.addEventListener("mc-content-updated", load);
-    return () => window.removeEventListener("mc-content-updated", load);
+    fetchPosts("blog").then(setPosts);
   }, []);
 
   return (
@@ -40,7 +37,7 @@ export function Blog() {
               >
                 {p.image && <img src={p.image} alt={p.title} className="w-full h-48 object-cover" />}
                 <div className="p-6">
-                  <p className="text-xs text-primary font-semibold mb-2">{new Date(p.createdAt).toLocaleDateString()}</p>
+                  <p className="text-xs text-primary font-semibold mb-2">{new Date(p.created_at).toLocaleDateString()}</p>
                   <h3 className="font-bold text-lg text-foreground line-clamp-2">{p.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground line-clamp-4 whitespace-pre-wrap">{p.text}</p>
                   <p className="mt-3 text-sm font-semibold text-primary">Read more →</p>

@@ -1,15 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { ArrowLeft, Trash2, Upload, Star, Newspaper, Sparkles, Lock } from "lucide-react";
+import { useEffect, useState, useCallback } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { ArrowLeft, Trash2, Upload, Star, Newspaper, Sparkles, Lock, Inbox } from "lucide-react";
+import { fetchPosts, fileToDataURL, type Post, type PostKind } from "@/lib/content-store";
 import {
-  addPost,
-  deletePost,
-  fileToDataURL,
-  getPosts,
-  updatePost,
-  type Post,
-  type PostKind,
-} from "@/lib/content-store";
+  adminAddPost,
+  adminDeletePost,
+  adminUpdatePost,
+  adminListLeads,
+  adminDeleteLead,
+} from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin — Mission Career" }, { name: "robots", content: "noindex" }] }),
@@ -35,6 +35,7 @@ function AdminPage() {
             e.preventDefault();
             if (pin === ADMIN_PIN) {
               sessionStorage.setItem("mc_admin", "1");
+              sessionStorage.setItem("mc_admin_pin", pin);
               setUnlocked(true);
             } else setErr("Invalid PIN");
           }}
@@ -64,23 +65,17 @@ function AdminPage() {
   return <AdminPanel />;
 }
 
-const TABS: { kind: PostKind; label: string; icon: typeof Newspaper }[] = [
-  { kind: "blog", label: "Blog Posts", icon: Newspaper },
-  { kind: "success", label: "Success Stories", icon: Star },
-  { kind: "festival", label: "Festival Offers", icon: Sparkles },
+type TabKey = PostKind | "leads";
+
+const TABS: { key: TabKey; label: string; icon: typeof Newspaper }[] = [
+  { key: "blog", label: "Blog Posts", icon: Newspaper },
+  { key: "success", label: "Success Stories", icon: Star },
+  { key: "festival", label: "Festival Offers", icon: Sparkles },
+  { key: "leads", label: "Counseling Leads", icon: Inbox },
 ];
 
 function AdminPanel() {
-  const [tab, setTab] = useState<PostKind>("blog");
-  const [posts, setPosts] = useState<Post[]>([]);
-  const refresh = () => setPosts(getPosts(tab));
-
-  useEffect(() => { refresh(); }, [tab]);
-  useEffect(() => {
-    const fn = () => refresh();
-    window.addEventListener("mc-content-updated", fn);
-    return () => window.removeEventListener("mc-content-updated", fn);
-  });
+  const [tab, setTab] = useState<TabKey>("blog");
 
   return (
     <div className="min-h-screen bg-background">
@@ -93,17 +88,17 @@ function AdminPanel() {
             <h1 className="text-xl font-extrabold">Admin Panel</h1>
           </div>
           <button
-            onClick={() => { sessionStorage.removeItem("mc_admin"); location.reload(); }}
+            onClick={() => { sessionStorage.removeItem("mc_admin"); sessionStorage.removeItem("mc_admin_pin"); location.reload(); }}
             className="text-sm font-semibold text-muted-foreground hover:text-primary"
           >Lock</button>
         </div>
         <div className="container mx-auto px-4 md:px-8 flex gap-2 overflow-x-auto pb-3">
-          {TABS.map(({ kind, label, icon: Icon }) => (
+          {TABS.map(({ key, label, icon: Icon }) => (
             <button
-              key={kind}
-              onClick={() => setTab(kind)}
+              key={key}
+              onClick={() => setTab(key)}
               className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold whitespace-nowrap transition ${
-                tab === kind ? "bg-gradient-primary text-primary-foreground shadow-soft" : "bg-secondary text-foreground hover:bg-accent"
+                tab === key ? "bg-gradient-primary text-primary-foreground shadow-soft" : "bg-secondary text-foreground hover:bg-accent"
               }`}
             >
               <Icon className="h-4 w-4" /> {label}
@@ -112,48 +107,95 @@ function AdminPanel() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 md:px-8 py-8 grid lg:grid-cols-2 gap-8">
-        <PostForm kind={tab} />
-        <div>
-          <h2 className="font-bold text-lg mb-4">Existing ({posts.length})</h2>
-          <div className="space-y-4">
-            {posts.length === 0 && <p className="text-sm text-muted-foreground">No posts yet.</p>}
-            {posts.map((p) => (
-              <div key={p.id} className="bg-card rounded-2xl shadow-card p-4 flex gap-3">
-                {p.image && <img src={p.image} alt="" className="h-20 w-20 rounded-xl object-cover flex-shrink-0" />}
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-foreground truncate">{p.title}</h3>
-                  <p className="text-xs text-muted-foreground line-clamp-2">{p.text}</p>
-                  <div className="flex items-center gap-3 mt-2">
-                    {p.kind === "festival" && (
-                      <label className="text-xs flex items-center gap-1.5 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={!!p.active}
-                          onChange={(e) => updatePost(p.id, { active: e.target.checked })}
-                        /> Show popup
-                      </label>
-                    )}
-                    <button onClick={() => deletePost(p.id)} className="text-xs text-destructive inline-flex items-center gap-1 ml-auto">
-                      <Trash2 className="h-3.5 w-3.5" /> Delete
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+      <main className="container mx-auto px-4 md:px-8 py-8">
+        {tab === "leads" ? <LeadsPanel /> : <PostsPanel kind={tab} />}
       </main>
     </div>
   );
 }
 
-function PostForm({ kind }: { kind: PostKind }) {
+function PostsPanel({ kind }: { kind: PostKind }) {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [busy, setBusy] = useState(false);
+  const deleteFn = useServerFn(adminDeletePost);
+  const updateFn = useServerFn(adminUpdatePost);
+  const pin = sessionStorage.getItem("mc_admin_pin") || "";
+
+  const refresh = useCallback(() => {
+    fetchPosts(kind).then(setPosts);
+  }, [kind]);
+
+  useEffect(() => { refresh(); }, [refresh]);
+
+  const onDelete = async (id: string) => {
+    if (!confirm("Delete this post?")) return;
+    setBusy(true);
+    try {
+      await deleteFn({ data: { pin, id } });
+      refresh();
+    } catch (e) {
+      alert("Delete failed: " + (e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const onToggleActive = async (id: string, active: boolean) => {
+    try {
+      await updateFn({ data: { pin, id, active } });
+      refresh();
+    } catch (e) {
+      alert("Update failed: " + (e as Error).message);
+    }
+  };
+
+  return (
+    <div className="grid lg:grid-cols-2 gap-8">
+      <PostForm kind={kind} pin={pin} onCreated={refresh} />
+      <div>
+        <h2 className="font-bold text-lg mb-4">Existing ({posts.length})</h2>
+        <div className="space-y-4">
+          {posts.length === 0 && <p className="text-sm text-muted-foreground">No posts yet.</p>}
+          {posts.map((p) => (
+            <div key={p.id} className="bg-card rounded-2xl shadow-card p-4 flex gap-3">
+              {p.image && <img src={p.image} alt="" className="h-20 w-20 rounded-xl object-cover flex-shrink-0" />}
+              <div className="flex-1 min-w-0">
+                <h3 className="font-bold text-foreground truncate">{p.title}</h3>
+                <p className="text-xs text-muted-foreground line-clamp-2">{p.text}</p>
+                <div className="flex items-center gap-3 mt-2">
+                  {p.kind === "festival" && (
+                    <label className="text-xs flex items-center gap-1.5 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={!!p.active}
+                        onChange={(e) => onToggleActive(p.id, e.target.checked)}
+                      /> Show popup
+                    </label>
+                  )}
+                  <button
+                    disabled={busy}
+                    onClick={() => onDelete(p.id)}
+                    className="text-xs text-destructive inline-flex items-center gap-1 ml-auto disabled:opacity-50"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" /> Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PostForm({ kind, pin, onCreated }: { kind: PostKind; pin: string; onCreated: () => void }) {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [image, setImage] = useState<string | undefined>();
   const [active, setActive] = useState(true);
   const [busy, setBusy] = useState(false);
+  const addFn = useServerFn(adminAddPost);
 
   const reset = () => { setTitle(""); setText(""); setImage(undefined); setActive(true); };
 
@@ -167,9 +209,24 @@ function PostForm({ kind }: { kind: PostKind }) {
     e.preventDefault();
     if (!title.trim() || !text.trim()) return;
     setBusy(true);
-    addPost({ kind, title: title.trim(), text: text.trim(), image, active: kind === "festival" ? active : undefined });
-    reset();
-    setBusy(false);
+    try {
+      await addFn({
+        data: {
+          pin,
+          kind,
+          title: title.trim(),
+          text: text.trim(),
+          image,
+          active: kind === "festival" ? active : undefined,
+        },
+      });
+      reset();
+      onCreated();
+    } catch (err) {
+      alert("Publish failed: " + (err as Error).message);
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -177,12 +234,12 @@ function PostForm({ kind }: { kind: PostKind }) {
       <h2 className="font-bold text-lg">Add new {kind}</h2>
       <div>
         <label className="text-sm font-semibold">Title {kind === "success" && <span className="text-muted-foreground font-normal">(Student name)</span>}</label>
-        <input value={title} onChange={(e) => setTitle(e.target.value)} required maxLength={120}
+        <input value={title} onChange={(e) => setTitle(e.target.value)} required maxLength={200}
           className="mt-1 w-full rounded-xl border border-input bg-background px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary" />
       </div>
       <div>
         <label className="text-sm font-semibold">Text {kind === "success" && <span className="text-muted-foreground font-normal">(Story / university)</span>}</label>
-        <textarea value={text} onChange={(e) => setText(e.target.value)} required maxLength={1000} rows={5}
+        <textarea value={text} onChange={(e) => setText(e.target.value)} required maxLength={5000} rows={5}
           className="mt-1 w-full rounded-xl border border-input bg-background px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary" />
       </div>
       <div>
@@ -199,9 +256,89 @@ function PostForm({ kind }: { kind: PostKind }) {
           Show as popup on site load
         </label>
       )}
-      <button disabled={busy} className="w-full rounded-full bg-gradient-primary py-3 font-semibold text-primary-foreground shadow-soft hover:shadow-glow transition">
+      <button disabled={busy} className="w-full rounded-full bg-gradient-primary py-3 font-semibold text-primary-foreground shadow-soft hover:shadow-glow transition disabled:opacity-60">
         {busy ? "Saving…" : "Publish"}
       </button>
     </form>
+  );
+}
+
+interface Lead {
+  id: string;
+  full_name: string;
+  phone: string | null;
+  email: string | null;
+  country: string | null;
+  study_level: string | null;
+  message: string | null;
+  created_at: string;
+}
+
+function LeadsPanel() {
+  const [leads, setLeads] = useState<Lead[] | null>(null);
+  const [error, setError] = useState<string>("");
+  const listFn = useServerFn(adminListLeads);
+  const deleteFn = useServerFn(adminDeleteLead);
+  const pin = sessionStorage.getItem("mc_admin_pin") || "";
+
+  const refresh = useCallback(async () => {
+    setError("");
+    try {
+      const rows = await listFn({ data: { pin } });
+      setLeads(rows as Lead[]);
+    } catch (e) {
+      setError((e as Error).message);
+      setLeads([]);
+    }
+  }, [listFn, pin]);
+
+  useEffect(() => { refresh(); }, [refresh]);
+
+  const onDelete = async (id: string) => {
+    if (!confirm("Delete this lead?")) return;
+    try {
+      await deleteFn({ data: { pin, id } });
+      refresh();
+    } catch (e) {
+      alert("Delete failed: " + (e as Error).message);
+    }
+  };
+
+  if (leads === null) return <p className="text-sm text-muted-foreground">Loading leads…</p>;
+
+  return (
+    <div>
+      <h2 className="font-bold text-lg mb-4">Free Counseling Leads ({leads.length})</h2>
+      {error && <p className="text-sm text-destructive mb-4">{error}</p>}
+      {leads.length === 0 ? (
+        <div className="bg-card rounded-2xl shadow-card p-10 text-center">
+          <Inbox className="mx-auto h-10 w-10 text-muted-foreground mb-3" />
+          <p className="text-sm text-muted-foreground">No leads yet. Submissions from the contact form will appear here.</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {leads.map((l) => (
+            <div key={l.id} className="bg-card rounded-2xl shadow-card p-5">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <h3 className="font-bold text-foreground">{l.full_name}</h3>
+                  <p className="text-xs text-muted-foreground">{new Date(l.created_at).toLocaleString()}</p>
+                </div>
+                <button onClick={() => onDelete(l.id)} className="text-xs text-destructive inline-flex items-center gap-1">
+                  <Trash2 className="h-3.5 w-3.5" /> Delete
+                </button>
+              </div>
+              <div className="mt-3 grid sm:grid-cols-2 gap-2 text-sm">
+                {l.phone && <div><span className="text-muted-foreground">Phone:</span> <a href={`tel:${l.phone}`} className="text-primary font-medium">{l.phone}</a></div>}
+                {l.email && <div><span className="text-muted-foreground">Email:</span> <a href={`mailto:${l.email}`} className="text-primary font-medium">{l.email}</a></div>}
+                {l.country && <div><span className="text-muted-foreground">Country:</span> {l.country}</div>}
+                {l.study_level && <div><span className="text-muted-foreground">Level:</span> {l.study_level}</div>}
+              </div>
+              {l.message && <p className="mt-3 text-sm text-foreground whitespace-pre-wrap border-t border-border pt-3">{l.message}</p>}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }

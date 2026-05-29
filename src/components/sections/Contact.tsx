@@ -1,6 +1,35 @@
-import { MapPin, Phone, Mail, MessageCircle, Send } from "lucide-react";
+import { useState } from "react";
+import { MapPin, Phone, Mail, MessageCircle, Send, CheckCircle2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 export function Contact() {
+  const [busy, setBusy] = useState(false);
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState("");
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const payload = {
+      full_name: String(data.get("full_name") || "").trim(),
+      phone: String(data.get("phone") || "").trim() || null,
+      email: String(data.get("email") || "").trim() || null,
+      country: String(data.get("country") || "").trim() || null,
+      study_level: String(data.get("study_level") || "").trim() || null,
+      message: String(data.get("message") || "").trim() || null,
+    };
+    if (!payload.full_name) { setError("Please enter your name."); return; }
+    if (!payload.phone && !payload.email) { setError("Please share phone or email."); return; }
+    setBusy(true);
+    const { error: err } = await supabase.from("leads").insert(payload);
+    setBusy(false);
+    if (err) { setError(err.message); return; }
+    setDone(true);
+    form.reset();
+  };
+
   return (
     <section id="contact" className="py-20 md:py-28 bg-background">
       <div className="container mx-auto px-4 md:px-8">
@@ -15,45 +44,55 @@ export function Contact() {
         <div className="grid lg:grid-cols-2 gap-8">
           <div className="bg-card rounded-3xl shadow-card p-8">
             <h3 className="text-xl font-bold text-foreground mb-6">Send us a message</h3>
-            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1.5">Full Name</label>
-                  <input type="text" placeholder="Your name" className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+            {done ? (
+              <div className="text-center py-10">
+                <CheckCircle2 className="h-14 w-14 text-primary mx-auto mb-3" />
+                <h4 className="text-xl font-bold">Thank you!</h4>
+                <p className="text-muted-foreground mt-1">Our counselor will reach out to you shortly.</p>
+                <button onClick={() => setDone(false)} className="mt-5 text-sm font-semibold text-primary">Send another message</button>
+              </div>
+            ) : (
+              <form className="space-y-4" onSubmit={onSubmit}>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1.5">Full Name</label>
+                    <input name="full_name" required maxLength={120} type="text" placeholder="Your name" className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1.5">Phone Number</label>
+                    <input name="phone" maxLength={30} type="tel" placeholder="+91 XXXXX XXXXX" className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+                  </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1.5">Phone Number</label>
-                  <input type="tel" placeholder="+91 XXXXX XXXXX" className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+                  <label className="block text-sm font-medium mb-1.5">Email Address</label>
+                  <input name="email" maxLength={200} type="email" placeholder="your@email.com" className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
                 </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1.5">Email Address</label>
-                <input type="email" placeholder="your@email.com" className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
-              </div>
-              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1.5">Preferred Country</label>
+                    <select name="country" className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" defaultValue="">
+                      <option value="">Select Country</option>
+                      {["USA","UK","Canada","Australia","Germany","Ireland"].map(c => <option key={c}>{c}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1.5">Study Level</label>
+                    <select name="study_level" className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" defaultValue="">
+                      <option value="">Select Level</option>
+                      {["Bachelors","Masters","MBA","Diploma"].map(c => <option key={c}>{c}</option>)}
+                    </select>
+                  </div>
+                </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1.5">Preferred Country</label>
-                  <select className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" defaultValue="">
-                    <option value="">Select Country</option>
-                    {["USA","UK","Canada","Australia","Germany","Ireland"].map(c => <option key={c}>{c}</option>)}
-                  </select>
+                  <label className="block text-sm font-medium mb-1.5">Your Message</label>
+                  <textarea name="message" maxLength={2000} rows={4} placeholder="Tell us about your study abroad goals..." className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1.5">Study Level</label>
-                  <select className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" defaultValue="">
-                    <option value="">Select Level</option>
-                    {["Bachelors","Masters","MBA","Diploma"].map(c => <option key={c}>{c}</option>)}
-                  </select>
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1.5">Your Message</label>
-                <textarea rows={4} placeholder="Tell us about your study abroad goals..." className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
-              </div>
-              <button className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 font-semibold text-primary-foreground shadow-soft hover:shadow-glow transition-shadow">
-                <Send className="h-4 w-4" /> Send Message
-              </button>
-            </form>
+                {error && <p className="text-sm text-destructive">{error}</p>}
+                <button disabled={busy} className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 font-semibold text-primary-foreground shadow-soft hover:shadow-glow transition-shadow disabled:opacity-60">
+                  <Send className="h-4 w-4" /> {busy ? "Sending…" : "Send Message"}
+                </button>
+              </form>
+            )}
           </div>
 
           <div className="space-y-4">
@@ -81,7 +120,7 @@ export function Contact() {
                 <div className="flex-1">
                   <h4 className="font-bold">Chat on WhatsApp</h4>
                   <p className="text-sm opacity-90">Get instant response from our counselors</p>
-                  <button className="mt-3 rounded-full bg-white text-primary px-5 py-2 text-sm font-semibold">Chat Now</button>
+                  <a href="https://wa.me/919870003748" target="_blank" rel="noopener noreferrer" className="mt-3 inline-block rounded-full bg-white text-primary px-5 py-2 text-sm font-semibold">Chat Now</a>
                 </div>
               </div>
             </div>

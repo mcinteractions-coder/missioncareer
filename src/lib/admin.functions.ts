@@ -57,7 +57,7 @@ export const adminUpdatePost = createServerFn({ method: "POST" })
   )
   .handler(async ({ data }) => {
     checkPin(data.pin);
-    const patch: Record<string, unknown> = {};
+    const patch: { active?: boolean } = {};
     if (typeof data.active === "boolean") patch.active = data.active;
     const { error } = await supabaseAdmin.from("posts").update(patch).eq("id", data.id);
     if (error) throw new Error(error.message);

@@ -1,20 +1,16 @@
 import { useEffect, useState } from "react";
 import { X, Sparkles } from "lucide-react";
-import { getActiveFestival, type Post } from "@/lib/content-store";
+import { fetchActiveFestival, type Post } from "@/lib/content-store";
 
 export function FestivalPopup() {
   const [post, setPost] = useState<Post | null>(null);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const load = () => {
-      const p = getActiveFestival();
+    fetchActiveFestival().then((p) => {
       setPost(p);
       setOpen(!!p);
-    };
-    load();
-    window.addEventListener("mc-content-updated", load);
-    return () => window.removeEventListener("mc-content-updated", load);
+    });
   }, []);
 
   if (!open || !post) return null;
