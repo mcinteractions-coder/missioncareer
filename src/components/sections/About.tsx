@@ -57,7 +57,7 @@ export function About() {
 
       <div className="container mx-auto px-4 md:px-8 relative">
         <div className="grid lg:grid-cols-2 gap-8 md:gap-10">
-          <div>
+          <div className="min-w-0">
             <h2 className="text-3xl md:text-5xl font-extrabold leading-tight">
               Study Abroad <br />
               <span className="text-gradient">Made Simple</span>
@@ -126,14 +126,14 @@ export function About() {
                             <Award className="h-3 w-3" /> #{u.ranking}
                           </div>
                         </div>
-                        <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
-                          <div className="flex items-center gap-1.5 text-muted-foreground">
-                            <DollarSign className="h-3 w-3" /> ~${u.tuitionUSD.toLocaleString()}/yr
+                        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2 text-xs">
+                          <div className="flex items-center gap-1.5 text-muted-foreground min-w-0">
+                            <DollarSign className="h-3 w-3 shrink-0" /> <span className="truncate">~${u.tuitionUSD.toLocaleString()}/yr</span>
                           </div>
-                          <div className="flex items-center gap-1.5 text-muted-foreground">
-                            <GraduationCap className="h-3 w-3" /> IELTS {u.ieltsMin || "N/R"}
+                          <div className="flex items-center gap-1.5 text-muted-foreground min-w-0">
+                            <GraduationCap className="h-3 w-3 shrink-0" /> <span className="truncate">IELTS {u.ieltsMin || "N/R"}
                             {u.greMin > 0 && ` · GRE ${u.greMin}`}
-                            {u.gmatMin > 0 && ` · GMAT ${u.gmatMin}`}
+                            {u.gmatMin > 0 && ` · GMAT ${u.gmatMin}`}</span>
                           </div>
                         </div>
                         <div className="mt-2 flex flex-wrap gap-1">
@@ -158,7 +158,7 @@ export function About() {
             </div>
           </div>
 
-          <div className="space-y-4 md:space-y-6">
+          <div className="space-y-4 md:space-y-6 min-w-0">
             <div className="bg-card rounded-2xl md:rounded-3xl shadow-card p-5 md:p-6">
               <h3 className="font-bold text-foreground flex items-center gap-2 mb-4">
                 <span className="h-2 w-2 rounded-full bg-primary" /> Recent Admits
