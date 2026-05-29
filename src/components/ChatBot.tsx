@@ -172,7 +172,7 @@ export function ChatBot() {
             ) : messages.length === 0 ? (
               <div className="flex h-full flex-col items-center justify-center text-center">
                 <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
-                  <MessageCircle className="h-7 w-7 text-primary" />
+                  <Bot className="h-7 w-7 text-primary" />
                 </div>
                 <p className="text-sm font-semibold text-foreground">Namaste! How can I help?</p>
                 <p className="mt-1 max-w-[260px] text-xs text-muted-foreground">
