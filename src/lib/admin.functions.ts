@@ -136,3 +136,26 @@ export const adminDeleteLead = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+export const adminListBookings = createServerFn({ method: "POST" })
+  .inputValidator(pinSchema)
+  .handler(async ({ data }) => {
+    checkPin(data.pin);
+    const { data: rows, error } = await supabaseAdmin
+      .from("bookings")
+      .select("*")
+      .order("slot_date", { ascending: true })
+      .order("slot_time", { ascending: true })
+      .limit(500);
+    if (error) throw new Error(error.message);
+    return rows ?? [];
+  });
+
+export const adminDeleteBooking = createServerFn({ method: "POST" })
+  .inputValidator(z.object({ pin: z.string(), id: z.string().uuid() }))
+  .handler(async ({ data }) => {
+    checkPin(data.pin);
+    const { error } = await supabaseAdmin.from("bookings").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
