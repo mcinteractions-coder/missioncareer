@@ -26,9 +26,9 @@ export function FestivalPopup() {
           <X className="h-5 w-5" />
         </button>
         {post.image && (
-          <img src={post.image} alt={post.title} className="w-full h-56 object-cover" />
+          <img src={post.image} alt={post.title} className="w-full h-44 md:h-56 object-cover" />
         )}
-        <div className="p-6 text-center">
+        <div className="p-5 md:p-6 text-center">
           <div className="inline-flex items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1 text-xs font-semibold text-primary mb-3">
             <Sparkles className="h-3.5 w-3.5" /> Festival Offer
           </div>

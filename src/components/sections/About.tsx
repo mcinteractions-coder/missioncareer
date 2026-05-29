@@ -52,26 +52,26 @@ export function About() {
   const activeCount = Object.values(filters).filter(Boolean).length;
 
   return (
-    <section id="about" className="py-20 md:py-28 bg-background relative overflow-hidden">
+    <section id="about" className="py-12 md:py-24 bg-background relative overflow-hidden">
       <div className="absolute top-20 left-0 w-96 h-96 rounded-full bg-primary-soft/40 blur-3xl pointer-events-none" />
 
       <div className="container mx-auto px-4 md:px-8 relative">
-        <div className="grid lg:grid-cols-2 gap-10">
+        <div className="grid lg:grid-cols-2 gap-8 md:gap-10">
           <div>
-            <h2 className="text-4xl md:text-5xl font-extrabold leading-tight">
+            <h2 className="text-3xl md:text-5xl font-extrabold leading-tight">
               Study Abroad <br />
               <span className="text-gradient">Made Simple</span>
             </h2>
-            <p className="mt-4 text-muted-foreground text-lg max-w-md">
+            <p className="mt-3 md:mt-4 text-muted-foreground text-base md:text-lg max-w-md">
               Discover universities, explore countries and start your international career with expert guidance.
             </p>
 
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-5 md:mt-6 flex flex-wrap gap-3">
               <a href="#contact" className="rounded-full bg-gradient-primary px-5 py-2.5 font-semibold text-primary-foreground shadow-soft">Free Counseling</a>
               <a href="#finder" className="rounded-full border-2 border-primary/30 bg-card px-5 py-2.5 font-semibold text-primary">Find Universities</a>
             </div>
 
-            <div id="finder" className="mt-8 grid sm:grid-cols-2 gap-3 bg-card rounded-3xl shadow-soft p-5">
+            <div id="finder" className="mt-6 md:mt-8 grid sm:grid-cols-2 gap-2.5 md:gap-3 bg-card rounded-2xl md:rounded-3xl shadow-soft p-4 md:p-5">
               {FIELDS.map((f) => (
                 <select
                   key={f.key}
@@ -151,15 +151,15 @@ export function About() {
               </div>
             )}
 
-            <div className="mt-6 flex flex-wrap gap-8">
-              <div><Counter value={5000} suffix="+" className="block text-2xl font-extrabold text-gradient" /><span className="text-sm text-muted-foreground">Students</span></div>
-              <div><Counter value={98} suffix="%" className="block text-2xl font-extrabold text-gradient" /><span className="text-sm text-muted-foreground">Visa Success</span></div>
-              <div><Counter value={120} suffix="+" className="block text-2xl font-extrabold text-gradient" /><span className="text-sm text-muted-foreground">Universities</span></div>
+            <div className="mt-6 flex flex-wrap gap-5 md:gap-8">
+              <div><Counter value={5000} suffix="+" className="block text-xl md:text-2xl font-extrabold text-gradient" /><span className="text-xs md:text-sm text-muted-foreground">Students</span></div>
+              <div><Counter value={98} suffix="%" className="block text-xl md:text-2xl font-extrabold text-gradient" /><span className="text-xs md:text-sm text-muted-foreground">Visa Success</span></div>
+              <div><Counter value={120} suffix="+" className="block text-xl md:text-2xl font-extrabold text-gradient" /><span className="text-xs md:text-sm text-muted-foreground">Universities</span></div>
             </div>
           </div>
 
-          <div className="space-y-6">
-            <div className="bg-card rounded-3xl shadow-card p-6">
+          <div className="space-y-4 md:space-y-6">
+            <div className="bg-card rounded-2xl md:rounded-3xl shadow-card p-5 md:p-6">
               <h3 className="font-bold text-foreground flex items-center gap-2 mb-4">
                 <span className="h-2 w-2 rounded-full bg-primary" /> Recent Admits
               </h3>
@@ -176,7 +176,7 @@ export function About() {
               </div>
             </div>
 
-            <div className="bg-card rounded-3xl shadow-card p-6 overflow-hidden">
+            <div className="bg-card rounded-2xl md:rounded-3xl shadow-card p-5 md:p-6 overflow-hidden">
               <h3 className="font-bold text-foreground mb-4">Top Destinations</h3>
               <div className="relative overflow-hidden">
                 <div className="flex gap-3 animate-marquee whitespace-nowrap">
@@ -187,7 +187,7 @@ export function About() {
               </div>
             </div>
 
-            <div className="bg-card rounded-3xl shadow-card p-6">
+            <div className="bg-card rounded-2xl md:rounded-3xl shadow-card p-5 md:p-6">
               <h3 className="font-bold text-foreground mb-4">Student Reviews</h3>
               <div className="grid sm:grid-cols-2 gap-3 max-h-80 overflow-y-auto pr-2">
                 {REVIEWS.map((r) => (
