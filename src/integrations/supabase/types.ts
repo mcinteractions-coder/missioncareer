@@ -50,30 +50,51 @@ export type Database = {
       posts: {
         Row: {
           active: boolean
+          course: string | null
           created_at: string
+          destination: string | null
+          flag_code: string | null
+          gender: string | null
           id: string
           image: string | null
           kind: string
+          prev_college: string | null
+          prev_course: string | null
           text: string
           title: string
+          university: string | null
         }
         Insert: {
           active?: boolean
+          course?: string | null
           created_at?: string
+          destination?: string | null
+          flag_code?: string | null
+          gender?: string | null
           id?: string
           image?: string | null
           kind: string
+          prev_college?: string | null
+          prev_course?: string | null
           text: string
           title: string
+          university?: string | null
         }
         Update: {
           active?: boolean
+          course?: string | null
           created_at?: string
+          destination?: string | null
+          flag_code?: string | null
+          gender?: string | null
           id?: string
           image?: string | null
           kind?: string
+          prev_college?: string | null
+          prev_course?: string | null
           text?: string
           title?: string
+          university?: string | null
         }
         Relationships: []
       }

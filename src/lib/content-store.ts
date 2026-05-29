@@ -11,6 +11,13 @@ export interface Post {
   image?: string | null;
   active?: boolean;
   created_at: string;
+  university?: string | null;
+  course?: string | null;
+  destination?: string | null;
+  flag_code?: string | null;
+  prev_course?: string | null;
+  prev_college?: string | null;
+  gender?: string | null;
 }
 
 export async function fetchPosts(kind?: PostKind): Promise<Post[]> {
