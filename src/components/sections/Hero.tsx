@@ -3,6 +3,9 @@ import {
 } from "lucide-react";
 import pooja from "@/assets/pooja-welling.png";
 import gautam from "@/assets/gautam-umashankar.png";
+import reema from "@/assets/reema-welling.png";
+import julee from "@/assets/julee-shakya.png";
+
 
 const features = [
   { icon: GraduationCap, label: "Career & Course Guidance" },
@@ -105,8 +108,9 @@ export function Hero() {
             <div className="grid grid-cols-2 gap-4 relative">
               <TeamCard img={pooja} name="Pooja Welling" role="Founder and Director" />
               <TeamCard img={gautam} name="Gautam Umashankar" role="International Admission Expert" />
-              <TeamCard initial="R" name="Reema Welling" role="Admin Head" />
-              <TeamCard initial="J" name="Julee Shakya" role="Admin Executive" />
+              <TeamCard img={reema} name="Reema Welling" role="Admin Head" />
+              <TeamCard img={julee} name="Julee Shakya" role="Admin Executive" />
+
             </div>
           </div>
         </div>
