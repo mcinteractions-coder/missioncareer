@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { useServerFn } from "@tanstack/react-start";
-import { MessageCircle, X, Send, RotateCcw, Loader2 } from "lucide-react";
+import { ChevronDown, Send, RotateCcw, Loader2, Bot } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { loadChatHistory, clearChatHistory } from "@/lib/chat.functions";
 
@@ -115,7 +115,13 @@ export function ChatBot() {
           className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-2xl transition-transform hover:scale-110 md:bottom-6 md:right-6 md:h-16 md:w-16"
           style={{ background: "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary)/0.8) 100%)" }}
         >
-          <MessageCircle className="h-6 w-6 md:h-7 md:w-7" />
+          <img
+            src="/chatbot-logo.png"
+            alt="Chatbot"
+            width={36}
+            height={36}
+            className="h-7 w-7 md:h-8 md:w-8 object-contain"
+          />
           <span className="absolute -top-1 -right-1 flex h-3 w-3">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
             <span className="relative inline-flex h-3 w-3 rounded-full bg-primary"></span>
@@ -130,7 +136,7 @@ export function ChatBot() {
           <div className="flex items-center justify-between rounded-t-2xl p-4 text-white" style={{ background: "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary)/0.85) 100%)" }}>
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20">
-                <MessageCircle className="h-5 w-5" />
+                <Bot className="h-5 w-5" />
               </div>
               <div>
                 <h3 className="text-sm font-bold">MC Interactions Assistant</h3>
@@ -149,9 +155,10 @@ export function ChatBot() {
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Close chat"
+                title="Minimize chat"
                 className="rounded-full p-2 hover:bg-white/10"
               >
-                <X className="h-5 w-5" />
+                <ChevronDown className="h-5 w-5" />
               </button>
             </div>
           </div>
@@ -165,7 +172,7 @@ export function ChatBot() {
             ) : messages.length === 0 ? (
               <div className="flex h-full flex-col items-center justify-center text-center">
                 <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
-                  <MessageCircle className="h-7 w-7 text-primary" />
+                  <Bot className="h-7 w-7 text-primary" />
                 </div>
                 <p className="text-sm font-semibold text-foreground">Namaste! How can I help?</p>
                 <p className="mt-1 max-w-[260px] text-xs text-muted-foreground">
