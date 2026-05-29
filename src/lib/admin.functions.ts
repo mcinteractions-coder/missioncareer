@@ -88,7 +88,7 @@ export const adminUpdatePost = createServerFn({ method: "POST" })
       if (v !== undefined) clean[k] = v;
     }
     if (Object.keys(clean).length === 0) return { ok: true };
-    const { error } = await supabaseAdmin.from("posts").update(clean).eq("id", id);
+    const { error } = await supabaseAdmin.from("posts").update(clean as never).eq("id", id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
