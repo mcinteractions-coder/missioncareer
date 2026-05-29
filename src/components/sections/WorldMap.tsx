@@ -1,5 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ComposableMap, Geographies, Geography, Marker, Line } from "react-simple-maps";
+
+function useIsDark() {
+  const [isDark, setIsDark] = useState(false);
+  useEffect(() => {
+    const el = document.documentElement;
+    const update = () => setIsDark(el.classList.contains("dark"));
+    update();
+    const obs = new MutationObserver(update);
+    obs.observe(el, { attributes: true, attributeFilter: ["class"] });
+    return () => obs.disconnect();
+  }, []);
+  return isDark;
+}
 import { GraduationCap, DollarSign, Briefcase, Sparkles, Plane, Globe2 } from "lucide-react";
 
 const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
