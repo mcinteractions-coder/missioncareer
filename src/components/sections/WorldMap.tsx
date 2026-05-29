@@ -198,7 +198,7 @@ export function WorldMap() {
                       : isHover
                         ? "url(#hoverGrad)"
                         : info
-                          ? "#3b4a7a"
+                          ? t.landIdle
                           : "url(#landGrad)";
                     return (
                       <Geography
@@ -214,7 +214,7 @@ export function WorldMap() {
                         style={{
                           default: {
                             fill,
-                            stroke: "#0b1224",
+                            stroke: t.stroke,
                             strokeWidth: 0.5,
                             outline: "none",
                             transition: "fill 0.4s ease, transform 0.4s ease",
