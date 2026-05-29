@@ -8,6 +8,7 @@ import { Process } from "@/components/sections/Process";
 import { Success } from "@/components/sections/Success";
 import { Blog } from "@/components/sections/Blog";
 import { Contact } from "@/components/sections/Contact";
+import { Reviews } from "@/components/sections/Reviews";
 import { Footer } from "@/components/sections/Footer";
 import { FestivalPopup } from "@/components/FestivalPopup";
 import { ScrollReveal } from "@/components/ScrollReveal";
@@ -34,6 +35,7 @@ function Index() {
       <div data-reveal><About /></div>
       <div data-reveal><Services /></div>
       <div data-reveal><Destinations /></div>
+      <div data-reveal><Reviews /></div>
       <div data-reveal><Process /></div>
       <div data-reveal><Success /></div>
       <div data-reveal><Blog /></div>
