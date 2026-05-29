@@ -1,14 +1,17 @@
-import { Search } from "lucide-react";
+import { Search, MapPin, GraduationCap, DollarSign, Award, X } from "lucide-react";
+import { useMemo, useState } from "react";
+import { searchUniversities, type FinderFilters, BUDGET_BANDS } from "@/lib/universities";
 
-const FIELDS: { label: string; options: string[] }[] = [
-  { label: "Country", options: ["USA","UK","Canada","Australia","Germany","Ireland","New Zealand","Italy","France","Spain"] },
-  { label: "Course", options: ["Computer Science","Business","Engineering","Data Science","MBA","Mechanical","IT","AI","AIML","Cyber Security","Finance","Bio Technology"] },
-  { label: "Level", options: ["Bachelors","Masters","MBA","Diploma"] },
-  { label: "Intake", options: ["Fall","Spring","Summer"] },
-  { label: "IELTS", options: ["Not Required","6","6.5","7","7.5","8"] },
-  { label: "GRE", options: ["Not Required","300","310","320"] },
-  { label: "GMAT", options: ["Not Required","550","600","650","700"] },
-  { label: "Budget", options: ["Low","Medium","High","Very High"] },
+type FieldKey = keyof FinderFilters;
+const FIELDS: { key: FieldKey; label: string; options: string[] }[] = [
+  { key: "country", label: "Country", options: ["USA","UK","Canada","Australia","Germany","Ireland","New Zealand","Italy","France","Spain"] },
+  { key: "course", label: "Course", options: ["Computer Science","Business","Engineering","Data Science","MBA","Mechanical","IT","AI","AIML","Cyber Security","Finance","Bio Technology"] },
+  { key: "level", label: "Level", options: ["Bachelors","Masters","MBA","Diploma"] },
+  { key: "intake", label: "Intake", options: ["Fall","Spring","Summer"] },
+  { key: "ielts", label: "IELTS", options: ["Not Required","6","6.5","7","7.5","8"] },
+  { key: "gre", label: "GRE", options: ["Not Required","300","310","320"] },
+  { key: "gmat", label: "GMAT", options: ["Not Required","550","600","650","700"] },
+  { key: "budget", label: "Budget", options: ["Low","Medium","High","Very High"] },
 ];
 
 const ADMITS = [
@@ -30,6 +33,23 @@ const REVIEWS = [
 ];
 
 export function About() {
+  const [filters, setFilters] = useState<FinderFilters>({});
+  const [submitted, setSubmitted] = useState(false);
+
+  const results = useMemo(() => (submitted ? searchUniversities(filters) : []), [filters, submitted]);
+
+  const setField = (key: FieldKey, value: string) => {
+    setFilters((prev) => ({ ...prev, [key]: value || undefined }));
+    setSubmitted(false);
+  };
+
+  const clearAll = () => {
+    setFilters({});
+    setSubmitted(false);
+  };
+
+  const activeCount = Object.values(filters).filter(Boolean).length;
+
   return (
     <section id="about" className="py-20 md:py-28 bg-background relative overflow-hidden">
       <div className="absolute top-20 left-0 w-96 h-96 rounded-full bg-primary-soft/40 blur-3xl pointer-events-none" />
@@ -50,21 +70,85 @@ export function About() {
               <a href="#destinations" className="rounded-full border-2 border-primary/30 bg-card px-5 py-2.5 font-semibold text-primary">Find Universities</a>
             </div>
 
-            <div className="mt-8 grid sm:grid-cols-2 gap-3 bg-card rounded-3xl shadow-soft p-5">
+            <div id="finder" className="mt-8 grid sm:grid-cols-2 gap-3 bg-card rounded-3xl shadow-soft p-5">
               {FIELDS.map((f) => (
                 <select
-                  key={f.label}
+                  key={f.key}
                   className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                  defaultValue=""
+                  value={filters[f.key] ?? ""}
+                  onChange={(e) => setField(f.key, e.target.value)}
                 >
                   <option value="">{f.label}</option>
-                  {f.options.map((o) => <option key={o} value={o}>{o}</option>)}
+                  {f.options.map((o) => <option key={o} value={o}>{o}{f.key === "budget" && BUDGET_BANDS[o] ? ` ($${BUDGET_BANDS[o][0]/1000}k–$${BUDGET_BANDS[o][1]/1000}k)` : ""}</option>)}
                 </select>
               ))}
-              <button className="sm:col-span-2 mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-primary px-5 py-3 font-semibold text-primary-foreground shadow-soft hover:shadow-glow transition-shadow">
-                <Search className="h-4 w-4" /> Search Universities
+              <button
+                onClick={() => setSubmitted(true)}
+                className="sm:col-span-2 mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-primary px-5 py-3 font-semibold text-primary-foreground shadow-soft hover:shadow-glow transition-shadow"
+              >
+                <Search className="h-4 w-4" /> Search Universities {activeCount > 0 && <span className="ml-1 rounded-full bg-white/20 px-2 py-0.5 text-xs">{activeCount}</span>}
               </button>
+              {activeCount > 0 && (
+                <button onClick={clearAll} className="sm:col-span-2 -mt-1 inline-flex items-center justify-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground">
+                  <X className="h-3 w-3" /> Clear all filters
+                </button>
+              )}
             </div>
+
+            {submitted && (
+              <div className="mt-6 bg-card rounded-3xl shadow-card p-5 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-bold text-foreground">
+                    {results.length} {results.length === 1 ? "Match" : "Matches"} Found
+                  </h3>
+                  {results.length > 0 && <span className="text-xs text-muted-foreground">Sorted by ranking</span>}
+                </div>
+
+                {results.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-sm text-muted-foreground">No universities match all your criteria.</p>
+                    <p className="text-xs text-muted-foreground mt-1">Try relaxing IELTS/GRE/GMAT or budget filters.</p>
+                    <a href="#contact" className="mt-4 inline-block rounded-full bg-gradient-primary px-5 py-2 text-sm font-semibold text-primary-foreground">Talk to a Counselor</a>
+                  </div>
+                ) : (
+                  <div className="space-y-3 max-h-[28rem] overflow-y-auto pr-1">
+                    {results.map((u) => (
+                      <div key={u.id} className="rounded-2xl border border-border bg-secondary/60 p-4 hover:shadow-soft transition-shadow">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <h4 className="font-bold text-foreground">{u.name}</h4>
+                            <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+                              <MapPin className="h-3 w-3" /> {u.city}, {u.country}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-1 rounded-full bg-primary-soft px-2.5 py-1 text-xs font-bold text-primary whitespace-nowrap">
+                            <Award className="h-3 w-3" /> #{u.ranking}
+                          </div>
+                        </div>
+                        <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                          <div className="flex items-center gap-1.5 text-muted-foreground">
+                            <DollarSign className="h-3 w-3" /> ~${u.tuitionUSD.toLocaleString()}/yr
+                          </div>
+                          <div className="flex items-center gap-1.5 text-muted-foreground">
+                            <GraduationCap className="h-3 w-3" /> IELTS {u.ieltsMin || "N/R"}
+                            {u.greMin > 0 && ` · GRE ${u.greMin}`}
+                            {u.gmatMin > 0 && ` · GMAT ${u.gmatMin}`}
+                          </div>
+                        </div>
+                        <div className="mt-2 flex flex-wrap gap-1">
+                          {u.levels.map((l) => (
+                            <span key={l} className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{l}</span>
+                          ))}
+                          {u.intakes.map((i) => (
+                            <span key={i} className="rounded-full bg-accent/40 px-2 py-0.5 text-[10px] font-semibold text-foreground">{i}</span>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className="mt-6 flex flex-wrap gap-8">
               <div><span className="block text-2xl font-extrabold text-gradient">5000+</span><span className="text-sm text-muted-foreground">Students</span></div>
