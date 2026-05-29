@@ -374,18 +374,18 @@ function InfoRow({ icon, label, value, accent, highlight = false }: { icon: Reac
   return (
     <div
       className={`flex items-center gap-3 rounded-xl p-3 border transition-all ${
-        highlight ? "bg-white/[0.06] border-white/20" : "bg-white/[0.03] border-white/10"
+        highlight ? "bg-foreground/[0.06] dark:bg-white/[0.06] border-foreground/20 dark:border-white/20" : "bg-foreground/[0.03] dark:bg-white/[0.03] border-foreground/10 dark:border-white/10"
       }`}
     >
       <div
-        className="h-9 w-9 shrink-0 rounded-lg flex items-center justify-center text-white shadow-md"
-        style={{ background: highlight ? `linear-gradient(135deg, ${accent}, #6366f1)` : "rgba(255,255,255,0.08)", color: highlight ? "#fff" : accent }}
+        className="h-9 w-9 shrink-0 rounded-lg flex items-center justify-center shadow-md"
+        style={{ background: highlight ? `linear-gradient(135deg, ${accent}, #6366f1)` : "hsl(var(--muted))", color: highlight ? "#fff" : accent }}
       >
         {icon}
       </div>
       <div className="min-w-0 flex-1">
-        <div className="text-[10px] uppercase tracking-wider text-white/50 font-semibold">{label}</div>
-        <div className="text-sm font-bold text-white truncate">{value}</div>
+        <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">{label}</div>
+        <div className="text-sm font-bold text-foreground truncate">{value}</div>
       </div>
     </div>
   );
