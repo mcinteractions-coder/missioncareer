@@ -74,13 +74,6 @@ export function Navbar() {
           </button>
         </div>
 
-        <button
-          className="lg:hidden p-2 rounded-md text-foreground"
-          onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
-        >
-          {open ? <X /> : <Menu />}
-        </button>
       </div>
 
       {open && (
