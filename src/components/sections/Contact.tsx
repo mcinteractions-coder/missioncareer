@@ -112,7 +112,7 @@ export function Contact() {
               </div>
             ))}
 
-            <div className="bg-gradient-primary rounded-2xl shadow-soft p-5 md:p-6 text-primary-foreground">
+            <div className="rounded-2xl shadow-soft p-5 md:p-6 text-white" style={{ background: "linear-gradient(135deg, #25D366 0%, #128C7E 100%)" }}>
               <div className="flex items-start gap-4">
                 <div className="h-12 w-12 rounded-xl bg-white/20 flex items-center justify-center">
                   <MessageCircle className="h-5 w-5" />
@@ -120,7 +120,7 @@ export function Contact() {
                 <div className="flex-1">
                   <h4 className="font-bold">Chat on WhatsApp</h4>
                   <p className="text-sm opacity-90">Get instant response from our counselors</p>
-                  <a href="https://wa.me/919870003748" target="_blank" rel="noopener noreferrer" className="mt-3 inline-block rounded-full bg-white text-primary px-5 py-2 text-sm font-semibold">Chat Now</a>
+                  <a href="https://wa.me/919870003748" target="_blank" rel="noopener noreferrer" className="mt-3 inline-block rounded-full bg-white px-5 py-2 text-sm font-semibold" style={{ color: "#128C7E" }}>Chat Now</a>
                 </div>
               </div>
             </div>
