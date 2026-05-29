@@ -11,27 +11,27 @@ const STEPS = [
 
 export function Process() {
   return (
-    <section id="process" className="py-20 md:py-28 bg-gradient-hero relative">
+    <section id="process" className="py-12 md:py-24 bg-gradient-hero relative">
       <div className="container mx-auto px-4 md:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-14">
-          <span className="inline-block rounded-full bg-primary-soft px-4 py-1.5 text-sm font-semibold text-primary mb-3">How It Works</span>
-          <h2 className="text-4xl md:text-5xl font-extrabold">
+        <div className="text-center max-w-2xl mx-auto mb-10 md:mb-14">
+          <span className="inline-block rounded-full bg-primary-soft px-4 py-1.5 text-xs md:text-sm font-semibold text-primary mb-3">How It Works</span>
+          <h2 className="text-3xl md:text-5xl font-extrabold">
             Our <span className="text-gradient">Process</span>
           </h2>
-          <p className="mt-4 text-muted-foreground">A simple 6-step journey to your dream university abroad</p>
+          <p className="mt-3 md:mt-4 text-sm md:text-base text-muted-foreground">A simple 6-step journey to your dream university abroad</p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {STEPS.map((s, i) => (
-            <div key={s.n} className="relative bg-card rounded-2xl p-6 shadow-card hover:shadow-soft transition-all hover:-translate-y-1">
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-5xl font-extrabold text-gradient">{s.n}</span>
-                <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-primary text-primary-foreground shadow-soft">
-                  <s.icon className="h-6 w-6" />
+            <div key={s.n} className="relative bg-card rounded-2xl p-5 md:p-6 shadow-card hover:shadow-soft transition-all hover:-translate-y-1">
+              <div className="flex items-center justify-between mb-3 md:mb-4">
+                <span className="text-4xl md:text-5xl font-extrabold text-gradient">{s.n}</span>
+                <div className="inline-flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-xl bg-gradient-primary text-primary-foreground shadow-soft">
+                  <s.icon className="h-5 w-5 md:h-6 md:w-6" />
                 </div>
               </div>
-              <h3 className="text-lg font-bold text-foreground">{s.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
+              <h3 className="text-base md:text-lg font-bold text-foreground">{s.title}</h3>
+              <p className="mt-1.5 md:mt-2 text-sm text-muted-foreground">{s.desc}</p>
               {i < STEPS.length - 1 && (
                 <ArrowRight className="hidden lg:block absolute -right-4 top-1/2 -translate-y-1/2 text-primary/40 h-6 w-6" />
               )}

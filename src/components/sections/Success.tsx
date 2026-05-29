@@ -30,40 +30,40 @@ export function Success() {
   const all = [...adminCards, ...defaults];
 
   return (
-    <section id="success" className="py-20 md:py-28 bg-background">
+    <section id="success" className="py-12 md:py-24 bg-background">
       <div className="container mx-auto px-4 md:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-14">
-          <span className="inline-block rounded-full bg-primary-soft px-4 py-1.5 text-sm font-semibold text-primary mb-3">Our Pride</span>
-          <h2 className="text-4xl md:text-5xl font-extrabold">
+        <div className="text-center max-w-2xl mx-auto mb-10 md:mb-14">
+          <span className="inline-block rounded-full bg-primary-soft px-4 py-1.5 text-xs md:text-sm font-semibold text-primary mb-3">Our Pride</span>
+          <h2 className="text-3xl md:text-5xl font-extrabold">
             Student <span className="text-gradient">Success Stories</span>
           </h2>
-          <p className="mt-4 text-muted-foreground">Real students, real achievements. See how Mission Career has transformed their lives.</p>
+          <p className="mt-3 md:mt-4 text-sm md:text-base text-muted-foreground">Real students, real achievements. See how Mission Career has transformed their lives.</p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {all.map((s) => (
-            <div key={s.key} className="relative bg-card rounded-2xl p-6 shadow-card hover:shadow-soft transition-all hover:-translate-y-1">
-              <Quote className="absolute top-4 right-4 h-8 w-8 text-primary/20" />
-              <div className="flex items-center gap-3 mb-4">
+            <div key={s.key} className="relative bg-card rounded-2xl p-5 md:p-6 shadow-card hover:shadow-soft transition-all hover:-translate-y-1">
+              <Quote className="absolute top-4 right-4 h-7 w-7 md:h-8 md:w-8 text-primary/20" />
+              <div className="flex items-center gap-3 mb-3 md:mb-4">
                 {s.image ? (
-                  <img src={s.image} alt={s.name} className="h-12 w-12 rounded-full object-cover" />
+                  <img src={s.image} alt={s.name} className="h-11 w-11 md:h-12 md:w-12 rounded-full object-cover" />
                 ) : (
-                  <div className="h-12 w-12 rounded-full bg-gradient-primary text-primary-foreground text-lg font-bold flex items-center justify-center">{s.i}</div>
+                  <div className="h-11 w-11 md:h-12 md:w-12 rounded-full bg-gradient-primary text-primary-foreground text-base md:text-lg font-bold flex items-center justify-center">{s.i}</div>
                 )}
                 <div>
-                  <h3 className="font-bold text-foreground">{s.name}</h3>
+                  <h3 className="font-bold text-foreground text-sm md:text-base">{s.name}</h3>
                   {s.uni && <p className="text-xs text-primary">{s.uni}</p>}
                 </div>
               </div>
-              <div className="inline-block rounded-full bg-primary-soft px-3 py-1 text-xs font-semibold text-primary mb-3">{s.course}</div>
+              <div className="inline-block rounded-full bg-primary-soft px-3 py-1 text-xs font-semibold text-primary mb-2 md:mb-3">{s.course}</div>
               <p className="text-sm text-muted-foreground italic whitespace-pre-wrap">"{s.quote}"</p>
-              <div className="mt-3 text-amber-500">★★★★★</div>
+              <div className="mt-2 md:mt-3 text-amber-500">★★★★★</div>
             </div>
           ))}
         </div>
 
-        <div className="mt-10 flex justify-center">
-          <a href="#contact" className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 font-semibold text-primary-foreground shadow-soft hover:shadow-glow transition-shadow">
+        <div className="mt-8 md:mt-10 flex justify-center">
+          <a href="#contact" className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-5 py-2.5 md:px-6 md:py-3 text-sm md:text-base font-semibold text-primary-foreground shadow-soft hover:shadow-glow transition-shadow">
             View All Success Stories <ArrowRight className="h-4 w-4" />
           </a>
         </div>

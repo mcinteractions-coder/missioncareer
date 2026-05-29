@@ -4,9 +4,9 @@ import logo from "@/assets/mission-logo.png";
 
 export function Footer() {
   return (
-    <footer className="bg-foreground text-background pt-16 pb-8">
+    <footer className="bg-foreground text-background pt-10 md:pt-16 pb-8">
       <div className="container mx-auto px-4 md:px-8">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           <div>
             <div className="bg-white rounded-xl p-3 inline-block">
               <img src={logo} alt="Mission Career" className="h-12 w-auto" draggable={false} />
@@ -51,7 +51,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-6 border-t border-background/10 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="mt-8 md:mt-12 pt-6 border-t border-background/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-background/60">© 2026 Mission Career. All rights reserved.</p>
           <div className="flex items-center gap-3">
             <Link
