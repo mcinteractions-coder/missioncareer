@@ -79,6 +79,33 @@ const COUNTRIES: Record<string, CountryInfo> = {
 export function WorldMap() {
   const [active, setActive] = useState<CountryInfo>(COUNTRIES["United States of America"]);
   const [hover, setHover] = useState<string | null>(null);
+  const isDark = useIsDark();
+
+  // theme-aware palette
+  const t = isDark
+    ? {
+        bg: "#070b1f",
+        ocean: ["#1e293b", "#0b1224"] as const,
+        land: ["#1e2a4a", "#172041"] as const,
+        landIdle: "#3b4a7a",
+        stroke: "#0b1224",
+        star: "rgba(255,255,255,0.7)",
+        grid: "rgba(255,255,255,0.6)",
+        radial:
+          "radial-gradient(circle at 20% 30%, rgba(99,102,241,0.4), transparent 45%), radial-gradient(circle at 80% 70%, rgba(236,72,153,0.3), transparent 45%), radial-gradient(circle at 50% 100%, rgba(34,211,238,0.25), transparent 50%)",
+      }
+    : {
+        bg: "#f1f5fb",
+        ocean: ["#e0e7ff", "#dbeafe"] as const,
+        land: ["#e2e8f0", "#cbd5e1"] as const,
+        landIdle: "#a5b4fc",
+        stroke: "#ffffff",
+        star: "rgba(99,102,241,0.55)",
+        grid: "rgba(99,102,241,0.35)",
+        radial:
+          "radial-gradient(circle at 20% 30%, rgba(99,102,241,0.25), transparent 45%), radial-gradient(circle at 80% 70%, rgba(236,72,153,0.18), transparent 45%), radial-gradient(circle at 50% 100%, rgba(34,211,238,0.18), transparent 50%)",
+      };
+
 
   return (
     <section id="world-map" className="relative py-16 md:py-28 overflow-hidden">
