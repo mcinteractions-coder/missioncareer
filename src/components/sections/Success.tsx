@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, GraduationCap, MapPin, BookOpen, School } from "lucide-react";
+import { ArrowRight, GraduationCap, MapPin, BookOpen, School, Building2, BookMarked } from "lucide-react";
 import { fetchPosts, type Post } from "@/lib/content-store";
 import { DEFAULT_STORIES } from "@/lib/default-stories";
 
@@ -138,21 +138,25 @@ function StoryCardView({ s }: { s: StoryCard }) {
 
       <div className="px-5 pb-5 pt-3">
         <h3 className="font-bold text-foreground text-base md:text-lg leading-tight">{s.name}</h3>
-        {(s.prev_course || s.prev_college) && (
-          <div className="mt-1 text-xs text-muted-foreground space-y-0.5">
-            {s.prev_course && <p className="truncate">{s.prev_course}</p>}
-            {s.prev_college && <p className="truncate">{s.prev_college}</p>}
-          </div>
-        )}
 
-        <div className="mt-3 border-t border-border/50 pt-3 space-y-2 text-sm">
+        <div className="mt-3 border-t border-border/50 pt-3 space-y-2.5 text-sm">
+          {s.prev_college && (
+            <Row icon={<Building2 className="h-3.5 w-3.5" />} label="Indian College">
+              {s.prev_college}
+            </Row>
+          )}
+          {s.prev_course && (
+            <Row icon={<BookMarked className="h-3.5 w-3.5" />} label="Indian Course">
+              {s.prev_course}
+            </Row>
+          )}
           {s.uni && (
-            <Row icon={<School className="h-3.5 w-3.5" />} label="University">
+            <Row icon={<School className="h-3.5 w-3.5" />} label="Abroad University">
               {s.uni}
             </Row>
           )}
           {s.course && (
-            <Row icon={<BookOpen className="h-3.5 w-3.5" />} label="Course">
+            <Row icon={<BookOpen className="h-3.5 w-3.5" />} label="Abroad Course">
               {s.course}
             </Row>
           )}
