@@ -158,7 +158,7 @@ export function About() {
             </div>
           </div>
 
-          <div className="space-y-4 md:space-y-6">
+          <div className="space-y-4 md:space-y-6 min-w-0">
             <div className="bg-card rounded-2xl md:rounded-3xl shadow-card p-5 md:p-6">
               <h3 className="font-bold text-foreground flex items-center gap-2 mb-4">
                 <span className="h-2 w-2 rounded-full bg-primary" /> Recent Admits
