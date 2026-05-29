@@ -110,19 +110,12 @@ export function WorldMap() {
   return (
     <section id="world-map" className="relative py-16 md:py-28 overflow-hidden">
       {/* Cinematic backdrop */}
-      <div className="absolute inset-0 -z-10 bg-[#070b1f]">
-        <div
-          className="absolute inset-0 opacity-[0.35]"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 20% 30%, rgba(99,102,241,0.4), transparent 45%), radial-gradient(circle at 80% 70%, rgba(236,72,153,0.3), transparent 45%), radial-gradient(circle at 50% 100%, rgba(34,211,238,0.25), transparent 50%)",
-          }}
-        />
+      <div className="absolute inset-0 -z-10" style={{ background: t.bg }}>
+        <div className="absolute inset-0 opacity-[0.55]" style={{ backgroundImage: t.radial }} />
         <div
           className="absolute inset-0 opacity-[0.08]"
           style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
+            backgroundImage: `linear-gradient(${t.grid} 1px, transparent 1px), linear-gradient(90deg, ${t.grid} 1px, transparent 1px)`,
             backgroundSize: "48px 48px",
           }}
         />
@@ -135,8 +128,8 @@ export function WorldMap() {
             return (
               <span
                 key={i}
-                className="absolute h-[2px] w-[2px] rounded-full bg-white/70 animate-pulse"
-                style={{ top: `${top}%`, left: `${left}%`, animationDelay: `${delay}s`, animationDuration: "2.4s" }}
+                className="absolute h-[2px] w-[2px] rounded-full animate-pulse"
+                style={{ top: `${top}%`, left: `${left}%`, background: t.star, animationDelay: `${delay}s`, animationDuration: "2.4s" }}
               />
             );
           })}
@@ -145,22 +138,22 @@ export function WorldMap() {
 
       <div className="container mx-auto px-4 md:px-8">
         <div className="text-center max-w-2xl mx-auto mb-10 md:mb-14">
-          <span className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur px-4 py-1.5 text-xs md:text-sm font-semibold text-white border border-white/20 mb-3">
+          <span className="inline-flex items-center gap-2 rounded-full bg-foreground/5 dark:bg-white/10 backdrop-blur px-4 py-1.5 text-xs md:text-sm font-semibold text-foreground border border-foreground/10 dark:border-white/20 mb-3">
             <Globe2 className="h-3.5 w-3.5" /> Hover · tap · explore
           </span>
-          <h2 className="text-3xl md:text-5xl font-extrabold text-white">
-            Your <span className="bg-gradient-to-r from-cyan-300 via-indigo-300 to-pink-300 bg-clip-text text-transparent">Global Classroom</span>
+          <h2 className="text-3xl md:text-5xl font-extrabold text-foreground">
+            Your <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 dark:from-cyan-300 dark:via-indigo-300 dark:to-pink-300 bg-clip-text text-transparent">Global Classroom</span>
           </h2>
-          <p className="mt-3 md:mt-4 text-sm md:text-base text-white/70">
+          <p className="mt-3 md:mt-4 text-sm md:text-base text-muted-foreground">
             7 flagship destinations · one tap from your dream university.
           </p>
         </div>
 
         <div className="grid lg:grid-cols-5 gap-6 items-stretch">
           {/* Map */}
-          <div className="lg:col-span-3 relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-white/[0.01] backdrop-blur-xl p-3 md:p-5 shadow-[0_30px_80px_-30px_rgba(99,102,241,0.6)]">
+          <div className="lg:col-span-3 relative rounded-3xl border border-foreground/10 dark:border-white/10 bg-card/70 dark:bg-white/[0.04] backdrop-blur-xl p-3 md:p-5 shadow-card">
             {/* glow ring */}
-            <div className="pointer-events-none absolute -inset-px rounded-3xl bg-gradient-to-br from-indigo-500/30 via-transparent to-pink-500/30 opacity-60 blur-xl -z-10" />
+            <div className="pointer-events-none absolute -inset-px rounded-3xl bg-gradient-to-br from-indigo-500/20 via-transparent to-pink-500/20 dark:from-indigo-500/30 dark:to-pink-500/30 opacity-60 blur-xl -z-10" />
 
             <ComposableMap
               projectionConfig={{ scale: 150 }}
