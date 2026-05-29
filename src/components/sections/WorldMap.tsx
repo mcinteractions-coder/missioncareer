@@ -165,8 +165,8 @@ export function WorldMap() {
                   <stop offset="100%" stopColor="#0b1224" />
                 </radialGradient>
                 <linearGradient id="landGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#1e2a4a" />
-                  <stop offset="100%" stopColor="#172041" />
+                  <stop offset="0%" stopColor={t.land[0]} />
+                  <stop offset="100%" stopColor={t.land[1]} />
                 </linearGradient>
                 <linearGradient id="activeGrad" x1="0" y1="0" x2="1" y2="1">
                   <stop offset="0%" stopColor="#6366f1" />
