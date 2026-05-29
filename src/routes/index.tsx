@@ -10,6 +10,7 @@ import { Blog } from "@/components/sections/Blog";
 import { Contact } from "@/components/sections/Contact";
 import { Reviews } from "@/components/sections/Reviews";
 import { Booking } from "@/components/sections/Booking";
+import { TodaysMeetings } from "@/components/sections/TodaysMeetings";
 import { Footer } from "@/components/sections/Footer";
 import { FestivalPopup } from "@/components/FestivalPopup";
 import { ScrollReveal } from "@/components/ScrollReveal";
