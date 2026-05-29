@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { useServerFn } from "@tanstack/react-start";
-import { MessageCircle, X, Send, RotateCcw, Loader2 } from "lucide-react";
+import { ChevronDown, Send, RotateCcw, Loader2, Bot } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { loadChatHistory, clearChatHistory } from "@/lib/chat.functions";
 
