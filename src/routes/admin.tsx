@@ -280,8 +280,11 @@ function EditModal({ post, pin, onClose, onSaved }: { post: Post; pin: string; o
   const [prevCourse, setPrevCourse] = useState(post.prev_course || "");
   const [prevCollege, setPrevCollege] = useState(post.prev_college || "");
   const [gender, setGender] = useState<"male" | "female">((post.gender as "male" | "female") || "male");
+  const [rating, setRating] = useState<number>(post.rating ?? 5);
   const [busy, setBusy] = useState(false);
   const isSuccess = post.kind === "success";
+  const isReview = post.kind === "review";
+  const isAdmit = post.kind === "admit";
 
   const onFile = async (f?: File) => {
     if (!f) return;
@@ -300,13 +303,14 @@ function EditModal({ post, pin, onClose, onSaved }: { post: Post; pin: string; o
           title: title.trim(),
           text: text.trim(),
           image: image ?? null,
-          university: isSuccess ? (university.trim() || null) : undefined,
+          university: (isSuccess || isAdmit) ? (university.trim() || null) : undefined,
           course: isSuccess ? (course.trim() || null) : undefined,
           destination: isSuccess ? (destination.trim() || null) : undefined,
           flag_code: isSuccess ? (flagCode.trim().toLowerCase() || null) : undefined,
           prev_course: isSuccess ? (prevCourse.trim() || null) : undefined,
           prev_college: isSuccess ? (prevCollege.trim() || null) : undefined,
           gender: isSuccess ? gender : undefined,
+          rating: isReview ? rating : undefined,
         },
       });
       onSaved();
@@ -328,7 +332,7 @@ function EditModal({ post, pin, onClose, onSaved }: { post: Post; pin: string; o
           <h3 className="font-bold text-lg">Edit {post.kind}</h3>
           <button type="button" onClick={onClose} className="h-8 w-8 rounded-full hover:bg-accent flex items-center justify-center"><X className="h-4 w-4" /></button>
         </div>
-        <Field label={isSuccess ? "Student Name" : "Title"}>
+        <Field label={(isSuccess || isReview || isAdmit) ? "Name" : "Title"}>
           <input value={title} onChange={(e) => setTitle(e.target.value)} required className="w-full rounded-xl border border-input bg-background px-3 py-2" />
         </Field>
         {isSuccess ? (
@@ -364,11 +368,31 @@ function EditModal({ post, pin, onClose, onSaved }: { post: Post; pin: string; o
               </div>
             </Field>
           </>
+        ) : isReview ? (
+          <>
+            <Field label="Stars (1-5)">
+              <div className="flex gap-1">
+                {[1,2,3,4,5].map((n) => (
+                  <button type="button" key={n} onClick={() => setRating(n)} className="text-2xl leading-none">
+                    <span className={n <= rating ? "text-amber-500" : "text-muted-foreground/40"}>★</span>
+                  </button>
+                ))}
+              </div>
+            </Field>
+            <Field label="Review Text">
+              <textarea value={text} onChange={(e) => setText(e.target.value)} rows={4} className="w-full rounded-xl border border-input bg-background px-3 py-2" />
+            </Field>
+          </>
+        ) : isAdmit ? (
+          <Field label="University / College">
+            <input value={university} onChange={(e) => setUniversity(e.target.value)} className="w-full rounded-xl border border-input bg-background px-3 py-2" />
+          </Field>
         ) : (
           <Field label="Text">
             <textarea value={text} onChange={(e) => setText(e.target.value)} rows={5} className="w-full rounded-xl border border-input bg-background px-3 py-2" />
           </Field>
         )}
+
         <Field label="Photo">
           <label className="flex items-center gap-3 rounded-xl border-2 border-dashed border-border p-3 cursor-pointer hover:border-primary">
             {image ? <img src={image} alt="" className="h-12 w-12 rounded-lg object-cover" /> : <Upload className="h-5 w-5 text-muted-foreground" />}
