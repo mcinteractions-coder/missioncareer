@@ -4,6 +4,7 @@ import { Hero } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
 import { Services } from "@/components/sections/Services";
 import { Destinations } from "@/components/sections/Destinations";
+import { WorldMap } from "@/components/sections/WorldMap";
 import { Process } from "@/components/sections/Process";
 import { Success } from "@/components/sections/Success";
 import { Blog } from "@/components/sections/Blog";
