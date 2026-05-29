@@ -1,6 +1,7 @@
 import { Search, MapPin, GraduationCap, DollarSign, Award, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { searchUniversities, type FinderFilters, BUDGET_BANDS } from "@/lib/universities";
+import { Counter } from "@/components/Counter";
 
 type FieldKey = keyof FinderFilters;
 const FIELDS: { key: FieldKey; label: string; options: string[] }[] = [
@@ -151,9 +152,9 @@ export function About() {
             )}
 
             <div className="mt-6 flex flex-wrap gap-8">
-              <div><span className="block text-2xl font-extrabold text-gradient">5000+</span><span className="text-sm text-muted-foreground">Students</span></div>
-              <div><span className="block text-2xl font-extrabold text-gradient">98%</span><span className="text-sm text-muted-foreground">Visa Success</span></div>
-              <div><span className="block text-2xl font-extrabold text-gradient">120+</span><span className="text-sm text-muted-foreground">Universities</span></div>
+              <div><Counter value={5000} suffix="+" className="block text-2xl font-extrabold text-gradient" /><span className="text-sm text-muted-foreground">Students</span></div>
+              <div><Counter value={98} suffix="%" className="block text-2xl font-extrabold text-gradient" /><span className="text-sm text-muted-foreground">Visa Success</span></div>
+              <div><Counter value={120} suffix="+" className="block text-2xl font-extrabold text-gradient" /><span className="text-sm text-muted-foreground">Universities</span></div>
             </div>
           </div>
 

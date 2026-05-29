@@ -5,6 +5,7 @@ import pooja from "@/assets/pooja-welling.png";
 import gautam from "@/assets/gautam-umashankar.png";
 import reema from "@/assets/reema-welling.png";
 import julee from "@/assets/julee-shakya.png";
+import { Counter } from "@/components/Counter";
 
 
 const features = [
