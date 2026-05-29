@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      bookings: {
+        Row: {
+          country: string | null
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          notes: string | null
+          phone: string
+          slot_date: string
+          slot_time: string
+          status: string
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          notes?: string | null
+          phone: string
+          slot_date: string
+          slot_time: string
+          status?: string
+        }
+        Update: {
+          country?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          notes?: string | null
+          phone?: string
+          slot_date?: string
+          slot_time?: string
+          status?: string
+        }
+        Relationships: []
+      }
       chat_messages: {
         Row: {
           content: string
