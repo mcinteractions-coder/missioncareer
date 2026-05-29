@@ -21,12 +21,12 @@ const stats = [
 
 function TeamCard({ img, initial, name, role }: { img?: string; initial?: string; name: string; role: string }) {
   return (
-    <div className="bg-card rounded-2xl shadow-card p-5 hover:shadow-soft transition-shadow">
-      <div className="aspect-square rounded-xl overflow-hidden bg-gradient-to-br from-primary-soft to-sky-tint mb-3 flex items-center justify-center">
+    <div className="bg-card rounded-3xl shadow-card p-5 hover-lift">
+      <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-primary-soft to-sky-tint mb-3 flex items-center justify-center">
         {img ? (
-          <img src={img} alt={name} className="w-full h-full object-cover" draggable={false} />
+          <img src={img} alt={name} className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" draggable={false} />
         ) : (
-          <div className="w-16 h-16 rounded-xl bg-gradient-primary text-primary-foreground text-3xl font-bold flex items-center justify-center">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-primary text-primary-foreground text-3xl font-bold flex items-center justify-center">
             {initial}
           </div>
         )}
@@ -49,8 +49,8 @@ export function Hero() {
       <div className="container mx-auto px-4 md:px-8 relative">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-card/70 backdrop-blur px-4 py-2 shadow-card mb-6">
-              <Sparkles className="h-4 w-4 text-primary" />
+            <div className="inline-flex items-center gap-2 rounded-full bg-card/70 backdrop-blur px-4 py-2 shadow-card mb-6 animate-pulse-glow">
+              <Sparkles className="h-4 w-4 text-primary animate-spin-slow" />
               <span className="text-sm font-medium text-primary">Trusted by 5000+ students across India</span>
             </div>
 
@@ -86,13 +86,13 @@ export function Hero() {
             <div className="mt-8 flex flex-wrap gap-3">
               <a
                 href="#contact"
-                className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 font-semibold text-primary-foreground shadow-soft hover:shadow-glow transition-shadow"
+                className="btn-shine inline-flex items-center gap-2 rounded-full bg-gradient-primary gradient-animated px-6 py-3 font-semibold text-primary-foreground shadow-soft hover:shadow-glow hover:-translate-y-0.5 transition-all duration-300"
               >
-                Start Free Consultation <ArrowRight className="h-4 w-4" />
+                Start Free Consultation <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </a>
               <a
                 href="#destinations"
-                className="inline-flex items-center rounded-full border-2 border-primary/30 bg-card px-6 py-3 font-semibold text-primary hover:bg-primary-soft transition-colors"
+                className="inline-flex items-center rounded-full border-2 border-primary/30 bg-card px-6 py-3 font-semibold text-primary hover:bg-primary-soft hover:-translate-y-0.5 transition-all duration-300"
               >
                 Explore Countries
               </a>

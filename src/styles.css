@@ -38,7 +38,7 @@
 }
 
 :root {
-  --radius: 1rem;
+  --radius: 1.5rem;
   --background: oklch(0.985 0.01 235);
   --foreground: oklch(0.22 0.05 250);
   --card: oklch(1 0 0);
@@ -112,3 +112,98 @@
   100% { transform: translateX(-50%); }
 }
 .animate-marquee { animation: marquee 30s linear infinite; }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; } to { opacity: 1; }
+}
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 oklch(0.7 0.18 235 / 0.45); }
+  50% { box-shadow: 0 0 0 16px oklch(0.7 0.18 235 / 0); }
+}
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow { animation: spin-slow 18s linear infinite; }
+.animate-pulse-glow { animation: pulse-glow 2.4s ease-out infinite; }
+
+/* Scroll reveal — works with the global IntersectionObserver in ScrollReveal.tsx */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease-out, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+[data-reveal="left"]   { transform: translateX(-40px); }
+[data-reveal="right"]  { transform: translateX(40px); }
+[data-reveal="scale"]  { transform: scale(0.92); }
+[data-reveal="fade"]   { transform: none; }
+[data-reveal].in-view {
+  opacity: 1;
+  transform: none;
+}
+[data-reveal-delay="1"].in-view { transition-delay: 0.08s; }
+[data-reveal-delay="2"].in-view { transition-delay: 0.16s; }
+[data-reveal-delay="3"].in-view { transition-delay: 0.24s; }
+[data-reveal-delay="4"].in-view { transition-delay: 0.32s; }
+[data-reveal-delay="5"].in-view { transition-delay: 0.4s; }
+[data-reveal-delay="6"].in-view { transition-delay: 0.48s; }
+
+/* Reusable interactive utilities */
+.hover-lift {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.35s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-soft);
+}
+.hover-tilt { transition: transform 0.4s ease; }
+.hover-tilt:hover { transform: perspective(800px) rotateX(2deg) rotateY(-3deg) translateY(-4px); }
+
+.gradient-animated {
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease infinite;
+}
+
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn-shine::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(120deg, transparent 30%, oklch(1 0 0 / 0.35) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.8s ease;
+}
+.btn-shine:hover::after { transform: translateX(120%); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+}
