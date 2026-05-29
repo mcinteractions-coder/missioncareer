@@ -63,8 +63,11 @@ export function Booking() {
       slot_date: toISO(date),
       slot_time: time,
     };
-    if (!payload.full_name || !payload.email || !payload.phone) {
-      setError("Name, email and phone are required."); return;
+    if (!payload.full_name || !payload.phone) {
+      setError("Name and phone are required."); return;
+    }
+    if (!payload.email && !payload.phone) {
+      setError("Please provide either email or phone so we can reach you."); return;
     }
     setBusy(true);
     const { error: err } = await supabase.from("bookings").insert(payload);
@@ -188,7 +191,7 @@ export function Booking() {
               </div>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <input name="email" type="email" required maxLength={200} placeholder="Email address" className="w-full rounded-xl border border-border bg-secondary pl-10 pr-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+                <input name="email" type="email" maxLength={200} placeholder="Email (optional)" className="w-full rounded-xl border border-border bg-secondary pl-10 pr-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
               </div>
               <div className="relative">
                 <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
