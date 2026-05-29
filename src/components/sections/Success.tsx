@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, GraduationCap, MapPin, BookOpen, School } from "lucide-react";
+import { ArrowRight, GraduationCap, MapPin, BookOpen, School, Building2, BookMarked } from "lucide-react";
 import { fetchPosts, type Post } from "@/lib/content-store";
 import { DEFAULT_STORIES } from "@/lib/default-stories";
 
