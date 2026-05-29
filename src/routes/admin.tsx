@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { ArrowLeft, Trash2, Upload, Star, Newspaper, Sparkles, Lock, Inbox, ArrowUp, ArrowDown, Pencil, X, CalendarDays, Clock, Phone, Mail, Globe2 } from "lucide-react";
 import { fetchPosts, fileToDataURL, type Post, type PostKind } from "@/lib/content-store";
+import { supabase } from "@/integrations/supabase/client";
 import {
   adminAddPost,
   adminDeletePost,
@@ -719,7 +720,20 @@ function BookingsPanel() {
     }
   }, [listFn, pin]);
 
-  useEffect(() => { refresh(); }, [refresh]);
+  useEffect(() => {
+    refresh();
+    const channel = supabase
+      .channel("admin-bookings")
+      .on("postgres_changes", { event: "*", schema: "public", table: "bookings" }, () => {
+        refresh();
+      })
+      .subscribe();
+    const interval = setInterval(refresh, 30000);
+    return () => {
+      supabase.removeChannel(channel);
+      clearInterval(interval);
+    };
+  }, [refresh]);
 
   const onDelete = async (id: string) => {
     if (!confirm("Delete this booking?")) return;
@@ -733,7 +747,8 @@ function BookingsPanel() {
 
   if (bookings === null) return <p className="text-sm text-muted-foreground">Loading bookings…</p>;
 
-  const todayISO = new Date().toISOString().slice(0, 10);
+  const now = new Date();
+  const todayISO = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
   const filtered = bookings.filter((b) => {
     if (filter === "all") return true;
     if (filter === "today") return b.slot_date === todayISO;
