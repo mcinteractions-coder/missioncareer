@@ -195,9 +195,23 @@ function PostForm({ kind, pin, onCreated }: { kind: PostKind; pin: string; onCre
   const [image, setImage] = useState<string | undefined>();
   const [active, setActive] = useState(true);
   const [busy, setBusy] = useState(false);
+  // Success-specific fields
+  const [university, setUniversity] = useState("");
+  const [course, setCourse] = useState("");
+  const [destination, setDestination] = useState("");
+  const [flagCode, setFlagCode] = useState("");
+  const [prevCourse, setPrevCourse] = useState("");
+  const [prevCollege, setPrevCollege] = useState("");
+  const [gender, setGender] = useState<"male" | "female">("male");
   const addFn = useServerFn(adminAddPost);
 
-  const reset = () => { setTitle(""); setText(""); setImage(undefined); setActive(true); };
+  const isSuccess = kind === "success";
+
+  const reset = () => {
+    setTitle(""); setText(""); setImage(undefined); setActive(true);
+    setUniversity(""); setCourse(""); setDestination(""); setFlagCode("");
+    setPrevCourse(""); setPrevCollege(""); setGender("male");
+  };
 
   const onFile = async (f?: File) => {
     if (!f) return;
@@ -207,7 +221,8 @@ function PostForm({ kind, pin, onCreated }: { kind: PostKind; pin: string; onCre
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !text.trim()) return;
+    if (!title.trim()) return;
+    if (!isSuccess && !text.trim()) return;
     setBusy(true);
     try {
       await addFn({
@@ -215,9 +230,16 @@ function PostForm({ kind, pin, onCreated }: { kind: PostKind; pin: string; onCre
           pin,
           kind,
           title: title.trim(),
-          text: text.trim(),
+          text: text.trim() || (isSuccess ? `${title.trim()} — placed at ${university || destination}` : ""),
           image,
           active: kind === "festival" ? active : undefined,
+          university: isSuccess ? university.trim() || undefined : undefined,
+          course: isSuccess ? course.trim() || undefined : undefined,
+          destination: isSuccess ? destination.trim() || undefined : undefined,
+          flag_code: isSuccess ? (flagCode.trim().toLowerCase() || undefined) : undefined,
+          prev_course: isSuccess ? prevCourse.trim() || undefined : undefined,
+          prev_college: isSuccess ? prevCollege.trim() || undefined : undefined,
+          gender: isSuccess ? gender : undefined,
         },
       });
       reset();
@@ -230,20 +252,77 @@ function PostForm({ kind, pin, onCreated }: { kind: PostKind; pin: string; onCre
   };
 
   return (
-    <form onSubmit={submit} className="bg-card rounded-2xl shadow-card p-6 space-y-4 h-fit sticky top-32">
+    <form onSubmit={submit} className="bg-card rounded-2xl shadow-card p-6 space-y-4 h-fit lg:sticky lg:top-32">
       <h2 className="font-bold text-lg">Add new {kind}</h2>
       <div>
-        <label className="text-sm font-semibold">Title {kind === "success" && <span className="text-muted-foreground font-normal">(Student name)</span>}</label>
+        <label className="text-sm font-semibold">{isSuccess ? "Student Name" : "Title"}</label>
         <input value={title} onChange={(e) => setTitle(e.target.value)} required maxLength={200}
+          placeholder={isSuccess ? "e.g. Martin Dsouza" : ""}
           className="mt-1 w-full rounded-xl border border-input bg-background px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary" />
       </div>
+
+      {isSuccess ? (
+        <>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-sm font-semibold">Destination Country</label>
+              <input value={destination} onChange={(e) => setDestination(e.target.value)} maxLength={100}
+                placeholder="Germany"
+                className="mt-1 w-full rounded-xl border border-input bg-background px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary" />
+            </div>
+            <div>
+              <label className="text-sm font-semibold">Flag Code <span className="text-muted-foreground font-normal">(2 letters)</span></label>
+              <input value={flagCode} onChange={(e) => setFlagCode(e.target.value)} maxLength={4}
+                placeholder="de, us, gb, ca…"
+                className="mt-1 w-full rounded-xl border border-input bg-background px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary" />
+            </div>
+          </div>
+          <div>
+            <label className="text-sm font-semibold">Abroad University</label>
+            <input value={university} onChange={(e) => setUniversity(e.target.value)} maxLength={200}
+              placeholder="Technische Universität Berlin"
+              className="mt-1 w-full rounded-xl border border-input bg-background px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary" />
+          </div>
+          <div>
+            <label className="text-sm font-semibold">Course (Abroad)</label>
+            <input value={course} onChange={(e) => setCourse(e.target.value)} maxLength={200}
+              placeholder="M.Sc. Computer Science"
+              className="mt-1 w-full rounded-xl border border-input bg-background px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary" />
+          </div>
+          <div>
+            <label className="text-sm font-semibold">Previous Course <span className="text-muted-foreground font-normal">(optional)</span></label>
+            <input value={prevCourse} onChange={(e) => setPrevCourse(e.target.value)} maxLength={200}
+              placeholder="Mechanical Engineering"
+              className="mt-1 w-full rounded-xl border border-input bg-background px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary" />
+          </div>
+          <div>
+            <label className="text-sm font-semibold">Previous College <span className="text-muted-foreground font-normal">(optional)</span></label>
+            <input value={prevCollege} onChange={(e) => setPrevCollege(e.target.value)} maxLength={200}
+              placeholder="Thakur College of Engineering"
+              className="mt-1 w-full rounded-xl border border-input bg-background px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary" />
+          </div>
+          <div>
+            <label className="text-sm font-semibold">Gender <span className="text-muted-foreground font-normal">(for default avatar)</span></label>
+            <div className="mt-1 flex gap-2">
+              {(["male", "female"] as const).map((g) => (
+                <button type="button" key={g} onClick={() => setGender(g)}
+                  className={`flex-1 rounded-xl border px-4 py-2.5 text-sm font-semibold capitalize transition ${
+                    gender === g ? "bg-gradient-primary text-primary-foreground border-transparent" : "bg-background text-foreground border-input hover:border-primary"
+                  }`}>{g}</button>
+              ))}
+            </div>
+          </div>
+        </>
+      ) : (
+        <div>
+          <label className="text-sm font-semibold">Text</label>
+          <textarea value={text} onChange={(e) => setText(e.target.value)} required maxLength={5000} rows={5}
+            className="mt-1 w-full rounded-xl border border-input bg-background px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary" />
+        </div>
+      )}
+
       <div>
-        <label className="text-sm font-semibold">Text {kind === "success" && <span className="text-muted-foreground font-normal">(Story / university)</span>}</label>
-        <textarea value={text} onChange={(e) => setText(e.target.value)} required maxLength={5000} rows={5}
-          className="mt-1 w-full rounded-xl border border-input bg-background px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary" />
-      </div>
-      <div>
-        <label className="text-sm font-semibold">Image</label>
+        <label className="text-sm font-semibold">{isSuccess ? "Student Photo (optional)" : "Image"}</label>
         <label className="mt-1 flex items-center gap-3 rounded-xl border-2 border-dashed border-border p-4 cursor-pointer hover:border-primary transition">
           {image ? <img src={image} alt="" className="h-16 w-16 rounded-lg object-cover" /> : <Upload className="h-6 w-6 text-muted-foreground" />}
           <span className="text-sm text-muted-foreground">{image ? "Change image" : "Click to upload"}</span>
