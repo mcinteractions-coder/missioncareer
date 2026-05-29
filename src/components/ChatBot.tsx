@@ -115,7 +115,13 @@ export function ChatBot() {
           className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-2xl transition-transform hover:scale-110 md:bottom-6 md:right-6 md:h-16 md:w-16"
           style={{ background: "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary)/0.8) 100%)" }}
         >
-          <MessageCircle className="h-6 w-6 md:h-7 md:w-7" />
+          <img
+            src="/chatbot-logo.png"
+            alt="Chatbot"
+            width={36}
+            height={36}
+            className="h-7 w-7 md:h-8 md:w-8 object-contain"
+          />
           <span className="absolute -top-1 -right-1 flex h-3 w-3">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
             <span className="relative inline-flex h-3 w-3 rounded-full bg-primary"></span>
