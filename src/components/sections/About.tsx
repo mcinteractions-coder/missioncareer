@@ -1,7 +1,8 @@
-import { Search, MapPin, GraduationCap, DollarSign, Award, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { Search, MapPin, GraduationCap, DollarSign, Award, X, Quote } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { searchUniversities, type FinderFilters, BUDGET_BANDS } from "@/lib/universities";
 import { Counter } from "@/components/Counter";
+import { fetchPosts, type Post } from "@/lib/content-store";
 
 type FieldKey = keyof FinderFilters;
 const FIELDS: { key: FieldKey; label: string; options: string[] }[] = [
@@ -15,27 +16,27 @@ const FIELDS: { key: FieldKey; label: string; options: string[] }[] = [
   { key: "budget", label: "Budget", options: ["Low","Medium","High","Very High"] },
 ];
 
-const ADMITS = [
-  { i: "M", name: "Martin Ronak Angello", uni: "TU Berlin" },
-  { i: "J", name: "Jayesh Sharma", uni: "TU Dresden" },
-  { i: "R", name: "Riya Patil", uni: "TU Braunschweig" },
-  { i: "H", name: "Hrushikesh Shetty", uni: "Indiana University" },
-];
-
 const DESTS = ["USA","UK","Australia","Canada","Germany","Ireland","New Zealand","Italy","France"];
 
-const REVIEWS = [
-  { t: "Mission Career guided me step by step for Germany admission. Very professional and supportive staff.", n: "Rishikesh" },
-  { t: "Best consultancy in Kandivali. Very honest guidance.", n: "Karan" },
-  { t: "Got my visa smoothly without stress.", n: "Akshada" },
-  { t: "Staff is friendly and explains everything clearly.", n: "Pooja" },
-  { t: "Highly recommended for study abroad.", n: "Akshay" },
-  { t: "Helped me choose correct university.", n: "Sneha" },
+const GRADIENTS = [
+  "from-rose-500 to-orange-500",
+  "from-sky-500 to-indigo-500",
+  "from-emerald-500 to-teal-500",
+  "from-fuchsia-500 to-purple-500",
+  "from-amber-500 to-red-500",
+  "from-cyan-500 to-blue-500",
 ];
 
 export function About() {
   const [filters, setFilters] = useState<FinderFilters>({});
   const [submitted, setSubmitted] = useState(false);
+  const [admits, setAdmits] = useState<Post[]>([]);
+  const [reviews, setReviews] = useState<Post[]>([]);
+
+  useEffect(() => {
+    fetchPosts("admit").then(setAdmits);
+    fetchPosts("review").then(setReviews);
+  }, []);
 
   const results = useMemo(() => (submitted ? searchUniversities(filters) : []), [filters, submitted]);
 
@@ -50,6 +51,7 @@ export function About() {
   };
 
   const activeCount = Object.values(filters).filter(Boolean).length;
+
 
   return (
     <section id="about" className="py-12 md:py-24 bg-background relative overflow-hidden">
