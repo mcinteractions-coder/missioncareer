@@ -67,7 +67,7 @@ export function About() {
 
             <div className="mt-6 flex flex-wrap gap-3">
               <a href="#contact" className="rounded-full bg-gradient-primary px-5 py-2.5 font-semibold text-primary-foreground shadow-soft">Free Counseling</a>
-              <a href="#destinations" className="rounded-full border-2 border-primary/30 bg-card px-5 py-2.5 font-semibold text-primary">Find Universities</a>
+              <a href="#finder" className="rounded-full border-2 border-primary/30 bg-card px-5 py-2.5 font-semibold text-primary">Find Universities</a>
             </div>
 
             <div id="finder" className="mt-8 grid sm:grid-cols-2 gap-3 bg-card rounded-3xl shadow-soft p-5">
