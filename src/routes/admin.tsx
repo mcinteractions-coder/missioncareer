@@ -719,7 +719,20 @@ function BookingsPanel() {
     }
   }, [listFn, pin]);
 
-  useEffect(() => { refresh(); }, [refresh]);
+  useEffect(() => {
+    refresh();
+    const channel = supabase
+      .channel("admin-bookings")
+      .on("postgres_changes", { event: "*", schema: "public", table: "bookings" }, () => {
+        refresh();
+      })
+      .subscribe();
+    const interval = setInterval(refresh, 30000);
+    return () => {
+      supabase.removeChannel(channel);
+      clearInterval(interval);
+    };
+  }, [refresh]);
 
   const onDelete = async (id: string) => {
     if (!confirm("Delete this booking?")) return;
