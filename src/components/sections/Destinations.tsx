@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import { Counter } from "@/components/Counter";
 
 const COUNTRIES = [
   { flag: "🇬🇧", name: "UK", unis: "150+" },
@@ -42,9 +43,9 @@ export function Destinations() {
         </div>
 
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 bg-gradient-primary rounded-3xl p-8 shadow-soft text-primary-foreground">
-          <div className="text-center"><div className="text-4xl font-extrabold">5000+</div><div className="text-sm opacity-90">Students Guided</div></div>
-          <div className="text-center"><div className="text-4xl font-extrabold">98%</div><div className="text-sm opacity-90">Visa Success</div></div>
-          <div className="text-center"><div className="text-4xl font-extrabold">120+</div><div className="text-sm opacity-90">University Partners</div></div>
+          <div className="text-center"><Counter value={5000} suffix="+" className="block text-4xl font-extrabold" /><div className="text-sm opacity-90">Students Guided</div></div>
+          <div className="text-center"><Counter value={98} suffix="%" className="block text-4xl font-extrabold" /><div className="text-sm opacity-90">Visa Success</div></div>
+          <div className="text-center"><Counter value={120} suffix="+" className="block text-4xl font-extrabold" /><div className="text-sm opacity-90">University Partners</div></div>
         </div>
       </div>
     </section>
