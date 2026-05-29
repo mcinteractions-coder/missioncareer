@@ -24,7 +24,7 @@ function TeamCard({ img, initial, name, role }: { img?: string; initial?: string
     <div className="bg-card rounded-3xl shadow-card p-5 hover-lift">
       <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-primary-soft to-sky-tint mb-3 flex items-center justify-center">
         {img ? (
-          <img src={img} alt={name} className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" draggable={false} />
+          <img src={img} alt={name} className="w-full h-full object-cover object-top transition-transform duration-500 hover:scale-105" draggable={false} />
         ) : (
           <div className="w-16 h-16 rounded-2xl bg-gradient-primary text-primary-foreground text-3xl font-bold flex items-center justify-center">
             {initial}
