@@ -17,9 +17,9 @@ const features = [
 ];
 
 const stats = [
-  { num: "5000+", label: "Students Placed Abroad" },
-  { num: "98%", label: "Visa Approval Rate" },
-  { num: "20+", label: "Global Destinations" },
+  { value: 5000, suffix: "+", label: "Students Placed Abroad" },
+  { value: 98, suffix: "%", label: "Visa Approval Rate" },
+  { value: 20, suffix: "+", label: "Global Destinations" },
 ];
 
 function TeamCard({ img, initial, name, role }: { img?: string; initial?: string; name: string; role: string }) {
@@ -80,7 +80,7 @@ export function Hero() {
             <div className="mt-8 flex flex-wrap gap-8">
               {stats.map((s) => (
                 <div key={s.label}>
-                  <div className="text-3xl md:text-4xl font-extrabold text-gradient">{s.num}</div>
+                  <Counter value={s.value} suffix={s.suffix} className="text-3xl md:text-4xl font-extrabold text-gradient" />
                   <div className="text-sm text-muted-foreground">{s.label}</div>
                 </div>
               ))}
