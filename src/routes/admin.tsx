@@ -686,3 +686,159 @@ function LeadsPanel() {
     </div>
   );
 }
+
+interface Booking {
+  id: string;
+  full_name: string;
+  phone: string | null;
+  email: string | null;
+  country: string | null;
+  slot_date: string;
+  slot_time: string;
+  notes: string | null;
+  status: string;
+  created_at: string;
+}
+
+function BookingsPanel() {
+  const [bookings, setBookings] = useState<Booking[] | null>(null);
+  const [error, setError] = useState("");
+  const [filter, setFilter] = useState<"upcoming" | "today" | "past" | "all">("upcoming");
+  const listFn = useServerFn(adminListBookings);
+  const deleteFn = useServerFn(adminDeleteBooking);
+  const pin = sessionStorage.getItem("mc_admin_pin") || "";
+
+  const refresh = useCallback(async () => {
+    setError("");
+    try {
+      const rows = await listFn({ data: { pin } });
+      setBookings(rows as Booking[]);
+    } catch (e) {
+      setError((e as Error).message);
+      setBookings([]);
+    }
+  }, [listFn, pin]);
+
+  useEffect(() => { refresh(); }, [refresh]);
+
+  const onDelete = async (id: string) => {
+    if (!confirm("Delete this booking?")) return;
+    try {
+      await deleteFn({ data: { pin, id } });
+      refresh();
+    } catch (e) {
+      alert("Delete failed: " + (e as Error).message);
+    }
+  };
+
+  if (bookings === null) return <p className="text-sm text-muted-foreground">Loading bookings…</p>;
+
+  const todayISO = new Date().toISOString().slice(0, 10);
+  const filtered = bookings.filter((b) => {
+    if (filter === "all") return true;
+    if (filter === "today") return b.slot_date === todayISO;
+    if (filter === "upcoming") return b.slot_date >= todayISO;
+    return b.slot_date < todayISO;
+  });
+
+  // group by date
+  const groups: Record<string, Booking[]> = {};
+  for (const b of filtered) {
+    (groups[b.slot_date] ||= []).push(b);
+  }
+  const dates = Object.keys(groups).sort((a, z) =>
+    filter === "past" ? z.localeCompare(a) : a.localeCompare(z),
+  );
+
+  const formatDate = (iso: string) => {
+    const d = new Date(iso + "T00:00:00");
+    return d.toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  };
+
+  const FILTERS: { key: typeof filter; label: string }[] = [
+    { key: "upcoming", label: "Upcoming" },
+    { key: "today", label: "Today" },
+    { key: "past", label: "Past" },
+    { key: "all", label: "All" },
+  ];
+
+  return (
+    <div>
+      <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
+        <h2 className="font-bold text-lg">Counseling Bookings ({filtered.length})</h2>
+        <div className="flex gap-2">
+          {FILTERS.map((f) => (
+            <button
+              key={f.key}
+              onClick={() => setFilter(f.key)}
+              className={`text-xs rounded-full px-3 py-1.5 font-semibold transition ${
+                filter === f.key ? "bg-gradient-primary text-primary-foreground shadow-soft" : "bg-secondary hover:bg-accent"
+              }`}
+            >{f.label}</button>
+          ))}
+        </div>
+      </div>
+
+      {error && <p className="text-sm text-destructive mb-4">{error}</p>}
+
+      {filtered.length === 0 ? (
+        <div className="bg-card rounded-2xl shadow-card p-10 text-center">
+          <CalendarDays className="mx-auto h-10 w-10 text-muted-foreground mb-3" />
+          <p className="text-sm text-muted-foreground">No bookings in this view.</p>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          {dates.map((date) => (
+            <div key={date}>
+              <div className="flex items-center gap-2 mb-3">
+                <div className="h-8 w-8 rounded-lg bg-primary-soft text-primary flex items-center justify-center">
+                  <CalendarDays className="h-4 w-4" />
+                </div>
+                <h3 className="font-bold text-foreground">{formatDate(date)}</h3>
+                <span className="text-xs text-muted-foreground">· {groups[date].length} {groups[date].length === 1 ? "booking" : "bookings"}</span>
+                {date === todayISO && <span className="text-[10px] uppercase tracking-wide bg-primary text-primary-foreground rounded-full px-2 py-0.5 font-bold">Today</span>}
+              </div>
+              <div className="grid md:grid-cols-2 gap-3">
+                {groups[date].map((b) => (
+                  <div key={b.id} className="bg-card rounded-2xl shadow-card p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <h4 className="font-bold text-foreground truncate">{b.full_name}</h4>
+                        <div className="flex items-center gap-1.5 text-primary text-sm font-semibold mt-0.5">
+                          <Clock className="h-3.5 w-3.5" /> {b.slot_time}
+                        </div>
+                      </div>
+                      <button onClick={() => onDelete(b.id)} className="text-xs text-destructive inline-flex items-center gap-1">
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                    <div className="mt-3 space-y-1.5 text-sm">
+                      {b.phone && (
+                        <div className="flex items-center gap-2">
+                          <Phone className="h-3.5 w-3.5 text-muted-foreground" />
+                          <a href={`tel:${b.phone}`} className="text-primary font-medium">{b.phone}</a>
+                        </div>
+                      )}
+                      {b.email && (
+                        <div className="flex items-center gap-2">
+                          <Mail className="h-3.5 w-3.5 text-muted-foreground" />
+                          <a href={`mailto:${b.email}`} className="text-primary font-medium truncate">{b.email}</a>
+                        </div>
+                      )}
+                      {b.country && (
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                          <Globe2 className="h-3.5 w-3.5" /> {b.country}
+                        </div>
+                      )}
+                    </div>
+                    {b.notes && <p className="mt-3 text-xs text-foreground whitespace-pre-wrap border-t border-border pt-2">{b.notes}</p>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
