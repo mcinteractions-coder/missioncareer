@@ -136,7 +136,7 @@ export function ChatBot() {
           <div className="flex items-center justify-between rounded-t-2xl p-4 text-white" style={{ background: "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary)/0.85) 100%)" }}>
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20">
-                <MessageCircle className="h-5 w-5" />
+                <Bot className="h-5 w-5" />
               </div>
               <div>
                 <h3 className="text-sm font-bold">MC Interactions Assistant</h3>
@@ -155,9 +155,10 @@ export function ChatBot() {
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Close chat"
+                title="Minimize chat"
                 className="rounded-full p-2 hover:bg-white/10"
               >
-                <X className="h-5 w-5" />
+                <ChevronDown className="h-5 w-5" />
               </button>
             </div>
           </div>
