@@ -10,6 +10,7 @@ import {
 import { useEffect } from "react";
 
 import appCss from "../styles.css?url";
+import { ChatBot } from "@/components/ChatBot";
 
 function NotFoundComponent() {
   return (
@@ -132,6 +133,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
+      <ChatBot />
     </QueryClientProvider>
   );
 }
