@@ -115,7 +115,7 @@ function AdminPanel() {
       </header>
 
       <main className="container mx-auto px-4 md:px-8 py-8">
-        {tab === "leads" ? <LeadsPanel /> : <PostsPanel kind={tab} />}
+        {tab === "leads" ? <LeadsPanel /> : tab === "bookings" ? <BookingsPanel /> : <PostsPanel kind={tab} />}
       </main>
     </div>
   );
