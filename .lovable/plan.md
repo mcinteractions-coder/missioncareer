@@ -1,36 +1,42 @@
-## Add a floating AI chatbot to the website
+## Problem
 
-A ChatGPT-style assistant that helps visitors with study-abroad queries (universities, courses, visa, costs, scholarships, MC Interactions services). Single ongoing conversation per user, persisted in Lovable Cloud, accessible from a floating bubble on every page.
+The chatbot is hallucinating:
+- Calls the company "MC Interactions" (wrong) instead of **Mission Career**.
+- Invents an incorrect office address.
 
-### What the user will see
+Root cause: the `SYSTEM_PROMPT` in `src/routes/api/chat.ts` hardcodes "MC Interactions" and gives the model no verified facts about the business, so it makes things up.
 
-- A green WhatsApp-style floating chat bubble (bottom-right, above the existing FestivalPopup z-index) on every page.
-- Click → opens a chat panel (Sheet/drawer) with a header "MC Interactions Assistant", message transcript, and a composer at the bottom.
-- Assistant messages render with markdown (bold, lists, links).
-- A streaming "Thinking…" shimmer while the model responds, then tokens stream in live.
-- "New conversation" button in the header to clear and start fresh.
-- Works without login (anonymous visitors get a browser-scoped session id stored in localStorage; signed-in admins get their user_id).
+## Fix
 
-### Tech approach
+Replace the system prompt with an accurate, fact-rich brief built from the actual website content. No DB/schema changes, no UI changes — only `src/routes/api/chat.ts`.
 
-- **AI**: Lovable AI Gateway via AI SDK (`ai`, `@ai-sdk/openai-compatible`). Default model `google/gemini-3-flash-preview`. `LOVABLE_API_KEY` already exists in secrets.
-- **Backend**: TanStack server route at `src/routes/api/chat.ts` for streaming chat (uses `streamText` + `toUIMessageStreamResponse`). A `createServerFn` (`saveChatMessage`) persists messages after streaming finishes via `onFinish`.
-- **DB**: New `chat_sessions` and `chat_messages` tables in Lovable Cloud, scoped by `session_key` (uuid stored in localStorage for anon users). Public insert/select policies scoped to `session_key` passed in queries (no PII; visitors can only see their own session because the key is the lookup).
-- **UI**: AI Elements (`Conversation`, `Message`, `MessageResponse`, `PromptInput`, `Shimmer`) installed via `bun x ai-elements@latest add`. Uses `useChat` from `@ai-sdk/react` with `DefaultChatTransport` pointing to `/api/chat`.
-- **System prompt**: Tuned for MC Interactions — study-abroad counseling, polite Hinglish-friendly tone, recommends booking a free counseling call (scrolls to #contact) when relevant.
+### Step 1 — Pull the source of truth from the site
 
-### Files to add / change
+Fetch the live site (https://ditto-craft-clone.lovable.app) and also read in-repo content sources so the facts match what visitors see:
+- `src/components/sections/Footer.tsx` (address, phone, email already present: Kandivali East Mumbai, +91 9870003748, mcinteractions@gmail.com)
+- `src/components/sections/Hero.tsx`, `About.tsx`, `Services.tsx`, `Destinations.tsx`, `Process.tsx`, `Contact.tsx`, `Success.tsx`, `Blog.tsx`
+- `src/lib/default-stories.ts`, `src/lib/universities.ts`
 
-- **New**: `supabase/migrations/<ts>_chat_tables.sql` — `chat_sessions`, `chat_messages` tables with grants + RLS.
-- **New**: `src/lib/ai-gateway.server.ts` — Lovable AI Gateway provider helper.
-- **New**: `src/routes/api/chat.ts` — streaming POST route, loads prior messages by `session_key`, calls `streamText`, saves on finish.
-- **New**: `src/lib/chat.functions.ts` — `loadChatHistory`, `clearChatHistory` server functions.
-- **New**: `src/components/ChatBot.tsx` — floating bubble + Sheet panel + `useChat` integration + markdown rendering.
-- **New**: `src/components/ai-elements/*` — installed AI Elements primitives.
-- **Edit**: `src/routes/__root.tsx` — mount `<ChatBot />` globally so it appears on every page.
-- **Edit**: `package.json` (via `bun add`) — `ai`, `@ai-sdk/openai-compatible`, `@ai-sdk/react`, `zod` (if missing), `react-markdown`.
+Extract: official brand name (**Mission Career** / "Mission Career Education"), tagline, full office address, phone, email, list of services, supported destinations, process steps, hours (if listed), social links.
 
-### Open question (optional)
+### Step 2 — Rewrite the system prompt in `src/routes/api/chat.ts`
 
-You skipped the "purpose" question. I'll tune the system prompt for **MC Interactions study-abroad counseling** (universities, courses, visa, scholarships, costs, and nudging users to the free counseling form). Tell me if you want a different focus.
+New prompt will:
+1. Set identity: "You are the Mission Career Assistant" — never say "MC Interactions".
+2. Embed a **VERIFIED FACTS** block (name, address, phone, email, services, destinations, process) pulled verbatim from the site/footer.
+3. Add a hard rule: *Never invent addresses, fees, deadlines, university stats, or contact details. If a fact is not in the VERIFIED FACTS block, say you'll connect them with a counselor.*
+4. Keep the existing tone (warm, Hinglish-friendly, markdown, ~150 words) and the nudge to the free counseling form / +91 9870003748.
 
+### Step 3 — Verify
+
+- Open the chatbot, ask "What's your office address?" → should return the exact footer address.
+- Ask "What's the company name?" → "Mission Career".
+- Ask something not in the facts (e.g. "What's the fee for MS in USA at MIT?") → should decline and offer counseling instead of inventing.
+
+## Files changed
+
+- `src/routes/api/chat.ts` — only the `SYSTEM_PROMPT` constant.
+
+## Out of scope
+
+- No new tables, no RAG/embeddings, no scraping at runtime. Facts are baked into the prompt (simpler, instant, zero cost). If the site content changes substantially later, we update the prompt — happy to wire up a small admin-editable "bot facts" record in a follow-up if you want that.
