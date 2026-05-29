@@ -747,7 +747,8 @@ function BookingsPanel() {
 
   if (bookings === null) return <p className="text-sm text-muted-foreground">Loading bookings…</p>;
 
-  const todayISO = new Date().toISOString().slice(0, 10);
+  const now = new Date();
+  const todayISO = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
   const filtered = bookings.filter((b) => {
     if (filter === "all") return true;
     if (filter === "today") return b.slot_date === todayISO;
