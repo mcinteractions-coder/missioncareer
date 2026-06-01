@@ -177,7 +177,7 @@ export function Booking() {
             </div>
 
             {/* Right: details form */}
-            <form onSubmit={onSubmit} className="lg:col-span-2 bg-card rounded-2xl sm:rounded-3xl shadow-card p-4 sm:p-5 md:p-7 border border-border space-y-2.5 sm:space-y-3">
+            <form onSubmit={onSubmit} className="bg-card rounded-2xl sm:rounded-3xl shadow-card p-4 sm:p-5 md:p-6 border border-border space-y-2.5 sm:space-y-3">
               <h3 className="font-bold text-base sm:text-lg mb-1">Your details</h3>
               <div className="text-xs text-muted-foreground mb-2 sm:mb-3">
                 {date.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" })}
