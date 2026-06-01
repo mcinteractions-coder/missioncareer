@@ -116,9 +116,9 @@ export function Booking() {
             </button>
           </div>
         ) : (
-          <div className="grid lg:grid-cols-5 gap-4 sm:gap-6 max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 max-w-4xl mx-auto">
             {/* Left: date + time picker */}
-            <div className="lg:col-span-3 bg-card rounded-2xl sm:rounded-3xl shadow-card p-4 sm:p-5 md:p-7 border border-border">
+            <div className="bg-card rounded-2xl sm:rounded-3xl shadow-card p-4 sm:p-5 md:p-6 border border-border">
               <div className="flex items-center gap-2 mb-3 sm:mb-4">
                 <CalendarDays className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                 <h3 className="font-bold text-base sm:text-lg">Select a date</h3>
