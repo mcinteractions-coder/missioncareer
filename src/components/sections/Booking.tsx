@@ -23,7 +23,7 @@ function getNextDays(count: number) {
 }
 
 const toISO = (d: Date) => d.toISOString().slice(0, 10);
-const compactSlot = (slot: string) => slot.replace(":00", "");
+const compactSlot = (slot: string) => slot.replace(/^0/, "").replace(":00", "");
 
 export function Booking() {
   const days = useMemo(() => getNextDays(10), []);
