@@ -23,6 +23,7 @@ function getNextDays(count: number) {
 }
 
 const toISO = (d: Date) => d.toISOString().slice(0, 10);
+const compactSlot = (slot: string) => slot.replace(":00", "");
 
 export function Booking() {
   const days = useMemo(() => getNextDays(10), []);
@@ -81,136 +82,147 @@ export function Booking() {
   };
 
   return (
-    <section id="booking" className="relative py-12 sm:py-16 md:py-28 overflow-hidden bg-background">
-      {/* ambient glow */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute top-0 left-1/4 h-56 w-56 sm:h-72 sm:w-72 rounded-full bg-primary/20 blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 h-56 w-56 sm:h-72 sm:w-72 rounded-full bg-accent/20 blur-3xl" />
-      </div>
-
-      <div className="container mx-auto px-3 sm:px-4 md:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10 md:mb-14">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1 text-[11px] sm:text-sm font-semibold text-primary mb-3">
-            <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> 100% Free · No obligation
+    <section id="booking" className="relative overflow-x-clip bg-gradient-hero py-12 sm:py-16 md:py-24">
+      <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto mb-7 max-w-3xl text-center sm:mb-10">
+          <span className="mb-3 inline-flex max-w-full items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1.5 text-xs font-bold text-primary shadow-soft">
+            <Sparkles className="h-3.5 w-3.5 shrink-0" /> 100% Free · No obligation
           </span>
-          <h2 className="text-[26px] leading-tight sm:text-3xl md:text-5xl font-extrabold">
+          <h2 className="text-4xl font-extrabold leading-tight tracking-normal sm:text-5xl lg:text-6xl">
             Book Your <span className="text-gradient">Free Counseling</span>
           </h2>
-          <p className="mt-2 sm:mt-3 md:mt-4 text-sm md:text-base text-muted-foreground px-2">
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
             Pick a date, choose a time — our expert counselor will call you.
           </p>
         </div>
 
         {done ? (
-          <div className="max-w-xl mx-auto bg-card rounded-2xl sm:rounded-3xl shadow-card p-6 sm:p-10 text-center border border-border">
-            <div className="mx-auto h-14 w-14 sm:h-16 sm:w-16 rounded-full bg-gradient-primary flex items-center justify-center shadow-glow mb-4">
-              <CheckCircle2 className="h-7 w-7 sm:h-8 sm:w-8 text-primary-foreground" />
+          <div className="mx-auto max-w-xl rounded-[28px] border border-border bg-card p-6 text-center shadow-card sm:p-10">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-primary shadow-glow sm:h-16 sm:w-16">
+              <CheckCircle2 className="h-7 w-7 text-primary-foreground sm:h-8 sm:w-8" />
             </div>
-            <h3 className="text-xl sm:text-2xl font-extrabold">You're booked! 🎉</h3>
-            <p className="mt-2 text-sm sm:text-base text-muted-foreground">
+            <h3 className="text-xl font-extrabold tracking-normal sm:text-2xl">You're booked! 🎉</h3>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-base">
               See you on <span className="font-semibold text-foreground">{date.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" })}</span> at <span className="font-semibold text-foreground">{time}</span>.
               <br />Our counselor will reach out shortly to confirm.
             </p>
-            <button onClick={() => setDone(false)} className="mt-6 text-sm font-semibold text-primary hover:underline">
+            <button type="button" onClick={() => setDone(false)} className="mt-6 text-sm font-semibold text-primary hover:underline">
               Book another slot
             </button>
           </div>
         ) : (
-          <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 max-w-4xl mx-auto">
-            {/* Left: date + time picker */}
-            <div className="bg-card rounded-2xl sm:rounded-3xl shadow-card p-4 sm:p-5 md:p-6 border border-border">
-              <div className="flex items-center gap-2 mb-3 sm:mb-4">
-                <CalendarDays className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-                <h3 className="font-bold text-base sm:text-lg">Select a date</h3>
-              </div>
-              <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 sm:-mx-1 px-4 sm:px-1 snap-x scrollbar-hide">
-                {days.map((d) => {
-                  const active = toISO(d) === toISO(date);
-                  return (
-                    <button
-                      key={d.toISOString()}
-                      onClick={() => setDate(d)}
-                      className={`snap-start shrink-0 w-[64px] sm:w-[78px] rounded-2xl px-2 sm:px-3 py-2.5 sm:py-3 text-center transition-all border ${
-                        active
-                          ? "bg-gradient-primary text-primary-foreground border-transparent shadow-glow scale-105"
-                          : "bg-secondary text-foreground border-border hover:border-primary/40 hover:-translate-y-0.5"
-                      }`}
-                    >
-                      <div className="text-[10px] uppercase tracking-wide opacity-80">{d.toLocaleDateString(undefined, { weekday: "short" })}</div>
-                      <div className="text-xl sm:text-2xl font-extrabold leading-tight">{d.getDate()}</div>
-                      <div className="text-[10px] opacity-80">{d.toLocaleDateString(undefined, { month: "short" })}</div>
-                    </button>
-                  );
-                })}
+          <div className="mx-auto grid w-full min-w-0 max-w-5xl gap-4 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:items-start">
+            <div className="w-full min-w-0 overflow-hidden rounded-[28px] border border-border bg-card shadow-card">
+              <div className="bg-gradient-primary px-4 py-4 text-primary-foreground sm:px-6 sm:py-5">
+                <div className="flex items-center gap-2 text-sm font-semibold opacity-95">
+                  <CalendarDays className="h-4 w-4 shrink-0" /> Counseling slot
+                </div>
+                <div className="mt-2 text-2xl font-extrabold leading-tight tracking-normal sm:text-3xl">
+                  {date.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" })}
+                </div>
+                <div className="mt-1 text-sm font-medium opacity-90">{time ? compactSlot(time) : "Choose a time"}</div>
               </div>
 
-              <div className="flex items-center gap-2 mt-5 sm:mt-7 mb-3 sm:mb-4">
-                <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-                <h3 className="font-bold text-base sm:text-lg">Pick a time slot</h3>
+              <div className="space-y-6 p-4 sm:p-6">
+                <div>
+                  <div className="mb-3 flex items-center gap-2">
+                    <CalendarDays className="h-4 w-4 shrink-0 text-primary" />
+                    <h3 className="text-base font-extrabold tracking-normal sm:text-lg">Select a date</h3>
+                  </div>
+                  <div className="grid grid-cols-5 gap-2 sm:gap-3">
+                    {days.map((d) => {
+                      const active = toISO(d) === toISO(date);
+                      return (
+                        <button
+                          key={d.toISOString()}
+                          type="button"
+                          onClick={() => setDate(d)}
+                          className={`min-w-0 rounded-2xl border px-1 py-2.5 text-center transition-all sm:py-3 ${
+                            active
+                              ? "scale-[1.03] border-transparent bg-gradient-primary text-primary-foreground shadow-glow"
+                              : "border-border bg-secondary text-foreground hover:border-primary/40 hover:-translate-y-0.5"
+                          }`}
+                        >
+                          <div className="truncate text-[10px] font-bold uppercase opacity-80">{d.toLocaleDateString(undefined, { weekday: "short" })}</div>
+                          <div className="text-2xl font-extrabold leading-none tracking-normal sm:text-3xl">{d.getDate()}</div>
+                          <div className="mt-1 truncate text-[10px] font-medium opacity-80">{d.toLocaleDateString(undefined, { month: "short" })}</div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="mb-3 flex items-center gap-2">
+                    <Clock className="h-4 w-4 shrink-0 text-primary" />
+                    <h3 className="text-base font-extrabold tracking-normal sm:text-lg">Pick a time slot</h3>
+                  </div>
+                  <div className="grid min-w-0 grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-3">
+                    {SLOTS.map((s) => {
+                      const isTaken = taken.has(s);
+                      const active = time === s;
+                      return (
+                        <button
+                          key={s}
+                          type="button"
+                          disabled={isTaken}
+                          onClick={() => setTime(s)}
+                          className={`min-w-0 rounded-2xl border px-2 py-3 text-center text-[13px] font-bold leading-none transition-all sm:text-sm ${
+                            isTaken
+                              ? "cursor-not-allowed border-border bg-muted text-muted-foreground line-through opacity-60"
+                              : active
+                                ? "border-transparent bg-gradient-primary text-primary-foreground shadow-glow"
+                                : "border-border bg-secondary text-foreground hover:border-primary/50 hover:-translate-y-0.5"
+                          }`}
+                        >
+                          <span className="block truncate">{compactSlot(s)}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <p className="mt-3 text-xs text-muted-foreground">
+                    <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-muted-foreground/40 align-middle" /> Greyed = already booked
+                  </p>
+                </div>
               </div>
-              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-2.5">
-                {SLOTS.map((s) => {
-                  const isTaken = taken.has(s);
-                  const active = time === s;
-                  return (
-                    <button
-                      key={s}
-                      type="button"
-                      disabled={isTaken}
-                      onClick={() => setTime(s)}
-                      className={`relative rounded-xl px-2 py-2.5 sm:px-3 sm:py-3 text-xs sm:text-sm font-semibold border transition-all ${
-                        isTaken
-                          ? "bg-muted text-muted-foreground line-through border-border cursor-not-allowed opacity-60"
-                          : active
-                            ? "bg-gradient-primary text-primary-foreground border-transparent shadow-glow"
-                            : "bg-secondary text-foreground border-border hover:border-primary/50 hover:-translate-y-0.5"
-                      }`}
-                    >
-                      {s}
-                    </button>
-                  );
-                })}
-              </div>
-              <p className="text-[11px] sm:text-xs text-muted-foreground mt-3">
-                <span className="inline-block h-2 w-2 rounded-full bg-muted-foreground/40 mr-1.5 align-middle" /> Greyed = already booked
-              </p>
             </div>
 
-            {/* Right: details form */}
-            <form onSubmit={onSubmit} className="bg-card rounded-2xl sm:rounded-3xl shadow-card p-4 sm:p-5 md:p-6 border border-border space-y-2.5 sm:space-y-3">
-              <h3 className="font-bold text-base sm:text-lg mb-1">Your details</h3>
-              <div className="text-xs text-muted-foreground mb-2 sm:mb-3">
-                {date.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" })}
-                {time && <> · <span className="text-primary font-semibold">{time}</span></>}
+            <form onSubmit={onSubmit} className="w-full min-w-0 space-y-3 overflow-hidden rounded-[28px] border border-border bg-card p-4 shadow-card sm:p-6">
+              <div>
+                <h3 className="text-lg font-extrabold tracking-normal">Your details</h3>
+                <div className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                  {date.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" })}
+                  {time && <> · <span className="font-semibold text-primary">{compactSlot(time)}</span></>}
+                </div>
               </div>
 
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <input name="full_name" required maxLength={120} placeholder="Full name" className="w-full rounded-xl border border-border bg-secondary pl-10 pr-3 py-3 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+              <div className="relative min-w-0">
+                <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <input name="full_name" required maxLength={120} placeholder="Full name" className="h-12 w-full min-w-0 rounded-2xl border border-border bg-secondary pl-10 pr-3 text-base focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm" />
               </div>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <input name="email" type="email" maxLength={200} placeholder="Email (optional)" className="w-full rounded-xl border border-border bg-secondary pl-10 pr-3 py-3 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+              <div className="relative min-w-0">
+                <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <input name="email" type="email" maxLength={200} placeholder="Email (optional)" className="h-12 w-full min-w-0 rounded-2xl border border-border bg-secondary pl-10 pr-3 text-base focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm" />
               </div>
-              <div className="relative">
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <input name="phone" type="tel" required maxLength={30} placeholder="Phone (+91...)" className="w-full rounded-xl border border-border bg-secondary pl-10 pr-3 py-3 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+              <div className="relative min-w-0">
+                <Phone className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <input name="phone" type="tel" required maxLength={30} placeholder="Phone (+91...)" className="h-12 w-full min-w-0 rounded-2xl border border-border bg-secondary pl-10 pr-3 text-base focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm" />
               </div>
-              <div className="relative">
-                <Globe2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <select name="country" defaultValue="" className="w-full rounded-xl border border-border bg-secondary pl-10 pr-3 py-3 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary appearance-none">
+              <div className="relative min-w-0">
+                <Globe2 className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <select name="country" defaultValue="" className="h-12 w-full min-w-0 appearance-none rounded-2xl border border-border bg-secondary pl-10 pr-3 text-base focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm">
                   <option value="">Preferred country (optional)</option>
                   {["USA","UK","Canada","Australia","Germany","Ireland","New Zealand"].map(c => <option key={c}>{c}</option>)}
                 </select>
               </div>
-              <textarea name="notes" rows={3} maxLength={1000} placeholder="Anything we should know? (optional)" className="w-full rounded-xl border border-border bg-secondary px-3 py-3 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+              <textarea name="notes" rows={3} maxLength={1000} placeholder="Anything we should know? (optional)" className="w-full min-w-0 resize-none rounded-2xl border border-border bg-secondary px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm" />
 
               {error && <p className="text-sm text-destructive">{error}</p>}
 
-              <button disabled={busy || !time} className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-gradient-primary px-6 py-3.5 text-sm sm:text-base font-semibold text-primary-foreground shadow-soft hover:shadow-glow transition-all disabled:opacity-60 disabled:cursor-not-allowed">
+              <button disabled={busy || !time} className="inline-flex h-12 w-full min-w-0 items-center justify-center gap-2 rounded-full bg-gradient-primary px-4 text-sm font-bold text-primary-foreground shadow-soft transition-all hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-60 sm:text-base">
                 {busy ? <><Loader2 className="h-4 w-4 animate-spin" /> Booking…</> : <>Confirm booking</>}
               </button>
-              <p className="text-[11px] text-center text-muted-foreground">By booking, you agree to be contacted by our counselor.</p>
+              <p className="text-center text-[11px] leading-relaxed text-muted-foreground">By booking, you agree to be contacted by our counselor.</p>
             </form>
           </div>
         )}
