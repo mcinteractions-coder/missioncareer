@@ -51,6 +51,15 @@ export function Hero() {
       </div>
 
       <div className="container mx-auto px-4 md:px-8 relative">
+        {/* Big animated wordmark */}
+        <div className="text-center mb-8 md:mb-14">
+          <h2 className="hero-wordmark font-extrabold leading-[0.9] tracking-[-0.04em]">
+            <span className="hero-word-mc">MISSION</span>
+            <span className="hero-word-mc hero-word-mc-2">CAREER</span>
+          </h2>
+          <div className="mx-auto mt-3 md:mt-4 h-[2px] w-24 md:w-40 bg-gradient-to-r from-transparent via-primary to-transparent" />
+        </div>
+
         <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full bg-card/70 backdrop-blur px-3 py-1.5 md:px-4 md:py-2 shadow-card mb-4 md:mb-6 animate-pulse-glow">
