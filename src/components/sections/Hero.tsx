@@ -1,10 +1,12 @@
 import {
   Sparkles, GraduationCap, Globe2, FileCheck, Wallet, Plane, LifeBuoy, ArrowRight,
+  Star, Award, Rocket, Trophy,
 } from "lucide-react";
 import pooja from "@/assets/pooja-welling.png";
 import gautam from "@/assets/gautam-umashankar.png";
 import reema from "@/assets/reema-welling.png";
 import julee from "@/assets/julee-shakya.png";
+import logoAsset from "@/assets/mission-logo.png.asset.json";
 import { Counter } from "@/components/Counter";
 
 
@@ -51,13 +53,39 @@ export function Hero() {
       </div>
 
       <div className="container mx-auto px-4 md:px-8 relative">
-        {/* Big animated wordmark */}
-        <div className="text-center mb-8 md:mb-14">
-          <h2 className="hero-wordmark font-extrabold leading-[0.9] tracking-[-0.04em]">
-            <span className="hero-word-mc">MISSION</span>
-            <span className="hero-word-mc hero-word-mc-2">CAREER</span>
-          </h2>
-          <div className="mx-auto mt-3 md:mt-4 h-[2px] w-24 md:w-40 bg-gradient-to-r from-transparent via-primary to-transparent" />
+        {/* Big animated logo showcase */}
+        <div className="hero-logo-stage relative mx-auto mb-10 md:mb-16 flex items-center justify-center">
+          {/* pulsing rings */}
+          <div className="hero-logo-ring hero-logo-ring-1" />
+          <div className="hero-logo-ring hero-logo-ring-2" />
+          <div className="hero-logo-ring hero-logo-ring-3" />
+
+          {/* orbiting widgets */}
+          <div className="hero-orbit hero-orbit-1">
+            <div className="hero-widget hero-widget-top"><Star className="h-4 w-4 md:h-5 md:w-5 text-primary" /></div>
+            <div className="hero-widget hero-widget-bottom"><Award className="h-4 w-4 md:h-5 md:w-5 text-primary" /></div>
+          </div>
+          <div className="hero-orbit hero-orbit-2">
+            <div className="hero-widget hero-widget-top"><Rocket className="h-4 w-4 md:h-5 md:w-5 text-primary-glow" /></div>
+            <div className="hero-widget hero-widget-bottom"><Trophy className="h-4 w-4 md:h-5 md:w-5 text-primary-glow" /></div>
+          </div>
+
+          {/* floating sparkles */}
+          <Sparkles className="hero-sparkle hero-sparkle-1 text-primary/70" />
+          <Sparkles className="hero-sparkle hero-sparkle-2 text-primary-glow/70" />
+          <Sparkles className="hero-sparkle hero-sparkle-3 text-primary/60" />
+          <Sparkles className="hero-sparkle hero-sparkle-4 text-primary-glow/60" />
+
+          {/* glow behind logo */}
+          <div className="hero-logo-glow" />
+
+          {/* the actual logo */}
+          <img
+            src={logoAsset.url}
+            alt="Mission Career — Study Abroad Consulting"
+            className="hero-logo-img relative z-10"
+            draggable={false}
+          />
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
