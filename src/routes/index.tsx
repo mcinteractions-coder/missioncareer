@@ -14,6 +14,7 @@ import { Booking } from "@/components/sections/Booking";
 import { TodaysMeetings } from "@/components/sections/TodaysMeetings";
 import { Footer } from "@/components/sections/Footer";
 import { FestivalPopup } from "@/components/FestivalPopup";
+import { IntroSplash } from "@/components/IntroSplash";
 import { ScrollReveal } from "@/components/ScrollReveal";
 
 export const Route = createFileRoute("/")({
@@ -31,6 +32,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <main>
+      <IntroSplash />
       <ScrollReveal />
       <FestivalPopup />
       <Navbar />
