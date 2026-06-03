@@ -278,7 +278,11 @@
   flex-direction: column;
   align-items: center;
   gap: 0.05em;
-  background: linear-gradient(120deg,
+  line-height: 0.9;
+}
+.hero-word-mc {
+  display: inline-block;
+  background-image: linear-gradient(120deg,
     var(--color-primary) 0%,
     var(--color-primary-glow) 35%,
     oklch(0.85 0.12 230) 60%,
@@ -286,23 +290,19 @@
   background-size: 220% 100%;
   -webkit-background-clip: text;
   background-clip: text;
+  -webkit-text-fill-color: transparent;
   color: transparent;
-  animation: wordmarkShine 6s ease-in-out infinite;
   filter: drop-shadow(0 8px 30px oklch(0.62 0.18 240 / 0.25));
+  animation: wordmarkShine 6s ease-in-out infinite, wordmarkRise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
-.dark .hero-wordmark {
+.dark .hero-word-mc {
   filter: drop-shadow(0 8px 40px oklch(0.72 0.17 235 / 0.45));
 }
-.hero-word-mc {
-  display: inline-block;
-  opacity: 0;
-  transform: translateY(30px);
-  animation: wordmarkRise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
-}
 .hero-word-mc-2 {
-  animation-delay: 0.45s;
+  animation-delay: 0s, 0.25s;
 }
 @keyframes wordmarkRise {
+  from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
 }
 @keyframes wordmarkShine {
@@ -311,5 +311,4 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-word-mc { opacity: 1; transform: none; animation: none; }
-  .hero-wordmark { animation: none; }
 }
