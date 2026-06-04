@@ -32,7 +32,6 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <main>
-      <IntroSplash />
       <ScrollReveal />
       <FestivalPopup />
       <Navbar />
