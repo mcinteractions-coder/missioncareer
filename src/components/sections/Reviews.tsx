@@ -1,7 +1,7 @@
 import { Star, Quote } from "lucide-react";
 import { reviews, type Review } from "@/data/reviews";
 
-const GOOGLE_REVIEW_URL = "https://www.google.com/search?q=Mission+Career+reviews";
+const GOOGLE_REVIEW_URL = "https://www.google.com/search?kgmid=/g/11byxgc8n8&q=Mission+Career";
 
 function GoogleG({ className = "h-4 w-4" }: { className?: string }) {
   return (
