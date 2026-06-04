@@ -54,7 +54,7 @@ export function Hero() {
 
       <div className="container mx-auto px-4 md:px-8 relative">
         {/* Big animated logo showcase */}
-        <div className="hero-logo-stage relative mx-auto mb-10 md:mb-16 flex items-center justify-center">
+        <div className="hero-logo-stage relative mx-auto mb-6 md:mb-10 flex items-center justify-center">
           {/* pulsing rings */}
           <div className="hero-logo-ring hero-logo-ring-1" />
           <div className="hero-logo-ring hero-logo-ring-2" />
