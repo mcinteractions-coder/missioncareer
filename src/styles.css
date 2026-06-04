@@ -274,14 +274,14 @@
 /* Hero logo showcase */
 .hero-logo-stage {
   width: 100%;
-  max-width: 720px;
+  max-width: 420px;
   aspect-ratio: 1.6 / 1;
   position: relative;
 }
 .hero-logo-img {
-  width: clamp(220px, 45vw, 520px);
+  width: clamp(140px, 26vw, 260px);
   height: auto;
-  filter: drop-shadow(0 12px 30px oklch(0.62 0.18 240 / 0.35));
+  filter: drop-shadow(0 8px 22px oklch(0.62 0.18 240 / 0.28));
   animation: heroLogoIn 1s cubic-bezier(0.22, 1, 0.36, 1) both,
              heroLogoFloat 5s ease-in-out infinite 1s;
 }
