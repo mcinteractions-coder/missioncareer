@@ -12,7 +12,7 @@ export function Footer() {
               <img src={logo} alt="Mission Career" className="h-12 w-auto" draggable={false} />
             </div>
             <p className="mt-4 text-sm text-background/70">
-              Mission Career Education helps students achieve their dream of studying abroad with expert counseling and complete admission support.
+              Mission Career helps students achieve their dream of studying abroad with expert counseling and complete admission support.
             </p>
             <div className="mt-5 flex gap-3">
               {[Facebook, Instagram, Linkedin, Twitter].map((Icon, i) => (
