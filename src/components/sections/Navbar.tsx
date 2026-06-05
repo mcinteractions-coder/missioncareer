@@ -38,7 +38,7 @@ export function Navbar() {
             <img src={logoAsset.url} alt="Mission Career" className="h-9 md:h-10 w-auto object-contain drop-shadow-sm" draggable={false} />
           </div>
           <span className="hidden sm:block text-base md:text-lg font-bold leading-tight bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent whitespace-nowrap">
-            Mission Career
+            
           </span>
         </a>
 

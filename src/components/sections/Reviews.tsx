@@ -83,7 +83,7 @@ export function Reviews() {
             Loved by Students <span className="text-gradient">Worldwide</span>
           </h2>
           <p className="mt-5 text-base md:text-lg text-muted-foreground">
-            Real stories from students who trusted Mission Career to launch their study-abroad journey.
+            Real stories from students who trusted us to launch their study-abroad journey.
           </p>
 
           {/* rating badge */}
