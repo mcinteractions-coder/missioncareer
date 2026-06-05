@@ -37,6 +37,7 @@ function Index() {
       <FestivalPopup />
       <Navbar />
       <Hero />
+      <UniversityMarquee />
       <div data-reveal><About /></div>
       <div data-reveal><Services /></div>
         <div data-reveal><Destinations /></div>
