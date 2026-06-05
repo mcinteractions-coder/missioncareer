@@ -286,7 +286,11 @@
              heroLogoFloat 5s ease-in-out infinite 1s;
 }
 .dark .hero-logo-img {
-  filter: drop-shadow(0 12px 40px oklch(0.72 0.17 235 / 0.55));
+  background: #ffffff;
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 12px 40px oklch(0.72 0.17 235 / 0.45);
+  filter: none;
 }
 .hero-logo-glow {
   position: absolute;
