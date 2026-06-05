@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
-import logo from "@/assets/mission-logo.png";
+import logoAsset from "@/assets/mission-logo-transparent.png.asset.json";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 const links = [
@@ -34,8 +34,8 @@ export function Navbar() {
     >
       <div className="container mx-auto px-4 md:px-6 flex items-center justify-between gap-4">
         <a href="#home" className="flex items-center gap-2 group shrink-0">
-          <div className="relative rounded-2xl bg-white/90 backdrop-blur-sm px-2 py-1.5 shadow-soft border border-white/20 group-hover:shadow-glow group-hover:scale-105 transition-all duration-300">
-            <img src={logo} alt="Mission Career" className="h-9 md:h-10 w-auto object-contain" draggable={false} />
+          <div className="relative group-hover:scale-105 transition-transform duration-300">
+            <img src={logoAsset.url} alt="Mission Career" className="h-9 md:h-10 w-auto object-contain drop-shadow-sm" draggable={false} />
           </div>
           <span className="hidden sm:block text-base md:text-lg font-bold leading-tight bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent whitespace-nowrap">
             Mission Career
