@@ -27,7 +27,7 @@ const SHOWCASE = [
 const showcaseUnis = SHOWCASE.map((name) => {
   const u = UNIVERSITIES.find((x) => x.name === name || x.id === name.toLowerCase().replace(/\s/g, ""));
   return u;
-}).filter(Boolean);
+}).filter((u): u is typeof UNIVERSITIES[number] => Boolean(u));
 
 function UniBadge({ uni }: { uni: (typeof UNIVERSITIES)[number] }) {
   const abbr = uni.name
