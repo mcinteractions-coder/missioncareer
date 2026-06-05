@@ -12,7 +12,7 @@ export function Footer() {
               <img src={logoAsset.url} alt="Mission Career" className="h-12 w-auto drop-shadow-sm" draggable={false} />
             </div>
             <p className="mt-4 text-sm text-background/70">
-              Mission Career helps students achieve their dream of studying abroad with expert counseling and complete admission support.
+              Helping students achieve their dream of studying abroad with expert counseling and complete admission support.
             </p>
             <div className="mt-5 flex gap-3">
               {[Facebook, Instagram, Linkedin, Twitter].map((Icon, i) => (
@@ -52,7 +52,7 @@ export function Footer() {
         </div>
 
         <div className="mt-8 md:mt-12 pt-6 border-t border-background/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-background/60">© 2026 Mission Career. All rights reserved.</p>
+          <p className="text-sm text-background/60">© 2026. All rights reserved.</p>
           <div className="flex items-center gap-3">
             <Link
               to="/admin"

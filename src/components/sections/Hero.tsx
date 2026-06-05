@@ -102,8 +102,8 @@ export function Hero() {
             </h1>
 
             <p className="mt-4 md:mt-6 text-base md:text-lg text-muted-foreground max-w-xl">
-              Finding the right university abroad shouldn't be complicated. Mission Career helps you discover
-              the best countries, universities, and scholarships with expert guidance at every step.
+              Finding the right university abroad shouldn't be complicated. 
+              Discover the best countries, universities, and scholarships with expert guidance at every step.
             </p>
 
             <div className="mt-6 md:mt-8 grid sm:grid-cols-2 gap-2 md:gap-3 max-w-xl">
