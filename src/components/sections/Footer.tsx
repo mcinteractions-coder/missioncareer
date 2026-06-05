@@ -1,6 +1,6 @@
 import { Facebook, Instagram, Linkedin, Twitter, ArrowUp, Lock } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import logo from "@/assets/mission-logo.png";
+import logoAsset from "@/assets/mission-logo-transparent.png.asset.json";
 
 export function Footer() {
   return (
@@ -8,8 +8,8 @@ export function Footer() {
       <div className="container mx-auto px-4 md:px-8">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           <div>
-            <div className="bg-white rounded-xl p-3 inline-block">
-              <img src={logo} alt="Mission Career" className="h-12 w-auto" draggable={false} />
+            <div className="inline-block">
+              <img src={logoAsset.url} alt="Mission Career" className="h-12 w-auto drop-shadow-sm" draggable={false} />
             </div>
             <p className="mt-4 text-sm text-background/70">
               Mission Career helps students achieve their dream of studying abroad with expert counseling and complete admission support.
