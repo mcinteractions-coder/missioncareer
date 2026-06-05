@@ -6,7 +6,7 @@ import pooja from "@/assets/pooja-welling.png";
 import gautam from "@/assets/gautam-umashankar.png";
 import reema from "@/assets/reema-welling.png";
 import julee from "@/assets/julee-shakya.png";
-import logoAsset from "@/assets/mission-logo.png.asset.json";
+import logoAsset from "@/assets/mission-logo-transparent.png.asset.json";
 import { Counter } from "@/components/Counter";
 
 
