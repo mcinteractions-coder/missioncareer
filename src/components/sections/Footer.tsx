@@ -1,6 +1,6 @@
 import { Facebook, Instagram, Linkedin, Twitter, ArrowUp, Lock } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import logoAsset from "@/assets/mission-logo-transparent.png.asset.json";
+const logoAsset = { url: "/mission-logo-transparent.png" };
 
 export function Footer() {
   return (
