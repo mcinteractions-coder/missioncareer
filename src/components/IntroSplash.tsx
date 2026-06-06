@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import logoAsset from "@/assets/mission-logo-transparent.png.asset.json";
+const logoAsset = { url: "/mission-logo-transparent.png" };
 
 export function IntroSplash() {
   const [show, setShow] = useState(true);

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
-import logoAsset from "@/assets/mission-logo-transparent.png.asset.json";
+const logoAsset = { url: "/mission-logo-transparent.png" };
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 const links = [
