@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
-import { createLovableAiGatewayProvider } from "@/lib/ai-gateway.server";
+import { getAiProvider } from "@/lib/ai-provider.server";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 const SYSTEM_PROMPT = `You are the **Mission Career Assistant** — a friendly, knowledgeable study-abroad counselor for **Mission Career** (also known as Mission Career Education), a Mumbai-based study-abroad consultancy.
@@ -74,8 +74,13 @@ export const Route = createFileRoute("/api/chat")({
             return new Response("Missing messages or sessionKey", { status: 400 });
           }
 
-          const key = process.env.LOVABLE_API_KEY;
-          if (!key) return new Response("Missing LOVABLE_API_KEY", { status: 500 });
+          const ai = getAiProvider();
+          if (!ai) {
+            return new Response(
+              "No AI provider configured. Set LOVABLE_API_KEY, OPENAI_API_KEY, or GEMINI_API_KEY.",
+              { status: 500 },
+            );
+          }
 
           // Persist latest user message
           const lastUser = [...messages].reverse().find((m) => m.role === "user");
@@ -92,8 +97,7 @@ export const Route = createFileRoute("/api/chat")({
             }
           }
 
-          const gateway = createLovableAiGatewayProvider(key);
-          const model = gateway("google/gemini-3-flash-preview");
+          const model = ai.provider(ai.modelId);
 
           const result = streamText({
             model,
