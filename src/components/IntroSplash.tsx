@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { CalendarCheck } from "lucide-react";
 const logoAsset = { url: "/mission-logo-transparent.png" };
 
 export function IntroSplash() {
@@ -24,6 +25,16 @@ export function IntroSplash() {
       document.body.style.overflow = "";
     };
   }, []);
+
+  const handleBookSlot = () => {
+    setLeaving(true);
+    setTimeout(() => {
+      setShow(false);
+      document.body.style.overflow = "";
+      const el = document.getElementById("booking");
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }, 700);
+  };
 
   if (!show) return null;
 
@@ -63,6 +74,22 @@ export function IntroSplash() {
         <p className="splash-tag mt-5 text-xs md:text-sm tracking-[0.4em] uppercase text-white/70">
           Study Abroad. Simplified.
         </p>
+
+        {/* Book Your Slot Button */}
+        <button
+          onClick={handleBookSlot}
+          className="splash-btn group mt-8 inline-flex items-center gap-2.5 rounded-full px-7 py-3 text-sm md:text-base font-semibold text-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95"
+          style={{
+            background: "linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #93c5fd 100%)",
+            boxShadow: "0 8px 32px rgba(59,130,246,0.35), 0 0 0 1px rgba(255,255,255,0.15) inset",
+          }}
+        >
+          <CalendarCheck className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
+          <span>Book Your Slot</span>
+          <span className="ml-1 inline-block transition-transform duration-300 group-hover:translate-x-1">
+            →
+          </span>
+        </button>
       </div>
 
       <style>{`
@@ -99,6 +126,11 @@ export function IntroSplash() {
           opacity: 0;
           animation: splashFade 0.8s ease-out 1.3s forwards;
         }
+        .splash-btn {
+          opacity: 0;
+          transform: translateY(16px);
+          animation: splashBtnIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) 1.6s forwards;
+        }
         .splash-shine::before {
           content: "";
           position: absolute; inset: 0;
@@ -131,6 +163,9 @@ export function IntroSplash() {
         }
         @keyframes splashLine { to { width: min(420px, 70vw); } }
         @keyframes splashFade { to { opacity: 1; } }
+        @keyframes splashBtnIn {
+          to { opacity: 1; transform: translateY(0); }
+        }
         @keyframes splashSweep {
           0% { transform: translateX(-100%); }
           100% { transform: translateX(100%); }
