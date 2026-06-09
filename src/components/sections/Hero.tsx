@@ -88,6 +88,26 @@ export function Hero() {
           />
         </div>
 
+        {/* Book Your Slot CTA under logo */}
+        <div className="flex justify-center mb-10 md:mb-14">
+          <a
+            href="#booking"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="hero-book-btn group inline-flex items-center gap-2.5 rounded-full px-7 py-3 text-sm md:text-base font-semibold text-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95"
+            style={{
+              background: "linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #93c5fd 100%)",
+              boxShadow: "0 8px 32px rgba(59,130,246,0.45), 0 0 0 1px rgba(255,255,255,0.18) inset",
+            }}
+          >
+            <CalendarCheck className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
+            <span>Book Your Slot</span>
+            <span className="ml-1 inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
+          </a>
+        </div>
+
         <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full bg-card/70 backdrop-blur px-3 py-1.5 md:px-4 md:py-2 shadow-card mb-4 md:mb-6 animate-pulse-glow">
