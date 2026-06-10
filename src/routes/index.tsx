@@ -51,6 +51,7 @@ function Index() {
         <div data-reveal><Reviews /></div>
         <div data-reveal><Process /></div>
         <div data-reveal><Success /></div>
+        <div data-reveal><Deadlines /></div>
         <div data-reveal><Blog /></div>
         <div data-reveal><Booking /></div>
         <div data-reveal><TodaysMeetings /></div>
