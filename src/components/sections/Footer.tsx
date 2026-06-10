@@ -11,12 +11,12 @@ export function Footer() {
             <div className="inline-block">
               <img src={logoAsset.url} alt="Mission Career" className="h-12 w-auto drop-shadow-sm" draggable={false} />
             </div>
-            <p className="mt-4 text-sm text-background/70">
+            <p className="mt-4 text-sm text-background/70 leading-relaxed">
               Helping students achieve their dream of studying abroad with expert counseling and complete admission support.
             </p>
-            <div className="mt-5 flex gap-3">
+            <div className="mt-6 flex gap-3">
               {[Facebook, Instagram, Linkedin, Twitter].map((Icon, i) => (
-                <a key={i} href="#" aria-label="social" className="h-9 w-9 rounded-full bg-background/10 hover:bg-primary flex items-center justify-center transition-colors">
+                <a key={i} href="#" aria-label="social" className="h-10 w-10 rounded-full bg-background/10 hover:bg-primary flex items-center justify-center transition-all hover:scale-110">
                   <Icon className="h-4 w-4" />
                 </a>
               ))}
@@ -24,34 +24,39 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold mb-4">Quick Links</h4>
-            <ul className="space-y-2 text-sm text-background/70">
-              {[["Home","#home"],["About","#about"],["Services","#services"],["Destinations","#destinations"],["Process","#process"]].map(([l,h]) => (
-                <li key={l}><a href={h} className="hover:text-primary-glow transition-colors">{l}</a></li>
+            <h4 className="font-bold text-lg mb-6">Quick Links</h4>
+            <ul className="space-y-3 text-sm text-background/70">
+              {[["Home","#home"],["About","#about"],["Services","#services"],["Destinations","#destinations"],["Process","#process"],["Contact Us","#contact"]].map(([l,h]) => (
+                <li key={l}><a href={h} className="hover:text-primary transition-colors">{l}</a></li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h4 className="font-bold mb-4">Top Destinations</h4>
-            <ul className="space-y-2 text-sm text-background/70">
+            <h4 className="font-bold text-lg mb-6">Top Destinations</h4>
+            <ul className="space-y-3 text-sm text-background/70">
               {["Canada","UK","Australia","Germany","USA"].map((c) => (
-                <li key={c}><a href="#destinations" className="hover:text-primary-glow transition-colors">{c}</a></li>
+                <li key={c}><a href="#destinations" className="hover:text-primary transition-colors">{c}</a></li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h4 className="font-bold mb-4">Contact Us</h4>
-            <div className="space-y-2 text-sm text-background/70">
-              <div className="whitespace-pre-line">
-                📍 28 Bldg No-27, Thakur Village Rd, Evershine Millennium Paradise, Evershine Nagar, Kandivali East, Mumbai, Maharashtra 400101{"\n"}
-                4.2 {"\n"}
-                · {"\n"}
-                179 Reviews
+            <h4 className="font-bold text-lg mb-6">Contact Us</h4>
+            <div className="space-y-6 text-sm text-background/70">
+              <div className="leading-relaxed">
+                📍&nbsp;&nbsp;&nbsp;28 Bldg No-27, Thakur Village Rd, Evershine Millennium Paradise, Evershine Nagar, Kandivali East, Mumbai, Maharashtra 400101
               </div>
-              <div>📞 <a href="tel:+919870003748" className="hover:text-primary-glow">+91 9870003748</a></div>
-              <div>✉️ <a href="mailto:mcinteractions@gmail.com" className="hover:text-primary-glow">mcinteractions@gmail.com</a></div>
+              <div className="space-y-3 pt-4">
+                <div className="flex items-center gap-2">
+                  <span>📞</span>
+                  <a href="tel:+919870003748" className="hover:text-primary transition-colors font-medium">+91 9870003748</a>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>✉️</span>
+                  <a href="mailto:mcinteractions@gmail.com" className="hover:text-primary transition-colors font-medium">mcinteractions@gmail.com</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
