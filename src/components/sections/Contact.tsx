@@ -96,8 +96,51 @@ export function Contact() {
           </div>
 
           <div className="space-y-3 md:space-y-4">
+            {/* Glassy Office Card with Map */}
+            <div className="relative overflow-hidden rounded-2xl md:rounded-3xl shadow-card group">
+              {/* Map background */}
+              <iframe
+                title="Mission Career Location"
+                src="https://www.google.com/maps?q=Mission+Career,+28+Bldg+No-27,+Thakur+Village+Rd,+Evershine+Millennium+Paradise,+Evershine+Nagar,+Kandivali+East,+Mumbai,+Maharashtra+400101&output=embed"
+                className="absolute inset-0 w-full h-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
+              {/* Gradient overlay for legibility */}
+              <div className="relative pt-48 md:pt-64 pointer-events-none">
+                <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-background/95 via-background/60 to-transparent" />
+              </div>
+              {/* Glass info panel */}
+              <div className="relative -mt-2 m-3 md:m-4 rounded-2xl border border-white/30 dark:border-white/10 bg-white/40 dark:bg-white/5 backdrop-blur-xl shadow-soft p-4 md:p-5">
+                <div className="flex items-start gap-3 md:gap-4">
+                  <div className="h-12 w-12 shrink-0 rounded-xl bg-gradient-primary text-primary-foreground flex items-center justify-center shadow-glow">
+                    <MapPin className="h-5 w-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h4 className="font-bold text-foreground">Our Office</h4>
+                      <span className="inline-flex items-center gap-1 rounded-full bg-primary/15 text-primary px-2 py-0.5 text-xs font-semibold">
+                        ★ 4.2 <span className="opacity-70">· 179 Reviews</span>
+                      </span>
+                    </div>
+                    <p className="mt-1 text-sm text-foreground/80 leading-relaxed">
+                      28 Bldg No-27, Thakur Village Rd, Evershine Millennium Paradise, Evershine Nagar, Kandivali East, Mumbai, Maharashtra 400101
+                    </p>
+                    <a
+                      href="https://www.google.com/maps/search/?api=1&query=Mission+Career+Evershine+Nagar+Kandivali+East+Mumbai"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-gradient-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground shadow-soft hover:shadow-glow transition-shadow"
+                    >
+                      Get Directions →
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {[
-              { icon: MapPin, title: "Our Office", text: "28 Bldg No-27, Thakur Village Rd, Evershine Millennium Paradise, Evershine Nagar, Kandivali East, Mumbai, Maharashtra 400101\n4.2\n·\n179 Reviews" },
               { icon: Phone, title: "Call Us", text: "+91 9870003748" },
               { icon: Mail, title: "Email Us", text: "mcinteractions@gmail.com" },
             ].map((c) => (
