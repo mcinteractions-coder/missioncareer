@@ -44,7 +44,12 @@ export function Footer() {
           <div>
             <h4 className="font-bold mb-4">Contact Us</h4>
             <div className="space-y-2 text-sm text-background/70">
-              <div>📍 Kandivali East, Mumbai</div>
+              <div className="whitespace-pre-line">
+                📍 28 Bldg No-27, Thakur Village Rd, Evershine Millennium Paradise, Evershine Nagar, Kandivali East, Mumbai, Maharashtra 400101{"\n"}
+                4.2 {"\n"}
+                · {"\n"}
+                179 Reviews
+              </div>
               <div>📞 <a href="tel:+919870003748" className="hover:text-primary-glow">+91 9870003748</a></div>
               <div>✉️ <a href="mailto:mcinteractions@gmail.com" className="hover:text-primary-glow">mcinteractions@gmail.com</a></div>
             </div>
