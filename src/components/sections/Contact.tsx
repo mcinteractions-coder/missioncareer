@@ -97,7 +97,7 @@ export function Contact() {
 
           <div className="space-y-3 md:space-y-4">
             {[
-              { icon: MapPin, title: "Our Office", text: "Kandivali East, Mumbai" },
+              { icon: MapPin, title: "Our Office", text: "28 Bldg No-27, Thakur Village Rd, Evershine Millennium Paradise, Evershine Nagar, Kandivali East, Mumbai, Maharashtra 400101\n4.2\n·\n179 Reviews" },
               { icon: Phone, title: "Call Us", text: "+91 9870003748" },
               { icon: Mail, title: "Email Us", text: "mcinteractions@gmail.com" },
             ].map((c) => (
@@ -107,7 +107,7 @@ export function Contact() {
                 </div>
                 <div>
                   <h4 className="font-bold text-foreground">{c.title}</h4>
-                  <p className="text-sm text-muted-foreground">{c.text}</p>
+                  <p className="text-sm text-muted-foreground whitespace-pre-line">{c.text}</p>
                 </div>
               </div>
             ))}
@@ -129,8 +129,8 @@ export function Contact() {
               <h4 className="font-bold text-foreground mb-3">Office Hours</h4>
               <div className="space-y-2 text-sm">
                 {[
-                  ["Monday - Friday","10:00 AM - 7:00 PM"],
-                  ["Saturday","10:00 AM - 5:00 PM"],
+                  ["Monday - Friday","11:30 AM - 8:00 PM"],
+                  ["Saturday","11:30 AM - 8:00 PM"],
                   ["Sunday","By Appointment"],
                 ].map(([d, t]) => (
                   <div key={d} className="flex justify-between border-b border-border last:border-0 pb-2 last:pb-0">
