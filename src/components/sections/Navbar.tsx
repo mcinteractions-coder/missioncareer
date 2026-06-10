@@ -11,6 +11,7 @@ const links = [
   { label: "Process", href: "#process" },
   { label: "Reviews", href: "#reviews" },
   { label: "Success Stories", href: "#success" },
+  { label: "Deadlines", href: "#deadlines" },
   { label: "Book Slot", href: "#booking" },
   { label: "Contact", href: "#contact" },
 ];
