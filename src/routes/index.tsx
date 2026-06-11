@@ -14,6 +14,7 @@ const Process = lazy(() => import("@/components/sections/Process").then(m => ({ 
 const Success = lazy(() => import("@/components/sections/Success").then(m => ({ default: m.Success })));
 const Blog = lazy(() => import("@/components/sections/Blog").then(m => ({ default: m.Blog })));
 const Deadlines = lazy(() => import("@/components/sections/Deadlines").then(m => ({ default: m.Deadlines })));
+const Globe3D = lazy(() => import("@/components/sections/Globe3D").then(m => ({ default: m.Globe3D })));
 const Contact = lazy(() => import("@/components/sections/Contact").then(m => ({ default: m.Contact })));
 const Reviews = lazy(() => import("@/components/sections/Reviews").then(m => ({ default: m.Reviews })));
 const Booking = lazy(() => import("@/components/sections/Booking").then(m => ({ default: m.Booking })));
@@ -48,6 +49,7 @@ function Index() {
         <div data-reveal><Services /></div>
         <div data-reveal><Destinations /></div>
         <div data-reveal><WorldMap /></div>
+        <div data-reveal><Globe3D /></div>
         <div data-reveal><Reviews /></div>
         <div data-reveal><Process /></div>
         <div data-reveal><Success /></div>
