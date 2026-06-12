@@ -2,6 +2,10 @@ import { Suspense, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { OrbitControls, Stars, Html } from "@react-three/drei";
 import * as THREE from "three";
+import earthDayMapUrl from "@/assets/globe/earth_atmos_2048.jpg";
+import earthNormalMapUrl from "@/assets/globe/earth_normal_2048.jpg";
+import earthSpecularMapUrl from "@/assets/globe/earth_specular_2048.jpg";
+import earthCloudsMapUrl from "@/assets/globe/earth_clouds_1024.png";
 
 type Uni = {
   name: string;
@@ -84,12 +88,12 @@ function Earth({
     }
   });
 
-  // Real Earth textures from three.js examples (reliably hosted)
+  // Bundled Earth textures; avoids external CDN failures when this section enters view.
   const [dayMap, normalMap, specMap, cloudsMap] = useLoader(THREE.TextureLoader, [
-    "https://unpkg.com/three@0.160.0/examples/textures/planets/earth_atmos_2048.jpg",
-    "https://unpkg.com/three@0.160.0/examples/textures/planets/earth_normal_2048.jpg",
-    "https://unpkg.com/three@0.160.0/examples/textures/planets/earth_specular_2048.jpg",
-    "https://unpkg.com/three@0.160.0/examples/textures/planets/earth_clouds_1024.png",
+    earthDayMapUrl,
+    earthNormalMapUrl,
+    earthSpecularMapUrl,
+    earthCloudsMapUrl,
   ]);
 
   useMemo(() => {
