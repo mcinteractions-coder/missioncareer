@@ -38,23 +38,21 @@ function Index() {
       <Navbar />
       <Hero />
       <UniversityMarquee />
-      <Suspense fallback={<Fallback />}>
-        <FestivalPopup />
-        <div data-reveal><About /></div>
-        <div data-reveal><Services /></div>
-        <div data-reveal><Destinations /></div>
-        <div data-reveal><WorldMap /></div>
-        <div data-reveal><Globe3D /></div>
-        <div data-reveal><Reviews /></div>
-        <div data-reveal><Process /></div>
-        <div data-reveal><Success /></div>
-        <div data-reveal><Deadlines /></div>
-        <div data-reveal><Blog /></div>
-        <div data-reveal><Booking /></div>
-        <div data-reveal><TodaysMeetings /></div>
-        <div data-reveal><Contact /></div>
-        <Footer />
-      </Suspense>
+      <FestivalPopup />
+      <div data-reveal><About /></div>
+      <div data-reveal><Services /></div>
+      <div data-reveal><Destinations /></div>
+      <div data-reveal><WorldMap /></div>
+      <div data-reveal><Globe3D /></div>
+      <div data-reveal><Reviews /></div>
+      <div data-reveal><Process /></div>
+      <div data-reveal><Success /></div>
+      <div data-reveal><Deadlines /></div>
+      <div data-reveal><Blog /></div>
+      <div data-reveal><Booking /></div>
+      <div data-reveal><TodaysMeetings /></div>
+      <div data-reveal><Contact /></div>
+      <Footer />
     </main>
   );
 }
