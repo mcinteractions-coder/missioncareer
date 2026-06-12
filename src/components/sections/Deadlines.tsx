@@ -150,18 +150,19 @@ const UNIVERSITIES: Uni[] = [
 const COUNTRIES = ["All", ...Array.from(new Set(UNIVERSITIES.map(u => u.country)))];
 
 function useCountdown(target: string) {
-  const [now, setNow] = useState(() => Date.now());
+  const [now, setNow] = useState<number | null>(null);
   useEffect(() => {
+    setNow(Date.now());
     const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
   }, []);
-  const diff = new Date(target).getTime() - now;
-  const expired = diff <= 0;
+  const diff = now === null ? 0 : new Date(target).getTime() - now;
+  const expired = now !== null && diff <= 0;
   const d = Math.max(0, Math.floor(diff / 86400000));
   const h = Math.max(0, Math.floor((diff % 86400000) / 3600000));
   const m = Math.max(0, Math.floor((diff % 3600000) / 60000));
   const s = Math.max(0, Math.floor((diff % 60000) / 1000));
-  return { d, h, m, s, expired, diff };
+  return { d, h, m, s, expired, diff, ready: now !== null };
 }
 
 function CountdownCard({ uni }: { uni: Uni }) {
