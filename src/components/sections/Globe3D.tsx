@@ -1,5 +1,5 @@
 import { Suspense, useMemo, useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { OrbitControls, Stars, Html } from "@react-three/drei";
 import * as THREE from "three";
 
@@ -84,38 +84,24 @@ function Earth({
     }
   });
 
-  // Procedural earth texture via gradient shader (no external image needed)
-  const earthMaterial = useMemo(
-    () =>
-      new THREE.ShaderMaterial({
-        uniforms: {
-          uTime: { value: 0 },
-        },
-        vertexShader: `
-          varying vec3 vNormal;
-          varying vec2 vUv;
-          void main() {
-            vNormal = normalize(normalMatrix * normal);
-            vUv = uv;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-          }
-        `,
-        fragmentShader: `
-          varying vec3 vNormal;
-          varying vec2 vUv;
-          void main() {
-            float intensity = pow(0.7 - dot(vNormal, vec3(0,0,1.0)), 2.0);
-            vec3 deep = vec3(0.02, 0.08, 0.25);
-            vec3 mid = vec3(0.05, 0.25, 0.55);
-            vec3 glow = vec3(0.2, 0.6, 1.0);
-            vec3 col = mix(deep, mid, vUv.y);
-            col += glow * intensity * 0.6;
-            gl_FragColor = vec4(col, 1.0);
-          }
-        `,
-      }),
-    []
-  );
+  // Real Earth textures (NASA Blue Marble via unpkg-hosted three examples)
+  const [dayMap, normalMap, specMap, cloudsMap] = useLoader(THREE.TextureLoader, [
+    "https://unpkg.com/three-globe@2.31.0/example/img/earth-blue-marble.jpg",
+    "https://unpkg.com/three-globe@2.31.0/example/img/earth-topology.png",
+    "https://unpkg.com/three-globe@2.31.0/example/img/earth-water.png",
+    "https://unpkg.com/three-globe@2.31.0/example/img/clouds.png",
+  ]);
+
+  useMemo(() => {
+    [dayMap, normalMap, specMap, cloudsMap].forEach((t) => {
+      if (t) t.colorSpace = THREE.SRGBColorSpace;
+    });
+  }, [dayMap, normalMap, specMap, cloudsMap]);
+
+  const cloudsRef = useRef<THREE.Mesh>(null);
+  useFrame((_, delta) => {
+    if (cloudsRef.current) cloudsRef.current.rotation.y += delta * 0.02;
+  });
 
   const atmosphereMaterial = useMemo(
     () =>
@@ -144,21 +130,22 @@ function Earth({
 
   return (
     <group ref={groupRef}>
-      {/* Earth sphere */}
+      {/* Earth sphere with real NASA textures */}
       <mesh>
         <sphereGeometry args={[2, 64, 64]} />
-        <primitive object={earthMaterial} attach="material" />
+        <meshPhongMaterial
+          map={dayMap}
+          normalMap={normalMap}
+          specularMap={specMap}
+          specular={new THREE.Color("#222")}
+          shininess={12}
+        />
       </mesh>
 
-      {/* Wireframe overlay for grid lines */}
-      <mesh>
-        <sphereGeometry args={[2.005, 32, 32]} />
-        <meshBasicMaterial
-          color="#4dd0e1"
-          wireframe
-          transparent
-          opacity={0.12}
-        />
+      {/* Clouds layer */}
+      <mesh ref={cloudsRef} scale={1.012}>
+        <sphereGeometry args={[2, 64, 64]} />
+        <meshPhongMaterial map={cloudsMap} transparent opacity={0.35} depthWrite={false} />
       </mesh>
 
       {/* Atmosphere glow */}
