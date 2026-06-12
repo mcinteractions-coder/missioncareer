@@ -84,12 +84,12 @@ function Earth({
     }
   });
 
-  // Real Earth textures (NASA Blue Marble via unpkg-hosted three examples)
+  // Real Earth textures from three.js examples (reliably hosted)
   const [dayMap, normalMap, specMap, cloudsMap] = useLoader(THREE.TextureLoader, [
-    "https://unpkg.com/three-globe@2.31.0/example/img/earth-blue-marble.jpg",
-    "https://unpkg.com/three-globe@2.31.0/example/img/earth-topology.png",
-    "https://unpkg.com/three-globe@2.31.0/example/img/earth-water.png",
-    "https://unpkg.com/three-globe@2.31.0/example/img/clouds.png",
+    "https://unpkg.com/three@0.160.0/examples/textures/planets/earth_atmos_2048.jpg",
+    "https://unpkg.com/three@0.160.0/examples/textures/planets/earth_normal_2048.jpg",
+    "https://unpkg.com/three@0.160.0/examples/textures/planets/earth_specular_2048.jpg",
+    "https://unpkg.com/three@0.160.0/examples/textures/planets/earth_clouds_1024.png",
   ]);
 
   useMemo(() => {
