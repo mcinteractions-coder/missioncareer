@@ -313,11 +313,49 @@ export function WorldMap() {
                     </g>
                   </Marker>
                 );
-              })}
-            </ComposableMap>
+            })}
 
-            {/* Country pill row */}
-            <div className="flex flex-wrap gap-1.5 mt-3 px-1">
+            {/* Top 100 University pins */}
+            {TOP_UNIVERSITIES.map((u) => {
+              const isSel = selectedUni?.rank === u.rank || hoverUni?.rank === u.rank;
+              return (
+                <Marker key={u.rank} coordinates={u.coords}>
+                  <g
+                    onMouseEnter={() => setHoverUni(u)}
+                    onMouseLeave={() => setHoverUni(null)}
+                    onClick={() => setSelectedUni(u)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {isSel && (
+                      <circle r={6} fill="#facc15" opacity={0.35}>
+                        <animate attributeName="r" values="4;10;4" dur="1.6s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="0.6;0;0.6" dur="1.6s" repeatCount="indefinite" />
+                      </circle>
+                    )}
+                    <circle
+                      r={isSel ? 2.6 : 1.6}
+                      fill={isSel ? "#facc15" : "#fde68a"}
+                      stroke={isDark ? "#0b1224" : "#1e293b"}
+                      strokeWidth={0.5}
+                      style={{ filter: isSel ? "drop-shadow(0 0 4px #facc15)" : undefined, transition: "all .25s ease" }}
+                    />
+                    {isSel && (
+                      <g style={{ pointerEvents: "none" }}>
+                        <rect x={6} y={-10} rx={3} ry={3} width={Math.max(60, u.name.length * 3.4)} height={14} fill={isDark ? "#0b1224" : "#ffffff"} stroke="#facc15" strokeWidth={0.5} opacity={0.95} />
+                        <text x={9} y={0} fontSize={5.5} fontWeight={700} fill={isDark ? "#fde68a" : "#1e293b"}>
+                          #{u.rank} {u.name}
+                        </text>
+                      </g>
+                    )}
+                  </g>
+                </Marker>
+              );
+            })}
+          </ComposableMap>
+
+          {/* Country pill row */}
+          <div className="flex flex-wrap gap-1.5 mt-3 px-1">
+
               {Object.values(COUNTRIES).map((c) => {
                 const isActive = active.name === c.name;
                 return (
