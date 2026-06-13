@@ -13,7 +13,8 @@ function useIsDark() {
   }, []);
   return isDark;
 }
-import { GraduationCap, DollarSign, Briefcase, Sparkles, Plane, Globe2 } from "lucide-react";
+import { GraduationCap, DollarSign, Briefcase, Sparkles, Plane, Globe2, Search, MapPin } from "lucide-react";
+import { TOP_UNIVERSITIES, type TopUni } from "@/lib/top-universities";
 
 const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
@@ -79,7 +80,20 @@ const COUNTRIES: Record<string, CountryInfo> = {
 export function WorldMap() {
   const [active, setActive] = useState<CountryInfo>(COUNTRIES["United States of America"]);
   const [hover, setHover] = useState<string | null>(null);
+  const [hoverUni, setHoverUni] = useState<TopUni | null>(null);
+  const [selectedUni, setSelectedUni] = useState<TopUni | null>(null);
+  const [query, setQuery] = useState("");
   const isDark = useIsDark();
+
+  const filteredUnis = TOP_UNIVERSITIES.filter((u) => {
+    const q = query.trim().toLowerCase();
+    if (!q) return true;
+    return (
+      u.name.toLowerCase().includes(q) ||
+      u.country.toLowerCase().includes(q) ||
+      u.city.toLowerCase().includes(q)
+    );
+  });
 
   // theme-aware palette
   const t = isDark
@@ -299,11 +313,49 @@ export function WorldMap() {
                     </g>
                   </Marker>
                 );
-              })}
-            </ComposableMap>
+            })}
 
-            {/* Country pill row */}
-            <div className="flex flex-wrap gap-1.5 mt-3 px-1">
+            {/* Top 100 University pins */}
+            {TOP_UNIVERSITIES.map((u) => {
+              const isSel = selectedUni?.rank === u.rank || hoverUni?.rank === u.rank;
+              return (
+                <Marker key={u.rank} coordinates={u.coords}>
+                  <g
+                    onMouseEnter={() => setHoverUni(u)}
+                    onMouseLeave={() => setHoverUni(null)}
+                    onClick={() => setSelectedUni(u)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {isSel && (
+                      <circle r={6} fill="#facc15" opacity={0.35}>
+                        <animate attributeName="r" values="4;10;4" dur="1.6s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="0.6;0;0.6" dur="1.6s" repeatCount="indefinite" />
+                      </circle>
+                    )}
+                    <circle
+                      r={isSel ? 2.6 : 1.6}
+                      fill={isSel ? "#facc15" : "#fde68a"}
+                      stroke={isDark ? "#0b1224" : "#1e293b"}
+                      strokeWidth={0.5}
+                      style={{ filter: isSel ? "drop-shadow(0 0 4px #facc15)" : undefined, transition: "all .25s ease" }}
+                    />
+                    {isSel && (
+                      <g style={{ pointerEvents: "none" }}>
+                        <rect x={6} y={-10} rx={3} ry={3} width={Math.max(60, u.name.length * 3.4)} height={14} fill={isDark ? "#0b1224" : "#ffffff"} stroke="#facc15" strokeWidth={0.5} opacity={0.95} />
+                        <text x={9} y={0} fontSize={5.5} fontWeight={700} fill={isDark ? "#fde68a" : "#1e293b"}>
+                          #{u.rank} {u.name}
+                        </text>
+                      </g>
+                    )}
+                  </g>
+                </Marker>
+              );
+            })}
+          </ComposableMap>
+
+          {/* Country pill row */}
+          <div className="flex flex-wrap gap-1.5 mt-3 px-1">
+
               {Object.values(COUNTRIES).map((c) => {
                 const isActive = active.name === c.name;
                 return (
@@ -323,7 +375,54 @@ export function WorldMap() {
                 );
               })}
             </div>
+
+            {/* Top 100 universities — search + scrollable list */}
+            <div className="mt-4 rounded-2xl border border-foreground/10 dark:border-white/10 bg-foreground/[0.02] dark:bg-white/[0.02] p-3">
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <div className="flex items-center gap-2 text-xs font-bold text-foreground">
+                  <MapPin className="h-3.5 w-3.5 text-amber-400" />
+                  Top 100 Universities · pinned on the map
+                </div>
+                <div className="relative w-44 md:w-56">
+                  <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                  <input
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Search university or city"
+                    className="w-full text-xs rounded-full bg-background/60 border border-foreground/10 dark:border-white/10 pl-7 pr-3 py-1.5 outline-none focus:border-amber-400/60 text-foreground"
+                  />
+                </div>
+              </div>
+              <div className="max-h-44 overflow-y-auto pr-1 grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                {filteredUnis.map((u) => {
+                  const isSel = selectedUni?.rank === u.rank;
+                  return (
+                    <button
+                      key={u.rank}
+                      onMouseEnter={() => setHoverUni(u)}
+                      onMouseLeave={() => setHoverUni(null)}
+                      onClick={() => setSelectedUni(u)}
+                      className={`flex items-center gap-2 text-left rounded-lg px-2 py-1.5 border transition-all ${
+                        isSel
+                          ? "bg-amber-400/15 border-amber-400/50"
+                          : "bg-foreground/[0.03] dark:bg-white/[0.03] border-foreground/10 dark:border-white/10 hover:border-amber-400/40"
+                      }`}
+                    >
+                      <span className="text-[10px] font-extrabold w-7 text-amber-500">#{u.rank}</span>
+                      <span className="flex-1 min-w-0">
+                        <span className="block text-xs font-semibold text-foreground truncate">{u.name}</span>
+                        <span className="block text-[10px] text-muted-foreground truncate">{u.city} · {u.country}</span>
+                      </span>
+                    </button>
+                  );
+                })}
+                {filteredUnis.length === 0 && (
+                  <div className="col-span-full text-center text-xs text-muted-foreground py-4">No universities match "{query}"</div>
+                )}
+              </div>
+            </div>
           </div>
+
 
           {/* Info card */}
           <div
