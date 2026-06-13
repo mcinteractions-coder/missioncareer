@@ -133,19 +133,7 @@ function Earth({
     }
   });
 
-  // Bundled Earth textures; avoids external CDN failures when this section enters view.
-  const [dayMap, normalMap, specMap, cloudsMap] = useLoader(THREE.TextureLoader, [
-    earthDayMapUrl,
-    earthNormalMapUrl,
-    earthSpecularMapUrl,
-    earthCloudsMapUrl,
-  ]);
-
-  useMemo(() => {
-    [dayMap, normalMap, specMap, cloudsMap].forEach((t) => {
-      if (t) t.colorSpace = THREE.SRGBColorSpace;
-    });
-  }, [dayMap, normalMap, specMap, cloudsMap]);
+  const earthTexture = useMemo(() => createEarthTexture(), []);
 
   const cloudsRef = useRef<THREE.Mesh>(null);
   useFrame((_, delta) => {
@@ -179,13 +167,11 @@ function Earth({
 
   return (
     <group ref={groupRef}>
-      {/* Earth sphere with real NASA textures */}
+      {/* Procedural Earth texture: no external image loading, so this cannot crash the page */}
       <mesh>
         <sphereGeometry args={[2, 64, 64]} />
         <meshPhongMaterial
-          map={dayMap}
-          normalMap={normalMap}
-          specularMap={specMap}
+          map={earthTexture}
           specular={new THREE.Color("#222")}
           shininess={12}
         />
@@ -194,7 +180,7 @@ function Earth({
       {/* Clouds layer */}
       <mesh ref={cloudsRef} scale={1.012}>
         <sphereGeometry args={[2, 64, 64]} />
-        <meshPhongMaterial map={cloudsMap} transparent opacity={0.35} depthWrite={false} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.08} wireframe depthWrite={false} />
       </mesh>
 
       {/* Atmosphere glow */}
