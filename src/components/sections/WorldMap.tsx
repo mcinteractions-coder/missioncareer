@@ -80,7 +80,20 @@ const COUNTRIES: Record<string, CountryInfo> = {
 export function WorldMap() {
   const [active, setActive] = useState<CountryInfo>(COUNTRIES["United States of America"]);
   const [hover, setHover] = useState<string | null>(null);
+  const [hoverUni, setHoverUni] = useState<TopUni | null>(null);
+  const [selectedUni, setSelectedUni] = useState<TopUni | null>(null);
+  const [query, setQuery] = useState("");
   const isDark = useIsDark();
+
+  const filteredUnis = TOP_UNIVERSITIES.filter((u) => {
+    const q = query.trim().toLowerCase();
+    if (!q) return true;
+    return (
+      u.name.toLowerCase().includes(q) ||
+      u.country.toLowerCase().includes(q) ||
+      u.city.toLowerCase().includes(q)
+    );
+  });
 
   // theme-aware palette
   const t = isDark
