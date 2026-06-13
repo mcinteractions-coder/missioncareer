@@ -165,7 +165,9 @@ function Earth({
     }
   });
 
-  const earthTexture = useMemo(() => createEarthTexture(), []);
+  const proceduralTexture = useMemo(() => createEarthTexture(), []);
+  const realTexture = useRealEarthTexture();
+  const earthTexture = realTexture ?? proceduralTexture;
 
   const cloudsRef = useRef<THREE.Mesh>(null);
   useFrame((_, delta) => {
