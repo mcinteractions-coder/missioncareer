@@ -1,7 +1,39 @@
-import { Suspense, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Stars, Html } from "@react-three/drei";
 import * as THREE from "three";
+
+// Try to load a real NASA earth map; if it fails for ANY reason, we silently
+// fall back to the procedural texture below so the page can never crash.
+const REAL_EARTH_URLS = [
+  "https://raw.githubusercontent.com/mrdoob/three.js/r160/examples/textures/planets/earth_atmos_2048.jpg",
+  "https://cdn.jsdelivr.net/gh/mrdoob/three.js@r160/examples/textures/planets/earth_atmos_2048.jpg",
+];
+
+function useRealEarthTexture(): THREE.Texture | null {
+  const [texture, setTexture] = useState<THREE.Texture | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    const loader = new THREE.TextureLoader();
+    loader.setCrossOrigin("anonymous");
+    const tryLoad = (i: number) => {
+      if (i >= REAL_EARTH_URLS.length) return;
+      loader.load(
+        REAL_EARTH_URLS[i],
+        (tex) => {
+          if (cancelled) { tex.dispose(); return; }
+          tex.colorSpace = THREE.SRGBColorSpace;
+          setTexture(tex);
+        },
+        undefined,
+        () => tryLoad(i + 1)
+      );
+    };
+    tryLoad(0);
+    return () => { cancelled = true; };
+  }, []);
+  return texture;
+}
 
 type Uni = {
   name: string;
@@ -133,7 +165,9 @@ function Earth({
     }
   });
 
-  const earthTexture = useMemo(() => createEarthTexture(), []);
+  const proceduralTexture = useMemo(() => createEarthTexture(), []);
+  const realTexture = useRealEarthTexture();
+  const earthTexture = realTexture ?? proceduralTexture;
 
   const cloudsRef = useRef<THREE.Mesh>(null);
   useFrame((_, delta) => {
