@@ -13,7 +13,8 @@ function useIsDark() {
   }, []);
   return isDark;
 }
-import { GraduationCap, DollarSign, Briefcase, Sparkles, Plane, Globe2 } from "lucide-react";
+import { GraduationCap, DollarSign, Briefcase, Sparkles, Plane, Globe2, Search, MapPin } from "lucide-react";
+import { TOP_UNIVERSITIES, type TopUni } from "@/lib/top-universities";
 
 const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
