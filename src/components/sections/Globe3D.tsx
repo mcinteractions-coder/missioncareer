@@ -1,11 +1,7 @@
 import { Suspense, useMemo, useRef, useState } from "react";
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Stars, Html } from "@react-three/drei";
 import * as THREE from "three";
-import earthDayMapUrl from "@/assets/globe/earth_atmos_2048.jpg";
-import earthNormalMapUrl from "@/assets/globe/earth_normal_2048.jpg";
-import earthSpecularMapUrl from "@/assets/globe/earth_specular_2048.jpg";
-import earthCloudsMapUrl from "@/assets/globe/earth_clouds_1024.png";
 
 type Uni = {
   name: string;
@@ -72,6 +68,55 @@ function latLngToVec3(lat: number, lng: number, radius: number) {
   return new THREE.Vector3(x, y, z);
 }
 
+function createEarthTexture() {
+  const width = 1024;
+  const height = 512;
+  const data = new Uint8Array(width * height * 4);
+  const landBlobs = [
+    [-101, 48, 34, 18], [-83, 30, 22, 16], [-60, -12, 18, 28], [-70, -38, 12, 18],
+    [15, 2, 27, 33], [20, 22, 25, 20], [78, 52, 46, 16], [104, 31, 34, 18],
+    [78, 20, 18, 17], [135, -25, 24, 16], [48, -20, 20, 18], [-42, 72, 18, 7],
+  ];
+
+  for (let y = 0; y < height; y += 1) {
+    const lat = 90 - (y / (height - 1)) * 180;
+    const latRad = (lat * Math.PI) / 180;
+    for (let x = 0; x < width; x += 1) {
+      const lng = (x / (width - 1)) * 360 - 180;
+      let land = 0;
+      landBlobs.forEach(([cx, cy, rx, ry]) => {
+        const dx = Math.abs(((lng - cx + 540) % 360) - 180) / rx;
+        const dy = (lat - cy) / ry;
+        land = Math.max(land, Math.exp(-(dx * dx + dy * dy) * 1.55));
+      });
+      const coastNoise = Math.sin((lng * 0.22 + lat * 0.38) * Math.PI) * 0.09 + Math.sin((lng * 0.71 - lat * 0.17) * Math.PI) * 0.05;
+      const ice = Math.max(0, (Math.abs(lat) - 66) / 20);
+      const shade = 0.72 + 0.28 * Math.cos(latRad);
+      const i = (y * width + x) * 4;
+
+      if (ice > 0.35) {
+        data[i] = 210; data[i + 1] = 234; data[i + 2] = 242; data[i + 3] = 255;
+      } else if (land + coastNoise > 0.34) {
+        data[i] = Math.round((34 + land * 58) * shade);
+        data[i + 1] = Math.round((102 + land * 84) * shade);
+        data[i + 2] = Math.round((64 + land * 44) * shade);
+        data[i + 3] = 255;
+      } else {
+        const ocean = 0.55 + 0.45 * Math.cos(latRad);
+        data[i] = Math.round(8 + ocean * 8);
+        data[i + 1] = Math.round(42 + ocean * 54);
+        data[i + 2] = Math.round(92 + ocean * 118);
+        data[i + 3] = 255;
+      }
+    }
+  }
+
+  const texture = new THREE.DataTexture(data, width, height, THREE.RGBAFormat);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.needsUpdate = true;
+  return texture;
+}
+
 function Earth({
   onSelect,
   selected,
@@ -88,19 +133,7 @@ function Earth({
     }
   });
 
-  // Bundled Earth textures; avoids external CDN failures when this section enters view.
-  const [dayMap, normalMap, specMap, cloudsMap] = useLoader(THREE.TextureLoader, [
-    earthDayMapUrl,
-    earthNormalMapUrl,
-    earthSpecularMapUrl,
-    earthCloudsMapUrl,
-  ]);
-
-  useMemo(() => {
-    [dayMap, normalMap, specMap, cloudsMap].forEach((t) => {
-      if (t) t.colorSpace = THREE.SRGBColorSpace;
-    });
-  }, [dayMap, normalMap, specMap, cloudsMap]);
+  const earthTexture = useMemo(() => createEarthTexture(), []);
 
   const cloudsRef = useRef<THREE.Mesh>(null);
   useFrame((_, delta) => {
@@ -134,13 +167,11 @@ function Earth({
 
   return (
     <group ref={groupRef}>
-      {/* Earth sphere with real NASA textures */}
+      {/* Procedural Earth texture: no external image loading, so this cannot crash the page */}
       <mesh>
         <sphereGeometry args={[2, 64, 64]} />
         <meshPhongMaterial
-          map={dayMap}
-          normalMap={normalMap}
-          specularMap={specMap}
+          map={earthTexture}
           specular={new THREE.Color("#222")}
           shininess={12}
         />
@@ -149,7 +180,7 @@ function Earth({
       {/* Clouds layer */}
       <mesh ref={cloudsRef} scale={1.012}>
         <sphereGeometry args={[2, 64, 64]} />
-        <meshPhongMaterial map={cloudsMap} transparent opacity={0.35} depthWrite={false} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.08} wireframe depthWrite={false} />
       </mesh>
 
       {/* Atmosphere glow */}
