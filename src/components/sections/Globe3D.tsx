@@ -250,6 +250,7 @@ function Earth({
 }) {
   const groupRef = useRef<THREE.Group>(null);
   const [autoRotate, setAutoRotate] = useState(true);
+  const [hovered, setHovered] = useState<Uni | null>(null);
 
   useFrame((_, delta) => {
     if (groupRef.current && autoRotate && !selected) {
@@ -319,8 +320,13 @@ function Earth({
       {UNIVERSITIES.map((u, i) => {
         const pos = latLngToVec3(u.lat, u.lng, 2.02);
         const isSelected = selected?.name === u.name;
+        const isHover = hovered?.name === u.name;
+        const active = isSelected || isHover;
+        const normal = pos.clone().normalize();
+        // Hide pins on the far side of the globe (back-face culling for HTML markers)
         return (
           <group key={i} position={pos}>
+            {/* Big invisible hit-sphere — makes pins easy to click */}
             <mesh
               onClick={(e) => {
                 e.stopPropagation();
@@ -330,35 +336,69 @@ function Earth({
               onPointerOver={(e) => {
                 e.stopPropagation();
                 document.body.style.cursor = "pointer";
+                setHovered(u);
               }}
               onPointerOut={() => {
                 document.body.style.cursor = "default";
+                setHovered((h) => (h?.name === u.name ? null : h));
               }}
             >
-              <sphereGeometry args={[isSelected ? 0.04 : 0.022, 12, 12]} />
-              <meshBasicMaterial color={isSelected ? "#ffd54f" : "#ff4081"} />
+              <sphereGeometry args={[0.11, 10, 10]} />
+              <meshBasicMaterial transparent opacity={0} depthWrite={false} />
             </mesh>
-            {/* Pulsing glow */}
+
+            {/* Outer soft halo */}
             <mesh>
-              <sphereGeometry args={[isSelected ? 0.08 : 0.045, 12, 12]} />
+              <sphereGeometry args={[active ? 0.075 : 0.05, 16, 16]} />
               <meshBasicMaterial
-                color={isSelected ? "#ffd54f" : "#ff80ab"}
+                color={isSelected ? "#fde047" : "#22d3ee"}
                 transparent
-                opacity={0.3}
+                opacity={active ? 0.35 : 0.22}
+                depthWrite={false}
               />
             </mesh>
+
+            {/* Ring (lollipop look) */}
+            <mesh quaternion={new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), normal)}>
+              <ringGeometry args={[active ? 0.04 : 0.028, active ? 0.052 : 0.038, 24]} />
+              <meshBasicMaterial
+                color={isSelected ? "#fde047" : "#67e8f9"}
+                transparent
+                opacity={0.9}
+                side={THREE.DoubleSide}
+                depthWrite={false}
+              />
+            </mesh>
+
+            {/* Core dot */}
+            <mesh>
+              <sphereGeometry args={[active ? 0.028 : 0.018, 16, 16]} />
+              <meshBasicMaterial color={isSelected ? "#fde047" : "#ffffff"} />
+            </mesh>
+
             {/* Beam pointing outward */}
-            <mesh position={pos.clone().normalize().multiplyScalar(0.12)}>
-              <cylinderGeometry args={[0.003, 0.003, 0.2, 6]} />
+            <mesh
+              position={normal.clone().multiplyScalar(active ? 0.14 : 0.08)}
+              quaternion={new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), normal)}
+            >
+              <cylinderGeometry args={[0.0035, 0.0015, active ? 0.28 : 0.16, 8]} />
               <meshBasicMaterial
-                color={isSelected ? "#ffd54f" : "#ff4081"}
+                color={isSelected ? "#fde047" : "#22d3ee"}
                 transparent
-                opacity={0.4}
+                opacity={0.85}
+                depthWrite={false}
               />
             </mesh>
-            {isSelected && (
-              <Html distanceFactor={6} position={[0, 0.2, 0]} center>
-                <div className="px-2 py-1 rounded-md bg-background/90 border border-primary text-xs font-semibold whitespace-nowrap shadow-lg backdrop-blur">
+
+            {(isSelected || isHover) && (
+              <Html
+                distanceFactor={7}
+                position={normal.clone().multiplyScalar(0.35).toArray()}
+                center
+                style={{ pointerEvents: "none" }}
+              >
+                <div className="px-2.5 py-1 rounded-lg bg-slate-900/95 border border-cyan-400/60 text-[11px] font-semibold text-white whitespace-nowrap shadow-[0_4px_20px_rgba(34,211,238,0.35)] backdrop-blur">
+                  <span className="text-cyan-300 mr-1">#{u.rank}</span>
                   {u.name}
                 </div>
               </Html>
