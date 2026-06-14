@@ -250,6 +250,7 @@ function Earth({
 }) {
   const groupRef = useRef<THREE.Group>(null);
   const [autoRotate, setAutoRotate] = useState(true);
+  const [hovered, setHovered] = useState<Uni | null>(null);
 
   useFrame((_, delta) => {
     if (groupRef.current && autoRotate && !selected) {
