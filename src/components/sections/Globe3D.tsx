@@ -306,7 +306,7 @@ function Earth({
       {/* Clouds layer */}
       <mesh ref={cloudsRef} scale={1.012}>
         <sphereGeometry args={[2, 64, 64]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.08} wireframe depthWrite={false} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.06} depthWrite={false} />
       </mesh>
 
       {/* Atmosphere glow */}
@@ -419,14 +419,12 @@ export function Globe3D() {
             {selected ? (
               <div className="animate-fade-in flex flex-col h-full">
                 <div className="flex items-start gap-3 mb-4">
-                  <img
-                    src={`https://logo.clearbit.com/${selected.domain}`}
-                    alt={selected.name}
-                    className="w-14 h-14 rounded-xl bg-white p-1.5 object-contain border border-border"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = "none";
-                    }}
-                  />
+                  <div
+                    className="w-14 h-14 rounded-xl flex items-center justify-center text-white font-bold text-lg shrink-0 border border-border"
+                    style={{ backgroundColor: getUniColor(selected.name) }}
+                  >
+                    {getInitials(selected.name)}
+                  </div>
                   <div className="flex-1">
                     <h3 className="font-bold text-lg leading-tight">{selected.name}</h3>
                     <p className="text-sm text-muted-foreground">
@@ -436,11 +434,11 @@ export function Globe3D() {
                 </div>
 
                 <div className="inline-block self-start px-3 py-1 rounded-full bg-primary/15 text-primary text-xs font-bold mb-3">
-                  🏆 {selected.rank}
+                  🏆 #{selected.rank} Global
                 </div>
 
                 <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-                  {selected.desc}
+                  Ranked #{selected.rank} globally. A world-class institution in {selected.country} known for outstanding teaching, research, and innovation.
                 </p>
 
                 <div className="mt-auto space-y-2">
