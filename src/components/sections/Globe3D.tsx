@@ -359,7 +359,7 @@ function Earth({
             </mesh>
 
             {/* Ring (lollipop look) */}
-            <mesh lookAt={normal.clone().multiplyScalar(10)}>
+            <mesh quaternion={new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), normal)}>
               <ringGeometry args={[active ? 0.04 : 0.028, active ? 0.052 : 0.038, 24]} />
               <meshBasicMaterial
                 color={isSelected ? "#fde047" : "#67e8f9"}
