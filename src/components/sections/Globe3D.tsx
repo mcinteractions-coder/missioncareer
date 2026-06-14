@@ -335,25 +335,25 @@ function Earth({
                 document.body.style.cursor = "default";
               }}
             >
-              <sphereGeometry args={[isSelected ? 0.06 : 0.035, 16, 16]} />
+              <sphereGeometry args={[isSelected ? 0.04 : 0.022, 12, 12]} />
               <meshBasicMaterial color={isSelected ? "#ffd54f" : "#ff4081"} />
             </mesh>
             {/* Pulsing glow */}
             <mesh>
-              <sphereGeometry args={[isSelected ? 0.12 : 0.07, 16, 16]} />
+              <sphereGeometry args={[isSelected ? 0.08 : 0.045, 12, 12]} />
               <meshBasicMaterial
                 color={isSelected ? "#ffd54f" : "#ff80ab"}
                 transparent
-                opacity={0.35}
+                opacity={0.3}
               />
             </mesh>
             {/* Beam pointing outward */}
-            <mesh position={pos.clone().normalize().multiplyScalar(0.15)}>
-              <cylinderGeometry args={[0.005, 0.005, 0.3, 8]} />
+            <mesh position={pos.clone().normalize().multiplyScalar(0.12)}>
+              <cylinderGeometry args={[0.003, 0.003, 0.2, 6]} />
               <meshBasicMaterial
                 color={isSelected ? "#ffd54f" : "#ff4081"}
                 transparent
-                opacity={0.5}
+                opacity={0.4}
               />
             </mesh>
             {isSelected && (
