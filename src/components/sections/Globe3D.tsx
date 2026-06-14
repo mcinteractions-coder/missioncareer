@@ -2,6 +2,7 @@ import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Stars, Html } from "@react-three/drei";
 import * as THREE from "three";
+import { TOP_UNIVERSITIES } from "@/lib/top-universities";
 
 // Try to load a real NASA earth map; if it fails for ANY reason, we silently
 // fall back to the procedural texture below so the page can never crash.
@@ -41,54 +42,145 @@ type Uni = {
   city: string;
   lat: number;
   lng: number;
-  domain: string;
-  rank: string;
-  desc: string;
+  rank: number;
 };
 
-const UNIVERSITIES: Uni[] = [
-  // USA
-  { name: "Harvard University", country: "USA", city: "Cambridge", lat: 42.3770, lng: -71.1167, domain: "harvard.edu", rank: "#1 Global", desc: "Ivy League. World's most prestigious university." },
-  { name: "MIT", country: "USA", city: "Cambridge", lat: 42.3601, lng: -71.0942, domain: "mit.edu", rank: "#2 Global", desc: "Leader in tech, engineering & innovation." },
-  { name: "Stanford University", country: "USA", city: "Stanford", lat: 37.4275, lng: -122.1697, domain: "stanford.edu", rank: "#3 Global", desc: "Silicon Valley powerhouse." },
-  { name: "Columbia University", country: "USA", city: "New York", lat: 40.8075, lng: -73.9626, domain: "columbia.edu", rank: "#12 Global", desc: "Ivy League in the heart of NYC." },
-  { name: "UC Berkeley", country: "USA", city: "Berkeley", lat: 37.8719, lng: -122.2585, domain: "berkeley.edu", rank: "#10 Global", desc: "Top public research university." },
-  { name: "Yale University", country: "USA", city: "New Haven", lat: 41.3163, lng: -72.9223, domain: "yale.edu", rank: "#9 Global", desc: "Ivy League excellence since 1701." },
-  { name: "Princeton University", country: "USA", city: "Princeton", lat: 40.3431, lng: -74.6551, domain: "princeton.edu", rank: "#16 Global", desc: "Elite Ivy League research." },
-  // UK
-  { name: "University of Oxford", country: "UK", city: "Oxford", lat: 51.7548, lng: -1.2544, domain: "ox.ac.uk", rank: "#1 UK", desc: "World's oldest English-speaking university." },
-  { name: "University of Cambridge", country: "UK", city: "Cambridge", lat: 52.2043, lng: 0.1149, domain: "cam.ac.uk", rank: "#2 UK", desc: "Birthplace of modern science." },
-  { name: "Imperial College London", country: "UK", city: "London", lat: 51.4988, lng: -0.1749, domain: "imperial.ac.uk", rank: "#5 Global", desc: "STEM-focused excellence." },
-  { name: "UCL", country: "UK", city: "London", lat: 51.5246, lng: -0.1340, domain: "ucl.ac.uk", rank: "#8 Global", desc: "London's leading multidisciplinary uni." },
-  { name: "LSE", country: "UK", city: "London", lat: 51.5145, lng: -0.1167, domain: "lse.ac.uk", rank: "#1 Social Sciences", desc: "Top for economics & politics." },
-  { name: "University of Edinburgh", country: "UK", city: "Edinburgh", lat: 55.9445, lng: -3.1892, domain: "ed.ac.uk", rank: "#22 Global", desc: "Scotland's flagship university." },
-  // Canada
-  { name: "University of Toronto", country: "Canada", city: "Toronto", lat: 43.6629, lng: -79.3957, domain: "utoronto.ca", rank: "#1 Canada", desc: "Canada's top research university." },
-  { name: "UBC", country: "Canada", city: "Vancouver", lat: 49.2606, lng: -123.2460, domain: "ubc.ca", rank: "#2 Canada", desc: "Stunning west-coast campus." },
-  { name: "McGill University", country: "Canada", city: "Montreal", lat: 45.5048, lng: -73.5772, domain: "mcgill.ca", rank: "#3 Canada", desc: "The Harvard of Canada." },
-  { name: "University of Waterloo", country: "Canada", city: "Waterloo", lat: 43.4723, lng: -80.5449, domain: "uwaterloo.ca", rank: "Top CS", desc: "Best for tech & co-op programs." },
-  // Australia
-  { name: "University of Melbourne", country: "Australia", city: "Melbourne", lat: -37.7964, lng: 144.9612, domain: "unimelb.edu.au", rank: "#1 Australia", desc: "Australia's leading research uni." },
-  { name: "University of Sydney", country: "Australia", city: "Sydney", lat: -33.8886, lng: 151.1873, domain: "sydney.edu.au", rank: "#2 Australia", desc: "Australia's first university." },
-  { name: "ANU", country: "Australia", city: "Canberra", lat: -35.2777, lng: 149.1185, domain: "anu.edu.au", rank: "Top research", desc: "National research powerhouse." },
-  { name: "UNSW Sydney", country: "Australia", city: "Sydney", lat: -33.9173, lng: 151.2313, domain: "unsw.edu.au", rank: "Top Engineering", desc: "Leader in engineering & business." },
-  { name: "University of Queensland", country: "Australia", city: "Brisbane", lat: -27.4975, lng: 153.0137, domain: "uq.edu.au", rank: "Top 50", desc: "Sun-soaked campus excellence." },
-  // Germany
-  { name: "TU Munich", country: "Germany", city: "Munich", lat: 48.1497, lng: 11.5680, domain: "tum.de", rank: "#1 Germany", desc: "Engineering & tech leader." },
-  { name: "LMU Munich", country: "Germany", city: "Munich", lat: 48.1508, lng: 11.5800, domain: "lmu.de", rank: "Top research", desc: "Germany's flagship university." },
-  { name: "Heidelberg University", country: "Germany", city: "Heidelberg", lat: 49.4099, lng: 8.7060, domain: "uni-heidelberg.de", rank: "Top research", desc: "Germany's oldest university." },
-  { name: "RWTH Aachen", country: "Germany", city: "Aachen", lat: 50.7785, lng: 6.0593, domain: "rwth-aachen.de", rank: "Top Engineering", desc: "Premier engineering school." },
-  // Others
-  { name: "ETH Zurich", country: "Switzerland", city: "Zurich", lat: 47.3763, lng: 8.5483, domain: "ethz.ch", rank: "#7 Global", desc: "Europe's MIT." },
-  { name: "Trinity College Dublin", country: "Ireland", city: "Dublin", lat: 53.3438, lng: -6.2546, domain: "tcd.ie", rank: "#1 Ireland", desc: "Ireland's most prestigious uni." },
-  { name: "NUS", country: "Singapore", city: "Singapore", lat: 1.2966, lng: 103.7764, domain: "nus.edu.sg", rank: "#8 Global", desc: "Asia's top university." },
-  { name: "NTU Singapore", country: "Singapore", city: "Singapore", lat: 1.3483, lng: 103.6831, domain: "ntu.edu.sg", rank: "#15 Global", desc: "World-class research." },
-  { name: "University of Tokyo", country: "Japan", city: "Tokyo", lat: 35.7126, lng: 139.7619, domain: "u-tokyo.ac.jp", rank: "#1 Japan", desc: "Japan's top university." },
-  { name: "University of Auckland", country: "New Zealand", city: "Auckland", lat: -36.8523, lng: 174.7691, domain: "auckland.ac.nz", rank: "#1 NZ", desc: "NZ's leading research uni." },
-  { name: "TU Delft", country: "Netherlands", city: "Delft", lat: 52.0022, lng: 4.3736, domain: "tudelft.nl", rank: "Top Engineering", desc: "Europe's engineering elite." },
-  { name: "Sorbonne University", country: "France", city: "Paris", lat: 48.8462, lng: 2.3447, domain: "sorbonne-universite.fr", rank: "Top France", desc: "Historic Parisian excellence." },
-  { name: "HKU", country: "Hong Kong", city: "Hong Kong", lat: 22.2830, lng: 114.1371, domain: "hku.hk", rank: "#17 Global", desc: "Asia's global gateway." },
-];
+// Convert TOP_UNIVERSITIES into the lat/lng format the globe expects
+const UNIVERSITIES: Uni[] = TOP_UNIVERSITIES.map((u) => ({
+  name: u.name,
+  country: u.country,
+  city: u.city,
+  lat: u.coords[1],
+  lng: u.coords[0],
+  rank: u.rank,
+}));
+
+// Simple initials avatar color generator based on name
+function getUniColor(name: string) {
+  const colors = [
+    "#ef4444", "#f97316", "#f59e0b", "#84cc16", "#10b981",
+    "#06b6d4", "#3b82f6", "#6366f1", "#8b5cf6", "#d946ef", "#f43f5e",
+  ];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return colors[Math.abs(hash) % colors.length];
+}
+
+function getInitials(name: string) {
+  return name
+    .split(" ")
+    .filter((w) => w.length > 0 && w[0] === w[0].toUpperCase())
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join("") || name.slice(0, 2).toUpperCase();
+}
+
+function getDomain(name: string) {
+  // Best-effort domain mapping for logo.clearbit
+  const map: Record<string, string> = {
+    "Massachusetts Institute of Technology": "mit.edu",
+    "University of Cambridge": "cam.ac.uk",
+    "University of Oxford": "ox.ac.uk",
+    "Harvard University": "harvard.edu",
+    "Stanford University": "stanford.edu",
+    "Imperial College London": "imperial.ac.uk",
+    "ETH Zurich": "ethz.ch",
+    "National University of Singapore": "nus.edu.sg",
+    "UCL (University College London)": "ucl.ac.uk",
+    "California Institute of Technology": "caltech.edu",
+    "University of Pennsylvania": "upenn.edu",
+    "University of California, Berkeley": "berkeley.edu",
+    "The University of Melbourne": "unimelb.edu.au",
+    "Peking University": "pku.edu.cn",
+    "Tsinghua University": "tsinghua.edu.cn",
+    "Princeton University": "princeton.edu",
+    "Yale University": "yale.edu",
+    "University of Toronto": "utoronto.ca",
+    "Cornell University": "cornell.edu",
+    "The University of Hong Kong": "hku.hk",
+    "Columbia University": "columbia.edu",
+    "University of Chicago": "uchicago.edu",
+    "University of Edinburgh": "ed.ac.uk",
+    "EPFL": "epfl.ch",
+    "PSL University": "psl.eu",
+    "The University of Tokyo": "u-tokyo.ac.jp",
+    "Johns Hopkins University": "jhu.edu",
+    "Technical University of Munich": "tum.de",
+    "University of Michigan-Ann Arbor": "umich.edu",
+    "McGill University": "mcgill.ca",
+    "Australian National University": "anu.edu.au",
+    "University of Sydney": "sydney.edu.au",
+    "UNSW Sydney": "unsw.edu.au",
+    "University of British Columbia": "ubc.ca",
+    "University of Manchester": "manchester.ac.uk",
+    "Nanyang Technological University": "ntu.edu.sg",
+    "Kyoto University": "kyoto-u.ac.jp",
+    "Seoul National University": "snu.ac.kr",
+    "KAIST": "kaist.ac.kr",
+    "Northwestern University": "northwestern.edu",
+    "University of Hong Kong S&T": "hkust.edu.hk",
+    "Fudan University": "fudan.edu.cn",
+    "Shanghai Jiao Tong University": "sjtu.edu.cn",
+    "Zhejiang University": "zju.edu.cn",
+    "Duke University": "duke.edu",
+    "Carnegie Mellon University": "cmu.edu",
+    "University of Bristol": "bristol.ac.uk",
+    "King's College London": "kcl.ac.uk",
+    "London School of Economics": "lse.ac.uk",
+    "New York University": "nyu.edu",
+    "Monash University": "monash.edu",
+    "University of Queensland": "uq.edu.au",
+    "University of Amsterdam": "uva.nl",
+    "Delft University of Technology": "tudelft.nl",
+    "University of Tokyo Inst. of Tech.": "titech.ac.jp",
+    "Sorbonne University": "sorbonne-universite.fr",
+    "Sciences Po": "sciencespo.fr",
+    "Heidelberg University": "uni-heidelberg.de",
+    "HEC Paris": "hec.edu",
+    "Indiana University Bloomington": "iu.edu",
+    "University of Wisconsin-Madison": "wisc.edu",
+    "University of Washington": "washington.edu",
+    "Brown University": "brown.edu",
+    "Boston University": "bu.edu",
+    "Georgia Institute of Technology": "gatech.edu",
+    "University of Texas at Austin": "utexas.edu",
+    "University of Auckland": "auckland.ac.nz",
+    "University of Otago": "otago.ac.nz",
+    "Trinity College Dublin": "tcd.ie",
+    "University College Dublin": "ucd.ie",
+    "University of Glasgow": "gla.ac.uk",
+    "University of Warwick": "warwick.ac.uk",
+    "University of Birmingham": "birmingham.ac.uk",
+    "University of Leeds": "leeds.ac.uk",
+    "University of Southampton": "southampton.ac.uk",
+    "Durham University": "durham.ac.uk",
+    "University of Nottingham": "nottingham.ac.uk",
+    "Korea University": "korea.ac.kr",
+    "Yonsei University": "yonsei.ac.kr",
+    "Osaka University": "osaka-u.ac.jp",
+    "Tohoku University": "tohoku.ac.jp",
+    "University of Waterloo": "uwaterloo.ca",
+    "University of Alberta": "ualberta.ca",
+    "University of Montreal": "umontreal.ca",
+    "Western University": "uwo.ca",
+    "RWTH Aachen": "rwth-aachen.de",
+    "LMU Munich": "lmu.de",
+    "Free University of Berlin": "fu-berlin.de",
+    "Humboldt University Berlin": "hu-berlin.de",
+    "Lund University": "lu.se",
+    "KTH Royal Institute of Technology": "kth.se",
+    "University of Copenhagen": "ku.dk",
+    "University of Oslo": "uio.no",
+    "University of Helsinki": "helsinki.fi",
+    "KU Leuven": "kuleuven.be",
+    "Politecnico di Milano": "polimi.it",
+    "Bocconi University": "bocconi.it",
+    "University of Bologna": "unibo.it",
+    "Universidad Complutense Madrid": "ucm.es",
+    "IE University": "ie.edu",
+  };
+  return map[name] || "";
+}
 
 // Convert lat/lng to 3D sphere coordinates
 function latLngToVec3(lat: number, lng: number, radius: number) {
