@@ -18,6 +18,7 @@ import { Booking } from "@/components/sections/Booking";
 import { TodaysMeetings } from "@/components/sections/TodaysMeetings";
 import { Footer } from "@/components/sections/Footer";
 import { FestivalPopup } from "@/components/FestivalPopup";
+import { ScrollPlane } from "@/components/ScrollPlane";
 
 export const Route = createFileRoute("/")({
   head: () => ({
