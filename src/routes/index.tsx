@@ -36,6 +36,7 @@ function Index() {
   return (
     <main>
       <ScrollReveal />
+      <ScrollPlane />
       <Navbar />
       <Hero />
       <UniversityMarquee />
