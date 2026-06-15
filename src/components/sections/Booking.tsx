@@ -11,18 +11,21 @@ function getNextDays(count: number) {
   const days: Date[] = [];
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  let i = 0;
-  while (days.length < count) {
+  for (let i = 0; i < count; i++) {
     const d = new Date(today);
     d.setDate(today.getDate() + i);
-    // skip Sundays (By Appointment)
-    if (d.getDay() !== 0) days.push(d);
-    i++;
+    days.push(d);
   }
   return days;
 }
 
-const toISO = (d: Date) => d.toISOString().slice(0, 10);
+// Local YYYY-MM-DD (avoid UTC shift from toISOString in IST/other tz)
+const toISO = (d: Date) => {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+};
 const compactSlot = (slot: string) => slot.replace(/^0/, "").replace(":00", "");
 
 export function Booking() {
