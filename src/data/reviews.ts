@@ -22,7 +22,7 @@ export const reviews: Review[] = [
     name: "Adarsh Jha",
     initials: "AJ",
     rating: 5,
-    text: "I really had a great experience with overall Process. Gautam sir is one of the best expertise for counselling and he also helped me alot for IELTS And overall Staff Reema Mam, Nidhi Julie Mam and Kajal Mam helped me alot with overall Process without any Hassle. I will advise whomsoever wants to apply for abroad program do consult is from Misson Career!!",
+    text: "I really had a great experience with overall Process. Gautam sir is one of the best expertise for counselling and he also helped me a lot for IELTS And overall Staff Reema Mam, Nidhi Julie Mam and Kajal Mam helped me a lot with overall Process without any Hassle. I will advise whomsoever wants to apply for abroad program do consult is from Misson Career!!",
     date: "a year ago",
     gradient: "from-emerald-500 to-teal-600",
   },
