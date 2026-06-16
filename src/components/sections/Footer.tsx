@@ -15,8 +15,13 @@ export function Footer() {
               Helping students achieve their dream of studying abroad with expert counseling and complete admission support.
             </p>
             <div className="mt-6 flex gap-3">
-              {[Facebook, Instagram, Linkedin, Twitter].map((Icon, i) => (
-                <a key={i} href="#" aria-label="social" className="h-10 w-10 rounded-full bg-background/10 hover:bg-primary flex items-center justify-center transition-all hover:scale-110">
+              {[
+                { Icon: Facebook, label: "Share on Facebook", href: "https://www.facebook.com/sharer/sharer.php?u=https://www.missioncareer.net" },
+                { Icon: Twitter, label: "Share on Twitter", href: "https://twitter.com/intent/tweet?url=https://www.missioncareer.net&text=Study%20Abroad%20with%20Mission%20Career" },
+                { Icon: Linkedin, label: "Share on LinkedIn", href: "https://www.linkedin.com/sharing/share-offsite/?url=https://www.missioncareer.net" },
+                { Icon: Instagram, label: "Instagram", href: "https://www.instagram.com/" },
+              ].map(({ Icon, label, href }) => (
+                <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="h-10 w-10 rounded-full bg-background/10 hover:bg-primary flex items-center justify-center transition-all hover:scale-110">
                   <Icon className="h-4 w-4" />
                 </a>
               ))}
