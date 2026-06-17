@@ -9,7 +9,7 @@ import { Destinations } from "@/components/sections/Destinations";
 import { WorldMap } from "@/components/sections/WorldMap";
 import { Process } from "@/components/sections/Process";
 import { Success } from "@/components/sections/Success";
-import { StudentStories } from "@/components/sections/StudentStories";
+
 import { Blog } from "@/components/sections/Blog";
 import { Deadlines } from "@/components/sections/Deadlines";
 import { Globe3D } from "@/components/sections/Globe3D";
@@ -49,7 +49,7 @@ function Index() {
       <div data-reveal><Reviews /></div>
       <div data-reveal><Process /></div>
       <div data-reveal><Success /></div>
-      <div data-reveal><StudentStories /></div>
+      
       <div data-reveal><Deadlines /></div>
       <div data-reveal><Blog /></div>
       <div data-reveal><Booking /></div>
