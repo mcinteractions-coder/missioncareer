@@ -51,40 +51,39 @@ export function Hero() {
         <div className="absolute bottom-10 left-10 w-80 h-80 rounded-full bg-sky-tint/40 blur-3xl" />
       </div>
 
-      <div className="container mx-auto px-4 md:px-8 relative">
-        {/* Vimeo video showcase with Book Your Slot overlay */}
-        <div className="relative mx-auto mb-6 md:mb-10 max-w-3xl">
-          <div className="relative rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl border border-white/10" style={{ aspectRatio: '16/9' }}>
-            <iframe
-              src="https://player.vimeo.com/video/1202782475?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1&muted=1&background=1"
-              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
-              className="absolute inset-0 w-full h-full"
-              title="Mission Career"
-            />
-            {/* bottom gradient so CTA is always readable */}
-            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
-          </div>
+      {/* Full-width Vimeo video hero */}
+      <div className="relative w-full" style={{ height: 'clamp(360px, 55vw, 720px)' }}>
+        <iframe
+          src="https://player.vimeo.com/video/1202782475?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1&muted=1&background=1"
+          allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+          className="absolute inset-0 w-full h-full"
+          title="Mission Career"
+        />
+        {/* dark gradient overlay for readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/70 pointer-events-none" />
 
-          {/* Book Your Slot CTA — overlaid on video bottom */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
-            <a
-              href="#booking"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="hero-book-btn group inline-flex items-center gap-2.5 rounded-full px-7 py-3 text-sm md:text-base font-semibold text-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95"
-              style={{
-                background: "linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #93c5fd 100%)",
-                boxShadow: "0 8px 32px rgba(59,130,246,0.45), 0 0 0 1px rgba(255,255,255,0.18) inset",
-              }}
-            >
-              <CalendarCheck className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
-              <span>Book Your Slot</span>
-              <span className="ml-1 inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
-            </a>
-          </div>
+        {/* Book Your Slot CTA — centred over video */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
+          <a
+            href="#booking"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="hero-book-btn group inline-flex items-center gap-2.5 rounded-full px-8 py-3.5 text-sm md:text-lg font-semibold text-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95"
+            style={{
+              background: "linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #93c5fd 100%)",
+              boxShadow: "0 8px 32px rgba(59,130,246,0.45), 0 0 0 1px rgba(255,255,255,0.18) inset",
+            }}
+          >
+            <CalendarCheck className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
+            <span>Book Your Slot</span>
+            <span className="ml-1 inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
+          </a>
         </div>
+      </div>
+
+      <div className="container mx-auto px-4 md:px-8 relative pt-12 md:pt-20">
 
         <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
           <div>
