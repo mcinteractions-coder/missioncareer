@@ -53,59 +53,36 @@ export function Hero() {
       </div>
 
       <div className="container mx-auto px-4 md:px-8 relative">
-        {/* Big animated logo showcase */}
-        <div className="hero-logo-stage relative mx-auto mb-6 md:mb-10 flex items-center justify-center">
-          {/* pulsing rings */}
-          <div className="hero-logo-ring hero-logo-ring-1" />
-          <div className="hero-logo-ring hero-logo-ring-2" />
-          <div className="hero-logo-ring hero-logo-ring-3" />
-
-          {/* orbiting widgets */}
-          <div className="hero-orbit hero-orbit-1">
-            <div className="hero-widget hero-widget-top"><Star className="h-4 w-4 md:h-5 md:w-5 text-primary" /></div>
-            <div className="hero-widget hero-widget-bottom"><Award className="h-4 w-4 md:h-5 md:w-5 text-primary" /></div>
-          </div>
-          <div className="hero-orbit hero-orbit-2">
-            <div className="hero-widget hero-widget-top"><Rocket className="h-4 w-4 md:h-5 md:w-5 text-primary-glow" /></div>
-            <div className="hero-widget hero-widget-bottom"><Trophy className="h-4 w-4 md:h-5 md:w-5 text-primary-glow" /></div>
+        {/* Vimeo video showcase with Book Your Slot overlay */}
+        <div className="relative mx-auto mb-6 md:mb-10 max-w-3xl">
+          <div className="relative rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl border border-white/10" style={{ aspectRatio: '16/9' }}>
+            <iframe
+              src="https://player.vimeo.com/video/1202782475?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1&muted=1&background=1"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+              className="absolute inset-0 w-full h-full"
+              title="Mission Career"
+            />
           </div>
 
-          {/* floating sparkles */}
-          <Sparkles className="hero-sparkle hero-sparkle-1 text-primary/70" />
-          <Sparkles className="hero-sparkle hero-sparkle-2 text-primary-glow/70" />
-          <Sparkles className="hero-sparkle hero-sparkle-3 text-primary/60" />
-          <Sparkles className="hero-sparkle hero-sparkle-4 text-primary-glow/60" />
-
-          {/* glow behind logo */}
-          <div className="hero-logo-glow" />
-
-          {/* the actual logo */}
-          <img
-            src={logoAsset.url}
-            alt="Mission Career — Study Abroad Consulting"
-            className="hero-logo-img relative z-10"
-            draggable={false}
-          />
-        </div>
-
-        {/* Book Your Slot CTA under logo */}
-        <div className="flex justify-center mb-10 md:mb-14">
-          <a
-            href="#booking"
-            onClick={(e) => {
-              e.preventDefault();
-              document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="hero-book-btn group inline-flex items-center gap-2.5 rounded-full px-7 py-3 text-sm md:text-base font-semibold text-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95"
-            style={{
-              background: "linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #93c5fd 100%)",
-              boxShadow: "0 8px 32px rgba(59,130,246,0.45), 0 0 0 1px rgba(255,255,255,0.18) inset",
-            }}
-          >
-            <CalendarCheck className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
-            <span>Book Your Slot</span>
-            <span className="ml-1 inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
-          </a>
+          {/* Book Your Slot CTA — overlaid on video bottom */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
+            <a
+              href="#booking"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="hero-book-btn group inline-flex items-center gap-2.5 rounded-full px-7 py-3 text-sm md:text-base font-semibold text-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95"
+              style={{
+                background: "linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #93c5fd 100%)",
+                boxShadow: "0 8px 32px rgba(59,130,246,0.45), 0 0 0 1px rgba(255,255,255,0.18) inset",
+              }}
+            >
+              <CalendarCheck className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
+              <span>Book Your Slot</span>
+              <span className="ml-1 inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
+            </a>
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
