@@ -1,12 +1,11 @@
 import {
   Sparkles, GraduationCap, Globe2, FileCheck, Wallet, Plane, LifeBuoy, ArrowRight,
-  Star, Award, Rocket, Trophy, CalendarCheck,
+  CalendarCheck,
 } from "lucide-react";
 import pooja from "@/assets/pooja-welling.png";
 import gautam from "@/assets/gautam-umashankar.png";
 import reema from "@/assets/reema-welling.png";
 import julee from "@/assets/julee-shakya.png";
-const logoAsset = { url: "/mission-logo-transparent.png" };
 import { Counter } from "@/components/Counter";
 
 
