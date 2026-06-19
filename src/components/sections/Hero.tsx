@@ -61,6 +61,8 @@ export function Hero() {
               className="absolute inset-0 w-full h-full"
               title="Mission Career"
             />
+            {/* bottom gradient so CTA is always readable */}
+            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
           </div>
 
           {/* Book Your Slot CTA — overlaid on video bottom */}
