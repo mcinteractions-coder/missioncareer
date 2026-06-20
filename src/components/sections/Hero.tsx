@@ -45,90 +45,59 @@ function TeamCard({ img, initial, name, role }: { img?: string; initial?: string
 
 export function Hero() {
   return (
-    <section id="home" className="relative overflow-hidden pt-20 md:pt-32 pb-12 md:pb-20">
-      {/* Vimeo video background — full-bleed behind everything */}
-      <div className="absolute inset-0 z-0">
-        <iframe
-          src="https://player.vimeo.com/video/1202782475?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1&muted=1&background=1"
-          allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
-          className="absolute inset-0 w-full h-full"
-          title="Mission Career"
-        />
-      </div>
-
-      {/* dark atmospheric overlays so content stays readable */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-b from-[#0a1628]/80 via-[#0a1628]/50 to-[#0a1628]/90 pointer-events-none" />
-      <div className="absolute inset-0 z-[1] bg-[#0a1628]/30 pointer-events-none" />
-
-      {/* decorative glow orbs (subtle, blend with video) */}
-      <div className="absolute inset-0 pointer-events-none z-[2]">
-        <div className="absolute top-20 right-10 w-72 h-72 rounded-full bg-primary-glow/10 blur-3xl" />
-        <div className="absolute bottom-10 left-10 w-80 h-80 rounded-full bg-sky-tint/20 blur-3xl" />
+    <section id="home" className="relative overflow-hidden pt-16 md:pt-24 pb-12 md:pb-20">
+      {/* subtle background glow */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full bg-primary/5 blur-3xl" />
       </div>
 
       <div className="container mx-auto px-4 md:px-8 relative z-10">
-        {/* Big animated logo showcase — sits ON TOP of video */}
-        <div className="hero-logo-stage relative mx-auto mb-6 md:mb-10 flex items-center justify-center">
-          {/* pulsing rings */}
-          <div className="hero-logo-ring hero-logo-ring-1" />
-          <div className="hero-logo-ring hero-logo-ring-2" />
-          <div className="hero-logo-ring hero-logo-ring-3" />
+        {/* Contained video showcase — matches the screenshot */}
+        <div className="mx-auto max-w-5xl mb-8 md:mb-10">
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/5">
+            {/* Vimeo video */}
+            <div className="relative w-full aspect-video bg-black">
+              <iframe
+                src="https://player.vimeo.com/video/1202782475?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1&muted=1&background=1"
+                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+                className="absolute inset-0 w-full h-full"
+                title="Mission Career"
+              />
+            </div>
 
-          {/* orbiting widgets */}
-          <div className="hero-orbit hero-orbit-1">
-            <div className="hero-widget hero-widget-top"><Star className="h-4 w-4 md:h-5 md:w-5 text-primary" /></div>
-            <div className="hero-widget hero-widget-bottom"><Award className="h-4 w-4 md:h-5 md:w-5 text-primary" /></div>
+            {/* Bottom gradient overlay + Book Your Slot button */}
+            <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
+            <div className="absolute bottom-5 md:bottom-7 left-0 right-0 flex justify-center pointer-events-auto">
+              <a
+                href="#booking"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="group inline-flex items-center gap-2.5 rounded-full px-7 py-3 text-sm md:text-base font-semibold text-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95"
+                style={{
+                  background: "linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #93c5fd 100%)",
+                  boxShadow: "0 8px 32px rgba(59,130,246,0.45), 0 0 0 1px rgba(255,255,255,0.18) inset",
+                }}
+              >
+                <CalendarCheck className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
+                <span>Book Your Slot</span>
+                <span className="ml-1 inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
+              </a>
+            </div>
           </div>
-          <div className="hero-orbit hero-orbit-2">
-            <div className="hero-widget hero-widget-top"><Rocket className="h-4 w-4 md:h-5 md:w-5 text-primary-glow" /></div>
-            <div className="hero-widget hero-widget-bottom"><Trophy className="h-4 w-4 md:h-5 md:w-5 text-primary-glow" /></div>
-          </div>
-
-          {/* floating sparkles */}
-          <Sparkles className="hero-sparkle hero-sparkle-1 text-primary/70" />
-          <Sparkles className="hero-sparkle hero-sparkle-2 text-primary-glow/70" />
-          <Sparkles className="hero-sparkle hero-sparkle-3 text-primary/60" />
-          <Sparkles className="hero-sparkle hero-sparkle-4 text-primary-glow/60" />
-
-          {/* glow behind logo */}
-          <div className="hero-logo-glow" />
-
-          {/* the actual logo */}
-          <img
-            src={logoAsset.url}
-            alt="Mission Career — Study Abroad Consulting"
-            className="hero-logo-img relative z-10"
-            draggable={false}
-          />
         </div>
 
-        {/* Book Your Slot CTA under logo */}
+        {/* Trusted badge — below the video container */}
         <div className="flex justify-center mb-10 md:mb-14">
-          <a
-            href="#booking"
-            onClick={(e) => {
-              e.preventDefault();
-              document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="hero-book-btn group inline-flex items-center gap-2.5 rounded-full px-7 py-3 text-sm md:text-base font-semibold text-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95"
-            style={{
-              background: "linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #93c5fd 100%)",
-              boxShadow: "0 8px 32px rgba(59,130,246,0.45), 0 0 0 1px rgba(255,255,255,0.18) inset",
-            }}
-          >
-            <CalendarCheck className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
-            <span>Book Your Slot</span>
-            <span className="ml-1 inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
-          </a>
+          <div className="inline-flex items-center gap-2 rounded-full bg-card/70 backdrop-blur px-3 py-1.5 md:px-4 md:py-2 shadow-card animate-pulse-glow">
+            <Sparkles className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary animate-spin-slow" />
+            <span className="text-xs md:text-sm font-medium text-primary">Trusted by 5000+ students across India</span>
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-card/70 backdrop-blur px-3 py-1.5 md:px-4 md:py-2 shadow-card mb-4 md:mb-6 animate-pulse-glow">
-              <Sparkles className="h-3.5 w-3.5 md:h-4 md:w-4 text-primary animate-spin-slow" />
-              <span className="text-xs md:text-sm font-medium text-primary">Trusted by 5000+ students across India</span>
-            </div>
-
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-[1.05] text-foreground">
               Study Abroad<br />
               <span className="text-gradient">Without the</span><br />
