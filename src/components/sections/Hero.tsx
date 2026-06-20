@@ -1,6 +1,6 @@
 import {
   Sparkles, GraduationCap, Globe2, FileCheck, Wallet, Plane, LifeBuoy, ArrowRight,
-  CalendarCheck,
+  Star, Award, CalendarCheck,
 } from "lucide-react";
 import pooja from "@/assets/pooja-welling.png";
 import gautam from "@/assets/gautam-umashankar.png";
