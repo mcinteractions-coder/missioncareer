@@ -54,6 +54,14 @@ export function Hero() {
         {/* Contained video showcase — matches the screenshot */}
         <div className="mx-auto max-w-5xl mb-8 md:mb-10">
           <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/5">
+            {/* Floating sparkles around the video */}
+            <Sparkles className="absolute top-4 left-6 w-5 h-5 text-primary/60 animate-pulse z-20 pointer-events-none" />
+            <Sparkles className="absolute top-8 right-10 w-4 h-4 text-primary-glow/50 animate-pulse z-20 pointer-events-none" style={{ animationDelay: '1s' }} />
+            <Sparkles className="absolute bottom-16 left-10 w-6 h-6 text-primary/40 animate-pulse z-20 pointer-events-none" style={{ animationDelay: '0.5s' }} />
+            <Sparkles className="absolute bottom-20 right-6 w-5 h-5 text-primary-glow/40 animate-pulse z-20 pointer-events-none" style={{ animationDelay: '1.5s' }} />
+            <Star className="absolute top-1/2 -left-3 w-4 h-4 text-primary/30 animate-pulse z-20 pointer-events-none" style={{ animationDelay: '0.8s' }} />
+            <Award className="absolute top-1/3 -right-3 w-4 h-4 text-primary-glow/30 animate-pulse z-20 pointer-events-none" style={{ animationDelay: '1.2s' }} />
+
             {/* Vimeo video */}
             <div className="relative w-full aspect-video bg-black">
               <iframe
