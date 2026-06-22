@@ -128,8 +128,8 @@ export function Hero() {
             </h1>
 
             <p className="mt-4 md:mt-6 text-base md:text-lg text-muted-foreground max-w-xl">
-              Finding the right university abroad shouldn't be complicated. 
-              Discover the best countries, universities, and scholarships with expert guidance at every step.
+              Study abroad without the confusion — we make it simple to find the right country, university, and scholarship.
+              Get expert guidance at every step so you can focus on your future, not the paperwork.
             </p>
 
             <div className="mt-6 md:mt-8 grid sm:grid-cols-2 gap-2 md:gap-3 max-w-xl">
