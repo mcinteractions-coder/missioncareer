@@ -63,13 +63,17 @@ export function Hero() {
             <Award className="absolute top-1/3 -right-3 w-4 h-4 text-primary-glow/30 animate-pulse z-20 pointer-events-none" style={{ animationDelay: '1.2s' }} />
 
             {/* Vimeo video */}
-            <div className="relative w-full aspect-video bg-black">
+            <div className="relative w-full aspect-video bg-black overflow-hidden">
               <iframe
                 src="https://player.vimeo.com/video/1202782475?badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&loop=1&muted=1&background=1"
                 allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
                 className="absolute inset-0 w-full h-full"
                 title="Mission Career"
               />
+              {/* Cover Gemini watermark (top-right corner) */}
+              <div className="absolute top-0 right-0 w-32 h-12 bg-black pointer-events-none z-10" />
+              {/* Cover any bottom-right watermark too */}
+              <div className="absolute bottom-0 right-0 w-32 h-12 bg-black pointer-events-none z-10" />
             </div>
 
             {/* Bottom gradient overlay + Book Your Slot button */}
