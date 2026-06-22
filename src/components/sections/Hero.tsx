@@ -84,7 +84,7 @@ export function Hero() {
                 }}
               >
                 <Sparkles className="h-3.5 w-3.5 md:h-4 md:w-4" />
-                <span>Mission</span>
+                <span className="whitespace-nowrap">Mission Career</span>
               </a>
             </div>
 
