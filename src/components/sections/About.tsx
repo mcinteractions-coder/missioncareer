@@ -61,7 +61,7 @@ export function About() {
         <div className="grid lg:grid-cols-2 gap-8 md:gap-10">
           <div className="min-w-0">
             <h2 className="text-3xl md:text-5xl font-extrabold leading-tight">
-              Study Abroad <br />
+              Your Journey <br />
               <span className="text-gradient">Made Simple</span>
             </h2>
             <p className="mt-3 md:mt-4 text-muted-foreground text-base md:text-lg max-w-md">
