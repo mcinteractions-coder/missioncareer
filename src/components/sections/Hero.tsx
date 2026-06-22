@@ -70,10 +70,22 @@ export function Hero() {
                 className="absolute inset-0 w-full h-full"
                 title="Mission Career"
               />
-              {/* Cover Gemini watermark (top-right corner) */}
-              <div className="absolute top-0 right-0 w-32 h-12 bg-black pointer-events-none z-10" />
-              {/* Cover any bottom-right watermark too */}
-              <div className="absolute bottom-0 right-0 w-32 h-12 bg-black pointer-events-none z-10" />
+              {/* Badge button covering the Gemini sparkle watermark (bottom-right) */}
+              <a
+                href="#contact"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="absolute bottom-3 right-3 md:bottom-4 md:right-4 z-20 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 md:px-4 md:py-2 text-[11px] md:text-xs font-semibold text-white shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-105"
+                style={{
+                  background: "linear-gradient(135deg, rgba(59,130,246,0.95) 0%, rgba(96,165,250,0.95) 100%)",
+                  boxShadow: "0 4px 16px rgba(59,130,246,0.5), 0 0 0 1px rgba(255,255,255,0.2) inset",
+                }}
+              >
+                <Sparkles className="h-3 w-3 md:h-3.5 md:w-3.5" />
+                <span>Mission Career</span>
+              </a>
             </div>
 
             {/* Bottom gradient overlay + Book Your Slot button */}
