@@ -62,8 +62,8 @@ function ReviewCard({ r }: { r: Review }) {
 }
 
 export function Reviews() {
-  const marqueeRow = [...reviews, ...reviews];
   const featured = reviews.slice(0, 3);
+
 
   return (
     <section id="reviews" className="relative py-20 md:py-28 overflow-hidden">
