@@ -491,3 +491,120 @@
   [data-reveal] { opacity: 1 !important; transform: none !important; }
 }
 
+/* =========================================================
+   Final legacy fallback pass for Smart TV browsers.
+   This MUST stay after the modern oklch() tokens because old
+   Chromium accepts custom-property text, then fails when those
+   values are used. Re-declaring here wins the cascade.
+   ========================================================= */
+@supports not (color: oklch(0 0 0)) {
+  :root {
+    --background: #f5f8fb;
+    --foreground: #1a2238;
+    --card: #ffffff;
+    --card-foreground: #1a2238;
+    --popover: #ffffff;
+    --popover-foreground: #1a2238;
+    --primary: #2f6bd6;
+    --primary-foreground: #ffffff;
+    --primary-soft: #dde8fa;
+    --primary-glow: #6aa3f0;
+    --secondary: #e6edf6;
+    --secondary-foreground: #1a2238;
+    --muted: #eef2f7;
+    --muted-foreground: #5a6677;
+    --accent: #cfdef6;
+    --accent-foreground: #25457a;
+    --destructive: #d94436;
+    --destructive-foreground: #ffffff;
+    --border: #d8e0ea;
+    --input: #dfe5ee;
+    --ring: #2f6bd6;
+    --sky-soft: #eff5fb;
+    --sky-tint: #d6e6f5;
+    --gradient-hero: linear-gradient(135deg, #eff5fb 0%, #d6e6f5 100%);
+    --gradient-primary: linear-gradient(135deg, #2f6bd6 0%, #4d8be3 100%);
+    --gradient-text: linear-gradient(135deg, #2f6bd6, #3b5dd1);
+    --shadow-soft: 0 10px 40px -10px rgba(47, 107, 214, 0.25);
+    --shadow-card: 0 4px 20px -4px rgba(40, 60, 100, 0.15);
+    --shadow-glow: 0 0 40px rgba(106, 163, 240, 0.4);
+  }
+
+  .dark {
+    --background: #131a2b;
+    --foreground: #eef2f8;
+    --card: #1c2438;
+    --card-foreground: #eef2f8;
+    --popover: #1c2438;
+    --popover-foreground: #eef2f8;
+    --primary: #6aa3f0;
+    --primary-foreground: #0e1426;
+    --primary-soft: #2a3a5c;
+    --primary-glow: #8cbcf5;
+    --secondary: #232c44;
+    --secondary-foreground: #eef2f8;
+    --muted: #1f2740;
+    --muted-foreground: #a3aec2;
+    --accent: #2c3a5c;
+    --accent-foreground: #dde6f4;
+    --destructive: #e15648;
+    --destructive-foreground: #ffffff;
+    --border: #2c354a;
+    --input: #28324a;
+    --ring: #6aa3f0;
+    --sky-soft: #1d273f;
+    --sky-tint: #243353;
+    --gradient-hero: linear-gradient(135deg, #1a2238 0%, #243353 100%);
+    --gradient-primary: linear-gradient(135deg, #6aa3f0 0%, #5b8be0 100%);
+    --gradient-text: linear-gradient(135deg, #8cbcf5, #93a7ef);
+    --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+    --shadow-card: 0 4px 20px -4px rgba(0, 0, 0, 0.4);
+    --shadow-glow: 0 0 40px rgba(106, 163, 240, 0.4);
+  }
+
+  html, body {
+    background: var(--background) !important;
+    color: var(--foreground) !important;
+  }
+
+  .glass,
+  .dark .glass {
+    background: rgba(28, 36, 56, 0.82) !important;
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+
+  .bg-gradient-hero { background: var(--gradient-hero) !important; }
+  .bg-gradient-primary { background: var(--gradient-primary) !important; }
+  .text-gradient {
+    background: var(--gradient-text) !important;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent !important;
+  }
+  .shadow-soft { box-shadow: var(--shadow-soft) !important; }
+  .shadow-card { box-shadow: var(--shadow-card) !important; }
+  .shadow-glow { box-shadow: var(--shadow-glow) !important; }
+
+  .btn-shine::after {
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%) !important;
+  }
+  .hero-logo-img { filter: drop-shadow(0 8px 22px rgba(47, 107, 214, 0.28)) !important; }
+  .dark .hero-logo-img { filter: drop-shadow(0 10px 28px rgba(106, 163, 240, 0.42)) !important; }
+  .hero-logo-ring { border-color: rgba(106, 163, 240, 0.3) !important; }
+  .hero-logo-ring-3 { border-color: rgba(106, 163, 240, 0.2) !important; }
+
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  [role="button"]:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 3px solid var(--primary) !important;
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px rgba(47, 107, 214, 0.25) !important;
+  }
+}
+
