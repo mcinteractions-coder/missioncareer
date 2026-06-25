@@ -62,7 +62,7 @@ function ReviewCard({ r }: { r: Review }) {
 }
 
 export function Reviews() {
-  const featured = reviews.slice(0, 3);
+
 
 
   return (
