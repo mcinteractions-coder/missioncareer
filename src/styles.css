@@ -362,3 +362,52 @@
     animation: none !important;
   }
 }
+
+/* =========================================================
+   Smart TV / Large-screen optimization
+   - 1080p TVs viewed from ~10ft (the "10-foot UI" rule)
+   - 4K TVs need bigger type and roomier hit targets
+   - D-pad/remote nav needs a loud focus ring
+   ========================================================= */
+
+/* 1080p TVs and large monitors */
+@media (min-width: 1600px) {
+  html { font-size: 18px; }
+  .container { max-width: 1480px !important; }
+  section { padding-top: clamp(4rem, 6vw, 7rem); padding-bottom: clamp(4rem, 6vw, 7rem); }
+  h1 { font-size: clamp(3.5rem, 5vw, 6rem) !important; line-height: 1.05; }
+  h2 { font-size: clamp(2.5rem, 3.6vw, 4.25rem) !important; }
+  h3 { font-size: clamp(1.6rem, 2vw, 2.25rem) !important; }
+  p, li, a, button, input, textarea, select { font-size: 1.05rem; }
+  .btn, button, a[role="button"], .inline-flex { min-height: 44px; }
+}
+
+/* 4K UHD TVs */
+@media (min-width: 2400px) {
+  html { font-size: 22px; }
+  .container { max-width: 2000px !important; }
+  img, video, iframe { image-rendering: -webkit-optimize-contrast; }
+}
+
+/* 8K + ultra-wide */
+@media (min-width: 3400px) {
+  html { font-size: 28px; }
+  .container { max-width: 2600px !important; }
+}
+
+/* TV remote / D-pad focus — visible from across the room.
+   Applies on any device but is mostly noticed on TVs where
+   keyboard/remote focus is the primary input mode. */
+:where(a, button, [role="button"], input, textarea, select, [tabindex]):focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0 6px oklch(0.62 0.18 240 / 0.25);
+}
+
+/* TVs often report as landscape with coarse pointer (remote).
+   Disable hover-only reveals so remote users see content. */
+@media (hover: none) and (pointer: coarse) and (min-width: 1280px) {
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+}
+
