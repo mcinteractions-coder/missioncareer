@@ -4,6 +4,86 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* =========================================================
+   Smart TV / legacy-browser color fallback
+   Tizen, WebOS, and older Chromium TV browsers don't support
+   oklch(). Without this block every theme token resolves to
+   nothing and the page renders fully unstyled.
+   Hex values below are visual equivalents of the oklch tokens.
+   ========================================================= */
+@supports not (color: oklch(0 0 0)) {
+  :root {
+    --background: #f5f8fb;
+    --foreground: #1a2238;
+    --card: #ffffff;
+    --card-foreground: #1a2238;
+    --popover: #ffffff;
+    --popover-foreground: #1a2238;
+    --primary: #2f6bd6;
+    --primary-foreground: #ffffff;
+    --primary-soft: #dde8fa;
+    --primary-glow: #6aa3f0;
+    --secondary: #e6edf6;
+    --secondary-foreground: #1a2238;
+    --muted: #eef2f7;
+    --muted-foreground: #5a6677;
+    --accent: #cfdef6;
+    --accent-foreground: #25457a;
+    --destructive: #d94436;
+    --destructive-foreground: #ffffff;
+    --border: #d8e0ea;
+    --input: #dfe5ee;
+    --ring: #2f6bd6;
+    --sky-soft: #eff5fb;
+    --sky-tint: #d6e6f5;
+    --gradient-hero: linear-gradient(135deg, #eff5fb 0%, #d6e6f5 100%);
+    --gradient-primary: linear-gradient(135deg, #2f6bd6 0%, #4d8be3 100%);
+    --gradient-text: linear-gradient(135deg, #2f6bd6, #3b5dd1);
+    --shadow-soft: 0 10px 40px -10px rgba(47, 107, 214, 0.25);
+    --shadow-card: 0 4px 20px -4px rgba(40, 60, 100, 0.15);
+    --shadow-glow: 0 0 40px rgba(106, 163, 240, 0.4);
+  }
+  .dark {
+    --background: #131a2b;
+    --foreground: #eef2f8;
+    --card: #1c2438;
+    --card-foreground: #eef2f8;
+    --popover: #1c2438;
+    --popover-foreground: #eef2f8;
+    --primary: #6aa3f0;
+    --primary-foreground: #0e1426;
+    --primary-soft: #2a3a5c;
+    --primary-glow: #8cbcf5;
+    --secondary: #232c44;
+    --secondary-foreground: #eef2f8;
+    --muted: #1f2740;
+    --muted-foreground: #a3aec2;
+    --accent: #2c3a5c;
+    --accent-foreground: #dde6f4;
+    --destructive: #e15648;
+    --destructive-foreground: #ffffff;
+    --border: #2c354a;
+    --input: #28324a;
+    --ring: #6aa3f0;
+    --sky-soft: #1d273f;
+    --sky-tint: #243353;
+    --gradient-hero: linear-gradient(135deg, #1a2238 0%, #243353 100%);
+    --gradient-primary: linear-gradient(135deg, #6aa3f0 0%, #5b8be0 100%);
+    --gradient-text: linear-gradient(135deg, #8cbcf5, #93a7ef);
+  }
+  .glass { background: rgba(255, 255, 255, 0.75); }
+  .dark .glass { background: rgba(28, 36, 56, 0.75); }
+  .text-gradient {
+    background: linear-gradient(135deg, #2f6bd6, #3b5dd1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+}
+
+
+
 @theme inline {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
