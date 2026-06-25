@@ -10,6 +10,7 @@ import {
 import { useEffect } from "react";
 
 import appCss from "../styles.css?url";
+import smartTvLegacyCss from "../smart-tv-legacy.css?raw";
 import { ChatBot } from "@/components/ChatBot";
 
 function NotFoundComponent() {
@@ -99,6 +100,10 @@ function RootShell({ children }: { children: React.ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+        <style
+          id="smart-tv-legacy-css"
+          dangerouslySetInnerHTML={{ __html: smartTvLegacyCss }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem('theme');var d=t?t==='dark':true;if(d)document.documentElement.classList.add('dark');}catch(e){document.documentElement.classList.add('dark');}})();`,
