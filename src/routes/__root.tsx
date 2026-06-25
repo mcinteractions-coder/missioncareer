@@ -83,6 +83,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "stylesheet", href: "/smart-tv-legacy.css" },
       { rel: "icon", type: "image/png", href: "/mission-logo-transparent.png" },
       { rel: "shortcut icon", href: "/mission-logo-transparent.png" },
       { rel: "apple-touch-icon", href: "/mission-logo-transparent.png" },
