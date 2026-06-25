@@ -62,8 +62,8 @@ function ReviewCard({ r }: { r: Review }) {
 }
 
 export function Reviews() {
-  const marqueeRow = [...reviews, ...reviews];
-  const featured = reviews.slice(0, 3);
+
+
 
   return (
     <section id="reviews" className="relative py-20 md:py-28 overflow-hidden">
@@ -112,38 +112,18 @@ export function Reviews() {
           }}
         >
           <div className="flex gap-5 w-max animate-marquee hover:[animation-play-state:paused] py-2 px-4">
-            {marqueeRow.map((r, i) => (
-              <ReviewCard key={i} r={r} />
+            {reviews.map((r, i) => (
+              <ReviewCard key={`r-${i}`} r={r} />
             ))}
+            <div aria-hidden="true" className="flex gap-5">
+              {reviews.map((r, i) => (
+                <ReviewCard key={`c-${i}`} r={r} />
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* featured trio */}
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
-          {featured.map((r, i) => (
-            <div
-              key={i}
-              className="relative rounded-3xl p-[1.5px] bg-gradient-to-br from-primary/40 via-primary-glow/20 to-transparent hover-tilt"
-            >
-              <div className="h-full rounded-[calc(1.5rem-1.5px)] glass border border-border/40 p-7 flex flex-col gap-5">
-                <Quote className="h-8 w-8 text-primary" />
-                <p className="text-base md:text-lg leading-relaxed text-foreground/90 font-medium">
-                  "{r.text}"
-                </p>
-                <div className="mt-auto flex items-center gap-3 pt-4 border-t border-border/40">
-                  <div className={`h-11 w-11 rounded-full bg-gradient-to-br ${r.gradient} grid place-items-center text-white font-bold`}>
-                    {r.initials}
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-semibold text-sm">{r.name}</p>
-                    <Stars size="h-3 w-3" />
-                  </div>
-                  <GoogleG className="h-5 w-5 shrink-0" />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+
 
         {/* CTA */}
         <div className="text-center">
