@@ -117,7 +117,7 @@ function StoryCardView({ s }: { s: StoryCard }) {
       </div>
 
       <div className="px-5 pb-5 pt-3">
-        <h3 className="font-bold text-foreground text-base md:text-lg leading-tight">{s.name}</h3>
+        <p className="font-bold text-foreground text-base md:text-lg leading-tight">{s.name}</p>
 
         <div className="mt-3 border-t border-border/50 pt-3 space-y-2.5 text-sm">
           {s.prev_college && (
