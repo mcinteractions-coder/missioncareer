@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { Star, Quote } from "lucide-react";
 import { reviews, type Review } from "@/data/reviews";
 
