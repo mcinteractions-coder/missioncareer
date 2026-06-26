@@ -450,8 +450,8 @@
    - D-pad/remote nav needs a loud focus ring
    ========================================================= */
 
-/* 1080p TVs and large monitors */
-@media (min-width: 1600px) {
+/* 1080p TVs — gated by coarse pointer so laptops/desktops with mice are unaffected */
+@media (min-width: 1600px) and (pointer: coarse) {
   html { font-size: 18px; }
   .container { max-width: 1480px !important; }
   section { padding-top: clamp(4rem, 6vw, 7rem); padding-bottom: clamp(4rem, 6vw, 7rem); }
@@ -463,14 +463,14 @@
 }
 
 /* 4K UHD TVs */
-@media (min-width: 2400px) {
+@media (min-width: 2400px) and (pointer: coarse) {
   html { font-size: 22px; }
   .container { max-width: 2000px !important; }
   img, video, iframe { image-rendering: -webkit-optimize-contrast; }
 }
 
-/* 8K + ultra-wide */
-@media (min-width: 3400px) {
+/* 8K + ultra-wide TVs */
+@media (min-width: 3400px) and (pointer: coarse) {
   html { font-size: 28px; }
   .container { max-width: 2600px !important; }
 }
