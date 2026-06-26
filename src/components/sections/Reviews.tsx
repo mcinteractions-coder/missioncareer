@@ -38,7 +38,7 @@ function ReviewCard({ r }: { r: Review }) {
               </span>
             </div>
             <div>
-              <h4 className="font-semibold text-sm leading-tight text-foreground">{r.name}</h4>
+              <p className="font-semibold text-sm leading-tight text-foreground">{r.name}</p>
               <p className="text-xs text-muted-foreground">{r.date}</p>
             </div>
           </div>
