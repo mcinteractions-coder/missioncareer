@@ -63,6 +63,8 @@ function ReviewCard({ r }: { r: Review }) {
 }
 
 export function Reviews() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
 
 
