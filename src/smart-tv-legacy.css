@@ -26,6 +26,23 @@ img, svg, video, canvas, iframe {
   max-width: 100%;
 }
 
+/* Logo size guards — Tailwind h-9/h-10/h-12 utilities aren't compiled in
+   legacy mode, so constrain the navbar + footer logos by attribute. */
+img[alt="Mission Career"],
+img[alt*="Mission Career"],
+img[src*="mission-logo"] {
+  height: 40px !important;
+  width: auto !important;
+  max-width: 200px;
+  object-fit: contain;
+}
+.hero-logo-img,
+.hero-logo-stage img {
+  width: 220px !important;
+  height: auto !important;
+  max-width: 60%;
+}
+
 a { color: inherit; text-decoration: none; }
 button, input, textarea, select { font: inherit; }
 
