@@ -118,11 +118,13 @@ export function Reviews() {
             {reviews.map((r, i) => (
               <ReviewCard key={`r-${i}`} r={r} />
             ))}
-            <div aria-hidden="true" className="flex gap-5">
-              {reviews.map((r, i) => (
-                <ReviewCard key={`c-${i}`} r={r} />
-              ))}
-            </div>
+            {mounted && (
+              <div aria-hidden="true" className="flex gap-5">
+                {reviews.map((r, i) => (
+                  <ReviewCard key={`c-${i}`} r={r} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
