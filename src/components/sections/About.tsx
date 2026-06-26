@@ -119,7 +119,7 @@ export function About() {
                       <div key={u.id} className="rounded-2xl border border-border bg-secondary/60 p-4 hover:shadow-soft transition-shadow">
                         <div className="flex items-start justify-between gap-3">
                           <div>
-                            <h4 className="font-bold text-foreground">{u.name}</h4>
+                            <p className="font-bold text-foreground">{u.name}</p>
                             <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
                               <MapPin className="h-3 w-3" /> {u.city}, {u.country}
                             </p>
