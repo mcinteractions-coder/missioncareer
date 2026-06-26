@@ -200,7 +200,7 @@ function CountdownCard({ uni }: { uni: Uni }) {
           )}
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="font-bold text-sm leading-tight line-clamp-2">{uni.name}</h3>
+          <p className="font-bold text-sm leading-tight line-clamp-2">{uni.name}</p>
           <p className="text-xs text-muted-foreground mt-0.5">{uni.country} · {uni.intake}</p>
         </div>
       </div>
