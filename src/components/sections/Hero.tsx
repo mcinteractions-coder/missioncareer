@@ -36,7 +36,7 @@ function TeamCard({ img, initial, name, role }: { img?: string; initial?: string
           </div>
         )}
       </div>
-      <h3 className="font-bold text-foreground text-sm md:text-base leading-tight">{name}</h3>
+      <p className="font-bold text-foreground text-sm md:text-base leading-tight">{name}</p>
       <p className="text-xs md:text-sm text-primary">{role}</p>
     </div>
   );
