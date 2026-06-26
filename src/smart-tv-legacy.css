@@ -1,3 +1,5 @@
+/* Scoped to legacy/TV browsers only — modern browsers ignore this block. */
+@supports not (color: oklch(0 0 0)) {
 /* Mission Career Smart TV / legacy browser rescue stylesheet.
    Loaded after the app bundle so older Tizen/WebOS browsers still get a
    readable, styled page even if they ignore newer CSS features. */
@@ -261,4 +263,5 @@ select:focus,
   .aspect-video > iframe,
   .aspect-video > video,
   .aspect-video > img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+}
 }
