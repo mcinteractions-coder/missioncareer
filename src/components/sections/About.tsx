@@ -77,6 +77,7 @@ export function About() {
               {FIELDS.map((f) => (
                 <select
                   key={f.key}
+                  aria-label={f.label}
                   className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                   value={filters[f.key] ?? ""}
                   onChange={(e) => setField(f.key, e.target.value)}
