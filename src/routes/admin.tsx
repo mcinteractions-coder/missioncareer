@@ -698,6 +698,7 @@ interface Booking {
   slot_time: string;
   notes: string | null;
   status: string;
+  mode: string;
   created_at: string;
 }
 
