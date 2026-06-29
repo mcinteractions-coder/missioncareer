@@ -35,6 +35,7 @@ export function Booking() {
   const [taken, setTaken] = useState<Set<string>>(new Set());
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
+  const [mode, setMode] = useState<"offline" | "online">("offline");
   const [error, setError] = useState("");
 
   useEffect(() => {
