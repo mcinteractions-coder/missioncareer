@@ -232,6 +232,12 @@
 }
 .animate-marquee { animation: marquee 30s linear infinite; }
 
+@keyframes review-pan {
+  0%, 8% { transform: translateX(0); }
+  92%, 100% { transform: translateX(calc(-100% + min(100vw, 1180px))); }
+}
+.animate-review-pan { animation: review-pan 55s linear infinite; }
+
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(28px); }
   to   { opacity: 1; transform: translateY(0); }

@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import { Star, Quote } from "lucide-react";
 import { reviews, type Review } from "@/data/reviews";
 
@@ -63,11 +62,6 @@ function ReviewCard({ r }: { r: Review }) {
 }
 
 export function Reviews() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
-
-
   return (
     <section id="reviews" className="relative py-20 md:py-28 overflow-hidden">
       {/* ambient glow */}
@@ -114,17 +108,10 @@ export function Reviews() {
             WebkitMaskImage: "linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)",
           }}
         >
-          <div className="flex gap-5 w-max animate-marquee hover:[animation-play-state:paused] py-2 px-4">
+          <div className="flex gap-5 w-max animate-review-pan hover:[animation-play-state:paused] py-2 px-4">
             {reviews.map((r, i) => (
               <ReviewCard key={`r-${i}`} r={r} />
             ))}
-            {mounted && (
-              <div aria-hidden="true" className="flex gap-5">
-                {reviews.map((r, i) => (
-                  <ReviewCard key={`c-${i}`} r={r} />
-                ))}
-              </div>
-            )}
           </div>
         </div>
 

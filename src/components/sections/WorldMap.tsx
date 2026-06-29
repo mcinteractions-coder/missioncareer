@@ -78,12 +78,15 @@ const COUNTRIES: Record<string, CountryInfo> = {
 };
 
 export function WorldMap() {
+  const [mapReady, setMapReady] = useState(false);
   const [active, setActive] = useState<CountryInfo>(COUNTRIES["United States of America"]);
   const [hover, setHover] = useState<string | null>(null);
   const [hoverUni, setHoverUni] = useState<TopUni | null>(null);
   const [selectedUni, setSelectedUni] = useState<TopUni | null>(null);
   const [query, setQuery] = useState("");
   const isDark = useIsDark();
+
+  useEffect(() => setMapReady(true), []);
 
   const filteredUnis = TOP_UNIVERSITIES.filter((u) => {
     const q = query.trim().toLowerCase();
@@ -169,6 +172,7 @@ export function WorldMap() {
             {/* glow ring */}
             <div className="pointer-events-none absolute -inset-px rounded-3xl bg-gradient-to-br from-indigo-500/20 via-transparent to-pink-500/20 dark:from-indigo-500/30 dark:to-pink-500/30 opacity-60 blur-xl -z-10" />
 
+            {mapReady ? (
             <ComposableMap
               projectionConfig={{ scale: 150 }}
               style={{ width: "100%", height: "auto" }}
@@ -352,6 +356,9 @@ export function WorldMap() {
               );
             })}
           </ComposableMap>
+            ) : (
+              <div className="aspect-[4/3] w-full rounded-2xl bg-foreground/[0.03] dark:bg-white/[0.03]" />
+            )}
 
           {/* Country pill row */}
           <div className="flex flex-wrap gap-1.5 mt-3 px-1">
