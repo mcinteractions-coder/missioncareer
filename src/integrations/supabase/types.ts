@@ -21,6 +21,7 @@ export type Database = {
           email: string | null
           full_name: string
           id: string
+          mode: string
           notes: string | null
           phone: string
           slot_date: string
@@ -33,6 +34,7 @@ export type Database = {
           email?: string | null
           full_name: string
           id?: string
+          mode?: string
           notes?: string | null
           phone: string
           slot_date: string
@@ -45,6 +47,7 @@ export type Database = {
           email?: string | null
           full_name?: string
           id?: string
+          mode?: string
           notes?: string | null
           phone?: string
           slot_date?: string
