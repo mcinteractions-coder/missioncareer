@@ -30,7 +30,7 @@ export function Process() {
                   <s.icon className="h-5 w-5 md:h-6 md:w-6" />
                 </div>
               </div>
-              <h3 className="text-base md:text-lg font-bold text-foreground">{s.title}</h3>
+              <p className="text-base md:text-lg font-bold text-foreground">{s.title}</p>
               <p className="mt-1.5 md:mt-2 text-sm text-muted-foreground">{s.desc}</p>
               {i < STEPS.length - 1 && (
                 <ArrowRight className="hidden lg:block absolute -right-4 top-1/2 -translate-y-1/2 text-primary/40 h-6 w-6" />

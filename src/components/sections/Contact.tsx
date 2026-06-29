@@ -43,11 +43,11 @@ export function Contact() {
 
         <div className="grid lg:grid-cols-2 gap-6 md:gap-8">
           <div className="bg-card rounded-2xl md:rounded-3xl shadow-card p-5 md:p-8">
-            <h3 className="text-lg md:text-xl font-bold text-foreground mb-4 md:mb-6">Send us a message</h3>
+            <p className="text-lg md:text-xl font-bold text-foreground mb-4 md:mb-6">Send us a message</p>
             {done ? (
               <div className="text-center py-10">
                 <CheckCircle2 className="h-14 w-14 text-primary mx-auto mb-3" />
-                <h4 className="text-xl font-bold">Thank you!</h4>
+                <p className="text-xl font-bold">Thank you!</p>
                 <p className="text-muted-foreground mt-1">Our counselor will reach out to you shortly.</p>
                 <button onClick={() => setDone(false)} className="mt-5 text-sm font-semibold text-primary">Send another message</button>
               </div>
@@ -55,37 +55,37 @@ export function Contact() {
               <form className="space-y-4" onSubmit={onSubmit}>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-1.5">Full Name</label>
-                    <input name="full_name" required maxLength={120} type="text" placeholder="Your name" className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+                    <label htmlFor="contact-full-name" className="block text-sm font-medium mb-1.5">Full Name</label>
+                    <input id="contact-full-name" name="full_name" required maxLength={120} type="text" placeholder="Your name" className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1.5">Phone Number</label>
-                    <input name="phone" maxLength={30} type="tel" placeholder="+91 XXXXX XXXXX" className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+                    <label htmlFor="contact-phone" className="block text-sm font-medium mb-1.5">Phone Number</label>
+                    <input id="contact-phone" name="phone" maxLength={30} type="tel" placeholder="+91 XXXXX XXXXX" className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1.5">Email Address</label>
-                  <input name="email" maxLength={200} type="email" placeholder="your@email.com" className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+                  <label htmlFor="contact-email" className="block text-sm font-medium mb-1.5">Email Address</label>
+                  <input id="contact-email" name="email" maxLength={200} type="email" placeholder="your@email.com" className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
                 </div>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-1.5">Preferred Country</label>
-                    <select name="country" className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" defaultValue="">
+                    <label htmlFor="contact-country" className="block text-sm font-medium mb-1.5">Preferred Country</label>
+                    <select id="contact-country" name="country" className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" defaultValue="">
                       <option value="">Select Country</option>
                       {["USA","UK","Canada","Australia","Germany","Ireland"].map(c => <option key={c}>{c}</option>)}
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1.5">Study Level</label>
-                    <select name="study_level" className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" defaultValue="">
+                    <label htmlFor="contact-study-level" className="block text-sm font-medium mb-1.5">Study Level</label>
+                    <select id="contact-study-level" name="study_level" className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" defaultValue="">
                       <option value="">Select Level</option>
                       {["Bachelors","Masters","MBA","Diploma"].map(c => <option key={c}>{c}</option>)}
                     </select>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1.5">Your Message</label>
-                  <textarea name="message" maxLength={2000} rows={4} placeholder="Tell us about your study abroad goals..." className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+                  <label htmlFor="contact-message" className="block text-sm font-medium mb-1.5">Your Message</label>
+                  <textarea id="contact-message" name="message" maxLength={2000} rows={4} placeholder="Tell us about your study abroad goals..." className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
                 </div>
                 {error && <p className="text-sm text-destructive">{error}</p>}
                 <button disabled={busy} className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3 font-semibold text-primary-foreground shadow-soft hover:shadow-glow transition-shadow disabled:opacity-60">
@@ -119,7 +119,7 @@ export function Contact() {
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h4 className="font-bold text-foreground">Our Office</h4>
+                      <p className="font-bold text-foreground">Our Office</p>
                       <span className="inline-flex items-center gap-1 rounded-full bg-primary/15 text-primary px-2 py-0.5 text-xs font-semibold">
                         ★ 4.2 <span className="opacity-70">· 179 Reviews</span>
                       </span>
@@ -149,7 +149,7 @@ export function Contact() {
                   <c.icon className="h-5 w-5" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-foreground">{c.title}</h4>
+                  <p className="font-bold text-foreground">{c.title}</p>
                   <p className="text-sm text-muted-foreground whitespace-pre-line">{c.text}</p>
                 </div>
               </div>
@@ -161,7 +161,7 @@ export function Contact() {
                   <MessageCircle className="h-5 w-5" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-bold">Chat on WhatsApp</h4>
+                  <p className="font-bold">Chat on WhatsApp</p>
                   <p className="text-sm opacity-90">Get instant response from our counselors</p>
                   <a href="https://wa.me/919870003748" target="_blank" rel="noopener noreferrer" className="mt-3 inline-block rounded-full bg-white px-5 py-2 text-sm font-semibold" style={{ color: "#128C7E" }}>Chat Now</a>
                 </div>
@@ -169,7 +169,7 @@ export function Contact() {
             </div>
 
             <div className="bg-card rounded-2xl shadow-card p-5 md:p-6">
-              <h4 className="font-bold text-foreground mb-3">Office Hours</h4>
+              <p className="font-bold text-foreground mb-3">Office Hours</p>
               <div className="space-y-2 text-sm">
                 {[
                   ["Monday - Friday","11:30 AM - 8:00 PM"],

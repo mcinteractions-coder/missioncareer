@@ -466,7 +466,7 @@ export function Globe3D() {
                     {getInitials(selected.name)}
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-bold text-lg leading-tight">{selected.name}</h3>
+                    <p className="font-bold text-lg leading-tight">{selected.name}</p>
                     <p className="text-sm text-muted-foreground">
                       📍 {selected.city}, {selected.country}
                     </p>
@@ -499,7 +499,7 @@ export function Globe3D() {
             ) : (
               <div className="flex flex-col items-center justify-center text-center h-full py-10">
                 <div className="text-6xl mb-4 animate-pulse">🎯</div>
-                <h3 className="font-bold text-xl mb-2">Click a Pin</h3>
+                <p className="font-bold text-xl mb-2">Click a Pin</p>
                 <p className="text-sm text-muted-foreground mb-6">
                   Tap any glowing pin on the globe to see university details.
                 </p>

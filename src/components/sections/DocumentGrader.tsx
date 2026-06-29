@@ -167,7 +167,7 @@ export function DocumentGrader() {
               <Card className="p-6 border-2">
                 <div className="flex items-center gap-2 mb-3">
                   <Bot className="h-5 w-5 text-purple-500" />
-                  <h3 className="font-semibold text-lg">AI Detection</h3>
+                  <p className="font-semibold text-lg">AI Detection</p>
                 </div>
                 <div className="flex items-baseline gap-2 mb-2">
                   <span className={`text-4xl font-bold ${scoreColor(100 - result.aiDetection.aiLikelihoodPercent)}`}>
@@ -190,7 +190,7 @@ export function DocumentGrader() {
               <Card className="p-6 border-2">
                 <div className="flex items-center gap-2 mb-3">
                   <ShieldAlert className="h-5 w-5 text-amber-500" />
-                  <h3 className="font-semibold text-lg">Plagiarism / Cliché Risk</h3>
+                  <p className="font-semibold text-lg">Plagiarism / Cliché Risk</p>
                 </div>
                 <div className="flex items-baseline gap-2 mb-2">
                   <span className={`text-4xl font-bold ${scoreColor(100 - result.plagiarismRisk.riskPercent)}`}>
@@ -213,7 +213,7 @@ export function DocumentGrader() {
 
             {/* Metrics grid */}
             <Card className="p-6 border-2">
-              <h3 className="font-semibold text-lg mb-4">Detailed Metrics</h3>
+              <p className="font-semibold text-lg mb-4">Detailed Metrics</p>
               <div className="grid md:grid-cols-2 gap-4">
                 {Object.entries(result.metrics).map(([key, m]) => (
                   <div key={key} className="p-4 rounded-lg bg-muted/40">
@@ -234,7 +234,7 @@ export function DocumentGrader() {
               <Card className="p-6 border-2 border-emerald-200 bg-emerald-50/50 dark:bg-emerald-950/20">
                 <div className="flex items-center gap-2 mb-3">
                   <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-                  <h3 className="font-semibold text-lg">Strengths</h3>
+                  <p className="font-semibold text-lg">Strengths</p>
                 </div>
                 <ul className="space-y-2">
                   {result.strengths.map((s, i) => (
@@ -245,7 +245,7 @@ export function DocumentGrader() {
               <Card className="p-6 border-2 border-red-200 bg-red-50/50 dark:bg-red-950/20">
                 <div className="flex items-center gap-2 mb-3">
                   <AlertTriangle className="h-5 w-5 text-red-600" />
-                  <h3 className="font-semibold text-lg">Weaknesses</h3>
+                  <p className="font-semibold text-lg">Weaknesses</p>
                 </div>
                 <ul className="space-y-2">
                   {result.weaknesses.map((s, i) => (
@@ -258,7 +258,7 @@ export function DocumentGrader() {
             {/* Line by line */}
             {result.lineByLineSuggestions.length > 0 && (
               <Card className="p-6 border-2">
-                <h3 className="font-semibold text-lg mb-4">Line-by-Line Suggestions</h3>
+                <p className="font-semibold text-lg mb-4">Line-by-Line Suggestions</p>
                 <div className="space-y-3">
                   {result.lineByLineSuggestions.map((s, i) => (
                     <div key={i} className="p-4 rounded-lg border bg-muted/30">
@@ -273,7 +273,7 @@ export function DocumentGrader() {
 
             {/* Rewrite tips */}
             <Card className="p-6 border-2 bg-gradient-to-br from-primary/5 to-purple-500/5">
-              <h3 className="font-semibold text-lg mb-3">✨ Next Steps to Improve</h3>
+              <p className="font-semibold text-lg mb-3">✨ Next Steps to Improve</p>
               <ol className="space-y-2 list-decimal list-inside">
                 {result.rewriteTips.map((t, i) => (
                   <li key={i} className="text-sm">{t}</li>
