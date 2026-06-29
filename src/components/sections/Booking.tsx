@@ -76,7 +76,7 @@ export function Booking() {
       setError("Please provide either email or phone so we can reach you."); return;
     }
     setBusy(true);
-    const { error: err } = await supabase.from("bookings").insert(payload);
+    const { error: err } = await supabase.from("bookings").insert(payload as any);
     setBusy(false);
     if (err) {
       if (err.code === "23505") setError("Oops! Someone just grabbed that slot. Pick another.");
