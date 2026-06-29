@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { CalendarDays, Clock, CheckCircle2, Sparkles, User, Mail, Phone, Globe2, Loader2 } from "lucide-react";
+import { CalendarDays, Clock, CheckCircle2, Sparkles, User, Mail, Phone, Globe2, Loader2, Building2, Video } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 const SLOTS = [
@@ -35,6 +35,7 @@ export function Booking() {
   const [taken, setTaken] = useState<Set<string>>(new Set());
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
+  const [mode, setMode] = useState<"offline" | "online">("offline");
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -43,13 +44,14 @@ export function Booking() {
       const { data } = await supabase
         .from("bookings")
         .select("slot_time")
-        .eq("slot_date", toISO(date));
+        .eq("slot_date", toISO(date))
+        .eq("mode", mode);
       if (!alive) return;
       setTaken(new Set((data ?? []).map((r: { slot_time: string }) => r.slot_time)));
       setTime("");
     })();
     return () => { alive = false; };
-  }, [date]);
+  }, [date, mode]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -65,6 +67,7 @@ export function Booking() {
       notes: String(f.get("notes") || "").trim() || null,
       slot_date: toISO(date),
       slot_time: time,
+      mode,
     };
     if (!payload.full_name || !payload.phone) {
       setError("Name and phone are required."); return;
@@ -73,7 +76,7 @@ export function Booking() {
       setError("Please provide either email or phone so we can reach you."); return;
     }
     setBusy(true);
-    const { error: err } = await supabase.from("bookings").insert(payload);
+    const { error: err } = await supabase.from("bookings").insert(payload as any);
     setBusy(false);
     if (err) {
       if (err.code === "23505") setError("Oops! Someone just grabbed that slot. Pick another.");
@@ -107,7 +110,10 @@ export function Booking() {
             <p className="text-xl font-extrabold tracking-normal sm:text-2xl">You're booked! 🎉</p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-base">
               See you on <span className="font-semibold text-foreground">{date.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" })}</span> at <span className="font-semibold text-foreground">{time}</span>.
-              <br />Our counselor will reach out shortly to confirm.
+              <br />
+              {mode === "offline"
+                ? "Visit us at our Kandivali East office. Our counselor will confirm your appointment shortly."
+                : "We'll send you a Google Meet link before your session. Our counselor will confirm shortly."}
             </p>
             <button type="button" onClick={() => setDone(false)} className="mt-6 text-sm font-semibold text-primary hover:underline">
               Book another slot
@@ -127,6 +133,31 @@ export function Booking() {
               </div>
 
               <div className="space-y-6 p-4 sm:p-6">
+                <div className="flex gap-2 rounded-2xl border border-border bg-secondary p-1">
+                  <button
+                    type="button"
+                    onClick={() => setMode("offline")}
+                    className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-bold transition-all ${
+                      mode === "offline"
+                        ? "bg-gradient-primary text-primary-foreground shadow-glow"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <Building2 className="h-4 w-4" /> Offline Counseling
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMode("online")}
+                    className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-bold transition-all ${
+                      mode === "online"
+                        ? "bg-gradient-primary text-primary-foreground shadow-glow"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <Video className="h-4 w-4" /> Online Counseling
+                  </button>
+                </div>
+
                 <div>
                   <div className="mb-3 flex items-center gap-2">
                     <CalendarDays className="h-4 w-4 shrink-0 text-primary" />
