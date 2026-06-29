@@ -44,13 +44,14 @@ export function Booking() {
       const { data } = await supabase
         .from("bookings")
         .select("slot_time")
-        .eq("slot_date", toISO(date));
+        .eq("slot_date", toISO(date))
+        .eq("mode", mode);
       if (!alive) return;
       setTaken(new Set((data ?? []).map((r: { slot_time: string }) => r.slot_time)));
       setTime("");
     })();
     return () => { alive = false; };
-  }, [date]);
+  }, [date, mode]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
