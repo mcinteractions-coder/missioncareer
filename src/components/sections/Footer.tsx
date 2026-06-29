@@ -29,7 +29,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold text-lg mb-6">Quick Links</h4>
+            <p className="font-bold text-lg mb-6">Quick Links</p>
             <ul className="space-y-3 text-sm text-background/70">
               {[["Home","#home"],["About","#about"],["Services","#services"],["Destinations","#destinations"],["Process","#process"],["Contact Us","#contact"]].map(([l,h]) => (
                 <li key={l}><a href={h} className="hover:text-primary transition-colors">{l}</a></li>
@@ -38,7 +38,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold text-lg mb-6">Top Destinations</h4>
+            <p className="font-bold text-lg mb-6">Top Destinations</p>
             <ul className="space-y-3 text-sm text-background/70">
               {["Canada","UK","Australia","Germany","USA"].map((c) => (
                 <li key={c}><a href="#destinations" className="hover:text-primary transition-colors">{c}</a></li>
@@ -47,7 +47,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold text-lg mb-6">Contact Us</h4>
+            <p className="font-bold text-lg mb-6">Contact Us</p>
             <div className="space-y-6 text-sm text-background/70">
               <div className="leading-relaxed">
                 📍&nbsp;&nbsp;&nbsp;28 Bldg No-27, Thakur Village Rd, Evershine Millennium Paradise, Evershine Nagar, Kandivali East, Mumbai, Maharashtra 400101

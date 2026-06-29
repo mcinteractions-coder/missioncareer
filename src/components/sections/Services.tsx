@@ -34,7 +34,7 @@ export function Services() {
                 <div className="inline-flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-xl bg-gradient-primary text-primary-foreground shadow-soft mb-3 md:mb-4 group-hover:scale-110 transition-transform">
                   <s.icon className="h-5 w-5 md:h-6 md:w-6" />
                 </div>
-                <h3 className="text-base md:text-lg font-bold text-foreground group-hover:text-primary-foreground transition-colors">{s.title}</h3>
+                <p className="text-base md:text-lg font-bold text-foreground group-hover:text-primary-foreground transition-colors">{s.title}</p>
                 <p className="mt-1.5 md:mt-2 text-sm text-muted-foreground group-hover:text-primary-foreground/90 transition-colors">{s.desc}</p>
               </div>
             </div>

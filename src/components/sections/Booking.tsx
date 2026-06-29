@@ -104,7 +104,7 @@ export function Booking() {
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-primary shadow-glow sm:h-16 sm:w-16">
               <CheckCircle2 className="h-7 w-7 text-primary-foreground sm:h-8 sm:w-8" />
             </div>
-            <h3 className="text-xl font-extrabold tracking-normal sm:text-2xl">You're booked! 🎉</h3>
+            <p className="text-xl font-extrabold tracking-normal sm:text-2xl">You're booked! 🎉</p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-base">
               See you on <span className="font-semibold text-foreground">{date.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" })}</span> at <span className="font-semibold text-foreground">{time}</span>.
               <br />Our counselor will reach out shortly to confirm.
@@ -130,7 +130,7 @@ export function Booking() {
                 <div>
                   <div className="mb-3 flex items-center gap-2">
                     <CalendarDays className="h-4 w-4 shrink-0 text-primary" />
-                    <h3 className="text-base font-extrabold tracking-normal sm:text-lg">Select a date</h3>
+                    <p className="text-base font-extrabold tracking-normal sm:text-lg">Select a date</p>
                   </div>
                   <div className="grid grid-cols-5 gap-2 sm:gap-3">
                     {days.map((d) => {
@@ -158,7 +158,7 @@ export function Booking() {
                 <div>
                   <div className="mb-3 flex items-center gap-2">
                     <Clock className="h-4 w-4 shrink-0 text-primary" />
-                    <h3 className="text-base font-extrabold tracking-normal sm:text-lg">Pick a time slot</h3>
+                    <p className="text-base font-extrabold tracking-normal sm:text-lg">Pick a time slot</p>
                   </div>
                   <div className="grid min-w-0 grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-3">
                     {SLOTS.map((s) => {
@@ -192,7 +192,7 @@ export function Booking() {
 
             <form onSubmit={onSubmit} className="w-full min-w-0 space-y-3 overflow-hidden rounded-[28px] border border-border bg-card p-4 shadow-card sm:p-6">
               <div>
-                <h3 className="text-lg font-extrabold tracking-normal">Your details</h3>
+                <p className="text-lg font-extrabold tracking-normal">Your details</p>
                 <div className="mt-1 text-xs leading-relaxed text-muted-foreground">
                   {date.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" })}
                   {time && <> · <span className="font-semibold text-primary">{compactSlot(time)}</span></>}

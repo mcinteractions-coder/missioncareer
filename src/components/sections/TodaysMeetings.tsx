@@ -123,7 +123,7 @@ export function TodaysMeetings() {
                     {initials(b.full_name) || <User className="w-5 h-5" />}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h3 className="font-semibold text-lg truncate">{b.full_name}</h3>
+                    <p className="font-semibold text-lg truncate">{b.full_name}</p>
                     <div className="flex items-center gap-1.5 text-primary font-medium text-sm mt-0.5">
                       <Clock className="w-3.5 h-3.5" />
                       {b.slot_time}

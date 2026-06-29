@@ -42,7 +42,7 @@ export function FestivalPopup() {
           <div className="inline-flex items-center gap-1.5 rounded-full bg-primary-soft px-4 py-1.5 text-sm font-semibold text-primary mb-4">
             <Sparkles className="h-4 w-4" /> Festival Offer
           </div>
-          <h3 className="text-3xl md:text-4xl font-extrabold text-foreground">{post.title}</h3>
+          <p className="text-3xl md:text-4xl font-extrabold text-foreground">{post.title}</p>
           <p className="mt-3 md:mt-4 text-base md:text-lg text-muted-foreground whitespace-pre-wrap max-w-2xl mx-auto">{post.text}</p>
           <button
             onClick={handleGrabOffer}

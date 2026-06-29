@@ -66,7 +66,7 @@ export function Destinations() {
                   />
                 </div>
               </div>
-              <h3 className="text-base md:text-xl font-bold text-foreground">{c.name}</h3>
+              <p className="text-base md:text-xl font-bold text-foreground">{c.name}</p>
               <p className="text-xs md:text-sm text-muted-foreground mt-1">
                 <span className="text-primary font-semibold">{c.unis}</span> Universities
               </p>

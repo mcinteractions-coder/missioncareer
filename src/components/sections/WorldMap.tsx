@@ -449,7 +449,7 @@ export function WorldMap() {
                   <div className="text-[10px] uppercase tracking-[0.2em] font-bold flex items-center gap-1" style={{ color: active.accent }}>
                     <Plane className="h-3 w-3" /> Destination
                   </div>
-                  <h3 className="text-2xl md:text-3xl font-extrabold text-foreground">{active.name}</h3>
+                  <p className="text-2xl md:text-3xl font-extrabold text-foreground">{active.name}</p>
                 </div>
               </div>
               <p className="text-sm text-muted-foreground italic mb-5">"{active.tagline}"</p>

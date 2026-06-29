@@ -77,6 +77,7 @@ export function About() {
               {FIELDS.map((f) => (
                 <select
                   key={f.key}
+                  aria-label={f.label}
                   className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                   value={filters[f.key] ?? ""}
                   onChange={(e) => setField(f.key, e.target.value)}
@@ -101,9 +102,9 @@ export function About() {
             {submitted && (
               <div className="mt-6 bg-card rounded-3xl shadow-card p-5 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-bold text-foreground">
+                  <p className="font-bold text-foreground">
                     {results.length} {results.length === 1 ? "Match" : "Matches"} Found
-                  </h3>
+                  </p>
                   {results.length > 0 && <span className="text-xs text-muted-foreground">Sorted by ranking</span>}
                 </div>
 
@@ -162,9 +163,9 @@ export function About() {
 
           <div className="space-y-4 md:space-y-6 min-w-0">
             <div className="bg-card rounded-2xl md:rounded-3xl shadow-card p-5 md:p-6">
-              <h3 className="font-bold text-foreground flex items-center gap-2 mb-4">
+              <p className="font-bold text-foreground flex items-center gap-2 mb-4">
                 <span className="h-2 w-2 rounded-full bg-primary animate-pulse" /> Recent Admits
-              </h3>
+              </p>
               <div className="space-y-3">
                 {admits.map((a, i) => (
                   <div key={a.id} className="group flex items-center gap-3 rounded-2xl bg-gradient-to-r from-secondary to-secondary/40 p-3 hover:shadow-soft hover:-translate-y-0.5 transition-all">
@@ -186,7 +187,7 @@ export function About() {
             </div>
 
             <div className="bg-card rounded-2xl md:rounded-3xl shadow-card p-5 md:p-6 overflow-hidden">
-              <h3 className="font-bold text-foreground mb-4">Top Destinations</h3>
+              <p className="font-bold text-foreground mb-4">Top Destinations</p>
               <div className="relative overflow-hidden">
                 <div className="flex gap-3 animate-marquee whitespace-nowrap">
                   {[...DESTS, ...DESTS].map((d, i) => (
@@ -199,9 +200,9 @@ export function About() {
             <div className="relative bg-gradient-to-br from-primary/5 via-card to-accent/10 rounded-2xl md:rounded-3xl shadow-card p-5 md:p-6 overflow-hidden">
               <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-primary/10 blur-2xl pointer-events-none" />
               <div className="flex items-center justify-between mb-4 relative">
-                <h3 className="font-bold text-foreground flex items-center gap-2">
+                <p className="font-bold text-foreground flex items-center gap-2">
                   <Quote className="h-4 w-4 text-primary" /> Student Reviews
-                </h3>
+                </p>
                 <div className="flex items-center gap-1 text-xs font-semibold bg-amber-500/10 text-amber-600 rounded-full px-2.5 py-1">
                   <span className="text-amber-500">★</span> 4.9 · {reviews.length}
                 </div>

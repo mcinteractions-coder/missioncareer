@@ -139,7 +139,7 @@ export function ChatBot() {
                 <Bot className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="text-sm font-bold">Mission Career Assistant</h3>
+                <p className="text-sm font-bold">Mission Career Assistant</p>
                 <p className="text-xs opacity-90">Study abroad guidance · AI-powered</p>
               </div>
             </div>

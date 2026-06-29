@@ -23,7 +23,7 @@ export function Blog() {
         {posts.length === 0 ? (
           <div className="max-w-2xl mx-auto bg-card rounded-2xl md:rounded-3xl shadow-card p-6 md:p-10 text-center">
             <Newspaper className="mx-auto h-10 w-10 md:h-12 md:w-12 text-primary mb-3 md:mb-4" />
-            <h3 className="text-xl md:text-2xl font-bold text-foreground">New blog posts coming soon</h3>
+            <p className="text-xl md:text-2xl font-bold text-foreground">New blog posts coming soon</p>
             <p className="mt-2 text-sm md:text-base text-muted-foreground">Stay tuned for expert articles on study abroad, scholarships, and visa tips.</p>
           </div>
         ) : (
@@ -38,9 +38,9 @@ export function Blog() {
                 {p.image && <img src={p.image} alt={p.title} className="w-full h-40 md:h-48 object-cover" />}
                 <div className="p-5 md:p-6">
                   <p className="text-xs text-primary font-semibold mb-2">{new Date(p.created_at).toLocaleDateString()}</p>
-                  <h3 className="font-bold text-base md:text-lg text-foreground line-clamp-2">{p.title}</h3>
+                  <p className="font-bold text-base md:text-lg text-foreground line-clamp-2">{p.title}</p>
                   <p className="mt-2 text-sm text-muted-foreground line-clamp-4 whitespace-pre-wrap">{p.text}</p>
-                  <p className="mt-3 text-sm font-semibold text-primary">Read more →</p>
+                  <p className="mt-3 text-sm font-semibold text-primary">Read about {p.title} →</p>
                 </div>
               </Link>
             ))}

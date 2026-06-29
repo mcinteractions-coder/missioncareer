@@ -104,11 +104,6 @@ function RootShell({ children }: { children: React.ReactNode }) {
           id="smart-tv-legacy-css"
           dangerouslySetInnerHTML={{ __html: smartTvLegacyCss }}
         />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('theme');var d=t?t==='dark':true;if(d)document.documentElement.classList.add('dark');}catch(e){document.documentElement.classList.add('dark');}})();`,
-          }}
-        />
       </head>
       <body>
         {children}
