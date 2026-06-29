@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { CalendarDays, Clock, CheckCircle2, Sparkles, User, Mail, Phone, Globe2, Loader2 } from "lucide-react";
+import { CalendarDays, Clock, CheckCircle2, Sparkles, User, Mail, Phone, Globe2, Loader2, Building2, Video } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 const SLOTS = [
