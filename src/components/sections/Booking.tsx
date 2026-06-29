@@ -130,6 +130,31 @@ export function Booking() {
               </div>
 
               <div className="space-y-6 p-4 sm:p-6">
+                <div className="flex gap-2 rounded-2xl border border-border bg-secondary p-1">
+                  <button
+                    type="button"
+                    onClick={() => setMode("offline")}
+                    className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-bold transition-all ${
+                      mode === "offline"
+                        ? "bg-gradient-primary text-primary-foreground shadow-glow"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <Building2 className="h-4 w-4" /> Offline Counseling
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMode("online")}
+                    className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-bold transition-all ${
+                      mode === "online"
+                        ? "bg-gradient-primary text-primary-foreground shadow-glow"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <Video className="h-4 w-4" /> Online Counseling
+                  </button>
+                </div>
+
                 <div>
                   <div className="mb-3 flex items-center gap-2">
                     <CalendarDays className="h-4 w-4 shrink-0 text-primary" />
