@@ -110,7 +110,10 @@ export function Booking() {
             <p className="text-xl font-extrabold tracking-normal sm:text-2xl">You're booked! 🎉</p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-base">
               See you on <span className="font-semibold text-foreground">{date.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" })}</span> at <span className="font-semibold text-foreground">{time}</span>.
-              <br />Our counselor will reach out shortly to confirm.
+              <br />
+              {mode === "offline"
+                ? "Visit us at our Kandivali East office. Our counselor will confirm your appointment shortly."
+                : "We'll send you a Google Meet link before your session. Our counselor will confirm shortly."}
             </p>
             <button type="button" onClick={() => setDone(false)} className="mt-6 text-sm font-semibold text-primary hover:underline">
               Book another slot
