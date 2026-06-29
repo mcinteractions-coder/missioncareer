@@ -67,6 +67,7 @@ export function Booking() {
       notes: String(f.get("notes") || "").trim() || null,
       slot_date: toISO(date),
       slot_time: time,
+      mode,
     };
     if (!payload.full_name || !payload.phone) {
       setError("Name and phone are required."); return;
