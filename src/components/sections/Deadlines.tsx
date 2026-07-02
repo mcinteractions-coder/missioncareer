@@ -243,9 +243,10 @@ function CountdownCard({ uni }: { uni: Uni }) {
         </span>
         <a
           href="#booking"
+          aria-label={`Apply to ${uni.name}`}
           className="font-semibold text-primary hover:text-primary-glow transition-colors"
         >
-          Apply →
+          Apply to {uni.name.split(" ").slice(0, 2).join(" ")} →
         </a>
       </div>
     </div>
