@@ -166,6 +166,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "shortcut icon", href: "/mission-logo-transparent.png" },
       { rel: "apple-touch-icon", href: "/mission-logo-transparent.png" },
     ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(LOCAL_BUSINESS_JSONLD),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(FAQ_JSONLD),
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -211,6 +221,7 @@ function RootComponent() {
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <ChatBot />
+      <WhatsAppFloat />
     </QueryClientProvider>
   );
 }
