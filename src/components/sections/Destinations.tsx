@@ -82,36 +82,37 @@ function CountryCard({ c }: { c: Country }) {
 
         {/* BACK */}
         <div
-          className="absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-2xl p-4 md:p-5 shadow-soft text-primary-foreground overflow-hidden"
+          className="absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-2xl p-4 md:p-5 shadow-soft overflow-hidden text-white"
           style={{
-            background: "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.85) 60%, hsl(217 91% 45%) 100%)",
+            background:
+              "linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #3b82f6 100%)",
           }}
         >
-          <div className="flex items-center gap-2 pb-2 mb-2 border-b border-white/25">
+          <div className="flex items-center gap-2 pb-2 mb-2 border-b border-white/30">
             <img
               src={`https://flagcdn.com/w80/${c.code}.png`}
               alt=""
               className="w-6 h-4 rounded-sm object-cover"
               loading="lazy"
             />
-            <p className="font-bold text-sm md:text-base">{c.name}</p>
+            <p className="font-bold text-sm md:text-base text-white">{c.name}</p>
           </div>
-          <ul className="space-y-1.5 md:space-y-2 text-[11px] md:text-[13px] leading-tight">
+          <ul className="space-y-1.5 md:space-y-2 text-[11px] md:text-[13px] leading-tight text-white">
             <li className="flex gap-2">
-              <GraduationCap className="h-3.5 w-3.5 md:h-4 md:w-4 shrink-0 mt-0.5 opacity-90" />
-              <span><span className="opacity-80">Top: </span>{c.topUnis}</span>
+              <GraduationCap className="h-3.5 w-3.5 md:h-4 md:w-4 shrink-0 mt-0.5 text-white" />
+              <span><span className="text-white/75">Top: </span>{c.topUnis}</span>
             </li>
             <li className="flex gap-2">
-              <Wallet className="h-3.5 w-3.5 md:h-4 md:w-4 shrink-0 mt-0.5 opacity-90" />
-              <span><span className="opacity-80">Tuition/yr: </span>{c.tuition}</span>
+              <Wallet className="h-3.5 w-3.5 md:h-4 md:w-4 shrink-0 mt-0.5 text-white" />
+              <span><span className="text-white/75">Tuition/yr: </span>{c.tuition}</span>
             </li>
             <li className="flex gap-2">
-              <Calendar className="h-3.5 w-3.5 md:h-4 md:w-4 shrink-0 mt-0.5 opacity-90" />
-              <span><span className="opacity-80">Intake: </span>{c.intake}</span>
+              <Calendar className="h-3.5 w-3.5 md:h-4 md:w-4 shrink-0 mt-0.5 text-white" />
+              <span><span className="text-white/75">Intake: </span>{c.intake}</span>
             </li>
             <li className="flex gap-2">
-              <Thermometer className="h-3.5 w-3.5 md:h-4 md:w-4 shrink-0 mt-0.5 opacity-90" />
-              <span><span className="opacity-80">Climate: </span>{c.climate}</span>
+              <Thermometer className="h-3.5 w-3.5 md:h-4 md:w-4 shrink-0 mt-0.5 text-white" />
+              <span><span className="text-white/75">Climate: </span>{c.climate}</span>
             </li>
           </ul>
           <a
@@ -121,7 +122,7 @@ function CountryCard({ c }: { c: Country }) {
               e.preventDefault();
               document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
             }}
-            className="absolute bottom-3 right-3 inline-flex items-center gap-1 text-[10px] md:text-xs font-semibold bg-white/20 hover:bg-white/30 backdrop-blur px-2.5 py-1 rounded-full"
+            className="absolute bottom-3 right-3 inline-flex items-center gap-1 text-[10px] md:text-xs font-bold bg-white text-blue-700 hover:bg-white/90 px-2.5 py-1 rounded-full shadow-md"
           >
             Enquire <ArrowRight className="h-3 w-3" />
           </a>
