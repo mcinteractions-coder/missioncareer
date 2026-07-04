@@ -12,6 +12,84 @@ import { useEffect } from "react";
 import appCss from "../styles.css?url";
 import smartTvLegacyCss from "../smart-tv-legacy.css?raw";
 import { ChatBot } from "@/components/ChatBot";
+import { WhatsAppFloat } from "@/components/WhatsAppFloat";
+
+const LOCAL_BUSINESS_JSONLD = {
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  name: "Mission Career",
+  alternateName: "Mission Career Education",
+  description:
+    "Mumbai-based study-abroad consultancy helping students get admission, visas and scholarships across 20+ countries.",
+  url: "https://www.missioncareer.net",
+  logo: "https://www.missioncareer.net/mission-logo-transparent.png",
+  image: "https://www.missioncareer.net/mission-logo.png",
+  telephone: "+91-9870003748",
+  email: "mcinteractions@gmail.com",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Kandivali East",
+    addressRegion: "Maharashtra",
+    addressCountry: "IN",
+  },
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "10:00",
+      closes: "19:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Saturday",
+      opens: "10:00",
+      closes: "17:00",
+    },
+  ],
+  sameAs: [
+    "https://www.instagram.com/missioncareer",
+    "https://www.facebook.com/missioncareer",
+  ],
+};
+
+const FAQ_JSONLD = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Which countries does Mission Career help students study in?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "We help students study abroad in USA, UK, Canada, Australia, Germany, Ireland, New Zealand, Italy, France, Spain, Netherlands, Sweden, Singapore, Japan, South Korea, UAE and 15+ more destinations.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Is the counseling free?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. The first career counseling and profile evaluation session is completely free. Book a slot on our website or call +91 9870003748.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What is your visa approval rate?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Mission Career has a 98% student visa approval rate, with 5000+ students successfully placed in universities abroad.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Do you help with scholarships and education loans?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. We guide you through scholarship applications and connect you with education loan partners for hassle-free financing.",
+      },
+    },
+  ],
+};
 
 function NotFoundComponent() {
   return (
