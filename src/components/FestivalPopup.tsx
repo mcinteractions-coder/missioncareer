@@ -7,9 +7,22 @@ export function FestivalPopup() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      if (sessionStorage.getItem("mc_festival_seen") === "1") return;
+    } catch {
+      /* ignore */
+    }
     fetchActiveFestival().then((p) => {
       setPost(p);
-      setOpen(!!p);
+      if (p) {
+        setOpen(true);
+        try {
+          sessionStorage.setItem("mc_festival_seen", "1");
+        } catch {
+          /* ignore */
+        }
+      }
     });
   }, []);
 
