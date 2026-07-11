@@ -84,6 +84,14 @@ export function Booking() {
       return;
     }
     setDone(true);
+    // Google Ads conversion tracking
+    if (typeof window !== "undefined" && typeof (window as any).gtag === "function") {
+      (window as any).gtag("event", "conversion", {
+        send_to: "AW-18313112211/VIJvCIPC780cEJPVr5xE",
+        value: 1.0,
+        currency: "INR",
+      });
+    }
     form.reset();
   };
 
