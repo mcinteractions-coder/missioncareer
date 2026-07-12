@@ -1057,6 +1057,9 @@ function AnalyticsPanel() {
         )}
       </div>
 
+      {/* Detailed visitor sessions with AI journey summaries */}
+      <VisitorSessionsPanel hours={hours} />
+
       {/* Recent visitor events feed */}
       <div className="bg-card rounded-2xl shadow-card p-5">
         <h3 className="font-bold text-base mb-3">Recent Visitor Activity</h3>
