@@ -14,6 +14,8 @@ import {
   adminListBookings,
   adminDeleteBooking,
   adminAnalytics,
+  adminListSessions,
+  adminSessionDetail,
 } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/admin")({
