@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowLeft, Trash2, Upload, Star, Newspaper, Sparkles, Lock, Inbox, ArrowUp, ArrowDown, Pencil, X, CalendarDays, Clock, Phone, Mail, Globe2, Activity, MapPin, Smartphone, Monitor, Eye, Users, TrendingUp } from "lucide-react";
+import { ArrowLeft, Trash2, Upload, Star, Newspaper, Sparkles, Lock, Inbox, ArrowUp, ArrowDown, Pencil, X, CalendarDays, Clock, Phone, Mail, Globe2, Activity, MapPin, Smartphone, Monitor, Eye, Users, TrendingUp, Wand2, MousePointerClick, ChevronRight } from "lucide-react";
 import { fetchPosts, fileToDataURL, type Post, type PostKind } from "@/lib/content-store";
 import { supabase } from "@/integrations/supabase/client";
 import {
