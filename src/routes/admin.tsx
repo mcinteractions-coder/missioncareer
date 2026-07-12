@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowLeft, Trash2, Upload, Star, Newspaper, Sparkles, Lock, Inbox, ArrowUp, ArrowDown, Pencil, X, CalendarDays, Clock, Phone, Mail, Globe2 } from "lucide-react";
+import { ArrowLeft, Trash2, Upload, Star, Newspaper, Sparkles, Lock, Inbox, ArrowUp, ArrowDown, Pencil, X, CalendarDays, Clock, Phone, Mail, Globe2, Activity, MapPin, Smartphone, Monitor, Eye, Users, TrendingUp } from "lucide-react";
 import { fetchPosts, fileToDataURL, type Post, type PostKind } from "@/lib/content-store";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -13,6 +13,7 @@ import {
   adminSwapOrder,
   adminListBookings,
   adminDeleteBooking,
+  adminAnalytics,
 } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/admin")({
@@ -69,9 +70,10 @@ function AdminPage() {
   return <AdminPanel />;
 }
 
-type TabKey = PostKind | "leads" | "bookings";
+type TabKey = PostKind | "leads" | "bookings" | "analytics";
 
 const TABS: { key: TabKey; label: string; icon: typeof Newspaper }[] = [
+  { key: "analytics", label: "Live Analytics", icon: Activity },
   { key: "bookings", label: "Counseling Bookings", icon: CalendarDays },
   { key: "blog", label: "Blog Posts", icon: Newspaper },
   { key: "success", label: "Success Stories", icon: Star },
@@ -83,7 +85,7 @@ const TABS: { key: TabKey; label: string; icon: typeof Newspaper }[] = [
 
 
 function AdminPanel() {
-  const [tab, setTab] = useState<TabKey>("blog");
+  const [tab, setTab] = useState<TabKey>("analytics");
 
   return (
     <div className="min-h-screen bg-background">
@@ -116,7 +118,7 @@ function AdminPanel() {
       </header>
 
       <main className="container mx-auto px-4 md:px-8 py-8">
-        {tab === "leads" ? <LeadsPanel /> : tab === "bookings" ? <BookingsPanel /> : <PostsPanel kind={tab} />}
+        {tab === "leads" ? <LeadsPanel /> : tab === "bookings" ? <BookingsPanel /> : tab === "analytics" ? <AnalyticsPanel /> : <PostsPanel kind={tab} />}
       </main>
     </div>
   );
