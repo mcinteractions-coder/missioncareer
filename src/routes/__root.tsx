@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import smartTvLegacyCss from "../smart-tv-legacy.css?raw";
 import { ChatBot } from "@/components/ChatBot";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
+import { VisitorTracker } from "@/components/VisitorTracker";
 
 const LOCAL_BUSINESS_JSONLD = {
   "@context": "https://schema.org",
@@ -230,6 +231,7 @@ function RootComponent() {
       <Outlet />
       <ChatBot />
       <WhatsAppFloat />
+      <VisitorTracker />
     </QueryClientProvider>
   );
 }
