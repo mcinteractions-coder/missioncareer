@@ -860,3 +860,266 @@ function BookingsPanel() {
     </div>
   );
 }
+
+interface AnalyticsData {
+  totals: { pageviews: number; uniqueSessions: number; liveVisitors: number; bookings: number; leads: number };
+  byCountry: { k: string; v: number }[];
+  byCity: { k: string; v: number }[];
+  byPath: { k: string; v: number }[];
+  byDevice: { k: string; v: number }[];
+  byReferrer: { k: string; v: number }[];
+  byHour: { k: string; v: number }[];
+  liveSessions: { session_id: string; path: string; country: string | null; city: string | null; device: string | null; last_seen: string; pages: number }[];
+  recentEvents: { id: string; session_id: string; path: string; referrer: string | null; country: string | null; city: string | null; device: string | null; event_type: string; created_at: string }[];
+  recentBookings: { id: string; full_name: string; phone: string | null; email: string | null; country: string | null; slot_date: string; slot_time: string; mode: string; created_at: string }[];
+  recentLeads: { id: string; full_name: string; phone: string | null; email: string | null; country: string | null; study_level: string | null; created_at: string }[];
+}
+
+function AnalyticsPanel() {
+  const [data, setData] = useState<AnalyticsData | null>(null);
+  const [err, setErr] = useState("");
+  const [hours, setHours] = useState<number>(24);
+  const fn = useServerFn(adminAnalytics);
+  const pin = sessionStorage.getItem("mc_admin_pin") || "";
+
+  const refresh = useCallback(async () => {
+    try {
+      const r = await fn({ data: { pin, hours } });
+      setData(r as AnalyticsData);
+      setErr("");
+    } catch (e) {
+      setErr((e as Error).message);
+    }
+  }, [fn, pin, hours]);
+
+  useEffect(() => {
+    refresh();
+    const t = setInterval(refresh, 15000);
+    return () => clearInterval(t);
+  }, [refresh]);
+
+  if (err) return <p className="text-sm text-destructive">{err}</p>;
+  if (!data) return <p className="text-sm text-muted-foreground">Loading analytics…</p>;
+
+  const RANGES: { h: number; label: string }[] = [
+    { h: 1, label: "Last 1h" },
+    { h: 24, label: "Today (24h)" },
+    { h: 24 * 7, label: "7 days" },
+    { h: 24 * 30, label: "30 days" },
+  ];
+
+  const maxHour = Math.max(...data.byHour.map((h) => h.v), 1);
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 className="text-2xl font-extrabold flex items-center gap-2">
+            <Activity className="h-6 w-6 text-primary" /> Live Analytics
+          </h2>
+          <p className="text-xs text-muted-foreground mt-1">Auto-refreshing every 15 seconds</p>
+        </div>
+        <div className="flex gap-2 flex-wrap">
+          {RANGES.map((r) => (
+            <button
+              key={r.h}
+              onClick={() => setHours(r.h)}
+              className={`text-xs rounded-full px-3 py-1.5 font-semibold transition ${
+                hours === r.h ? "bg-gradient-primary text-primary-foreground shadow-soft" : "bg-secondary hover:bg-accent"
+              }`}
+            >{r.label}</button>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <StatCard icon={Users} label="Live now" value={data.totals.liveVisitors} accent="text-emerald-500" pulse />
+        <StatCard icon={Eye} label="Pageviews" value={data.totals.pageviews} />
+        <StatCard icon={TrendingUp} label="Unique visitors" value={data.totals.uniqueSessions} />
+        <StatCard icon={CalendarDays} label="Bookings" value={data.totals.bookings} accent="text-primary" />
+        <StatCard icon={Inbox} label="Leads" value={data.totals.leads} accent="text-primary" />
+      </div>
+
+      {/* Live visitors table */}
+      <div className="bg-card rounded-2xl shadow-card p-5">
+        <h3 className="font-bold text-base mb-3 flex items-center gap-2">
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+          </span>
+          Currently on site ({data.liveSessions.length})
+        </h3>
+        {data.liveSessions.length === 0 ? (
+          <p className="text-xs text-muted-foreground">No active visitors right now.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="text-xs uppercase text-muted-foreground">
+                <tr className="text-left"><th className="py-2 pr-3">Location</th><th className="py-2 pr-3">Page</th><th className="py-2 pr-3">Device</th><th className="py-2 pr-3">Pages</th><th className="py-2 pr-3">Last seen</th></tr>
+              </thead>
+              <tbody>
+                {data.liveSessions.map((s) => (
+                  <tr key={s.session_id} className="border-t border-border">
+                    <td className="py-2 pr-3">{flag(s.country)} {[s.city, s.country].filter(Boolean).join(", ") || "Unknown"}</td>
+                    <td className="py-2 pr-3 font-mono text-xs truncate max-w-[220px]">{s.path}</td>
+                    <td className="py-2 pr-3 capitalize">{s.device || "—"}</td>
+                    <td className="py-2 pr-3">{s.pages}</td>
+                    <td className="py-2 pr-3 text-xs text-muted-foreground">{timeAgo(s.last_seen)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      {/* Hourly chart */}
+      <div className="bg-card rounded-2xl shadow-card p-5">
+        <h3 className="font-bold text-base mb-3">Pageviews over time</h3>
+        {data.byHour.length === 0 ? (
+          <p className="text-xs text-muted-foreground">No data yet.</p>
+        ) : (
+          <div className="flex items-end gap-1 h-32">
+            {data.byHour.map((h) => (
+              <div key={h.k} className="flex-1 flex flex-col items-center gap-1 group">
+                <div className="w-full bg-gradient-primary rounded-t opacity-80 group-hover:opacity-100 transition" style={{ height: `${(h.v / maxHour) * 100}%`, minHeight: "2px" }} title={`${h.k}:00 — ${h.v} views`} />
+              </div>
+            ))}
+          </div>
+        )}
+        <div className="flex justify-between text-[10px] text-muted-foreground mt-2">
+          <span>{data.byHour[0]?.k.slice(11) || ""}h</span>
+          <span>{data.byHour[data.byHour.length - 1]?.k.slice(11) || ""}h</span>
+        </div>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-4">
+        <BarList title="Top Countries" icon={Globe2} items={data.byCountry} render={(k) => `${flag(k)} ${k}`} />
+        <BarList title="Top Cities" icon={MapPin} items={data.byCity} />
+        <BarList title="Top Pages" icon={Eye} items={data.byPath} mono />
+        <BarList title="Traffic Sources" icon={TrendingUp} items={data.byReferrer} />
+        <BarList title="Devices" icon={Smartphone} items={data.byDevice} />
+      </div>
+
+      {/* Recent form submissions */}
+      <div className="bg-card rounded-2xl shadow-card p-5">
+        <h3 className="font-bold text-base mb-3 flex items-center gap-2"><CalendarDays className="h-4 w-4 text-primary" /> Recent Booking Form Submissions ({data.recentBookings.length})</h3>
+        {data.recentBookings.length === 0 ? (
+          <p className="text-xs text-muted-foreground">No bookings in this range.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="text-xs uppercase text-muted-foreground">
+                <tr className="text-left"><th className="py-2 pr-3">Time</th><th className="py-2 pr-3">Name</th><th className="py-2 pr-3">Phone</th><th className="py-2 pr-3">Country</th><th className="py-2 pr-3">Slot</th><th className="py-2 pr-3">Mode</th></tr>
+              </thead>
+              <tbody>
+                {data.recentBookings.map((b) => (
+                  <tr key={b.id} className="border-t border-border">
+                    <td className="py-2 pr-3 text-xs text-muted-foreground whitespace-nowrap">{new Date(b.created_at).toLocaleString("en-IN", { hour: "2-digit", minute: "2-digit", day: "2-digit", month: "short" })}</td>
+                    <td className="py-2 pr-3 font-semibold">{b.full_name}</td>
+                    <td className="py-2 pr-3"><a href={`tel:${b.phone}`} className="text-primary">{b.phone}</a></td>
+                    <td className="py-2 pr-3">{flag(b.country)} {b.country || "—"}</td>
+                    <td className="py-2 pr-3 whitespace-nowrap">{b.slot_date} · {b.slot_time}</td>
+                    <td className="py-2 pr-3 capitalize">{b.mode}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      <div className="bg-card rounded-2xl shadow-card p-5">
+        <h3 className="font-bold text-base mb-3 flex items-center gap-2"><Inbox className="h-4 w-4 text-primary" /> Recent Lead Form Submissions ({data.recentLeads.length})</h3>
+        {data.recentLeads.length === 0 ? (
+          <p className="text-xs text-muted-foreground">No leads in this range.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="text-xs uppercase text-muted-foreground">
+                <tr className="text-left"><th className="py-2 pr-3">Time</th><th className="py-2 pr-3">Name</th><th className="py-2 pr-3">Contact</th><th className="py-2 pr-3">Country</th><th className="py-2 pr-3">Level</th></tr>
+              </thead>
+              <tbody>
+                {data.recentLeads.map((l) => (
+                  <tr key={l.id} className="border-t border-border">
+                    <td className="py-2 pr-3 text-xs text-muted-foreground whitespace-nowrap">{new Date(l.created_at).toLocaleString("en-IN", { hour: "2-digit", minute: "2-digit", day: "2-digit", month: "short" })}</td>
+                    <td className="py-2 pr-3 font-semibold">{l.full_name}</td>
+                    <td className="py-2 pr-3 text-xs">{l.phone || l.email || "—"}</td>
+                    <td className="py-2 pr-3">{flag(l.country)} {l.country || "—"}</td>
+                    <td className="py-2 pr-3">{l.study_level || "—"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      {/* Recent visitor events feed */}
+      <div className="bg-card rounded-2xl shadow-card p-5">
+        <h3 className="font-bold text-base mb-3">Recent Visitor Activity</h3>
+        <div className="max-h-96 overflow-y-auto divide-y divide-border">
+          {data.recentEvents.slice(0, 60).map((e) => (
+            <div key={e.id} className="py-2 flex items-center gap-3 text-xs">
+              <span className="text-muted-foreground w-24 shrink-0">{timeAgo(e.created_at)}</span>
+              <span className="w-32 shrink-0 truncate">{flag(e.country)} {[e.city, e.country].filter(Boolean).join(", ") || "Unknown"}</span>
+              <span className="font-mono truncate flex-1">{e.path}</span>
+              <span className="text-muted-foreground capitalize hidden sm:inline">{e.device}</span>
+            </div>
+          ))}
+          {data.recentEvents.length === 0 && <p className="text-xs text-muted-foreground py-3">No visitor events yet.</p>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StatCard({ icon: Icon, label, value, accent, pulse }: { icon: typeof Eye; label: string; value: number; accent?: string; pulse?: boolean }) {
+  return (
+    <div className="bg-card rounded-2xl shadow-card p-4">
+      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+        <Icon className={`h-4 w-4 ${accent || ""}`} /> {label}
+      </div>
+      <div className={`mt-2 text-3xl font-extrabold ${accent || "text-foreground"} ${pulse && value > 0 ? "animate-pulse" : ""}`}>{value}</div>
+    </div>
+  );
+}
+
+function BarList({ title, icon: Icon, items, render, mono }: { title: string; icon: typeof Eye; items: { k: string; v: number }[]; render?: (k: string) => React.ReactNode; mono?: boolean }) {
+  const max = Math.max(...items.map((i) => i.v), 1);
+  return (
+    <div className="bg-card rounded-2xl shadow-card p-5">
+      <h3 className="font-bold text-base mb-3 flex items-center gap-2"><Icon className="h-4 w-4 text-primary" /> {title}</h3>
+      {items.length === 0 ? (
+        <p className="text-xs text-muted-foreground">No data.</p>
+      ) : (
+        <div className="space-y-1.5">
+          {items.slice(0, 10).map((it) => (
+            <div key={it.k} className="relative">
+              <div className="absolute inset-0 bg-primary-soft rounded" style={{ width: `${(it.v / max) * 100}%` }} />
+              <div className="relative flex justify-between items-center px-2 py-1 text-xs">
+                <span className={`truncate ${mono ? "font-mono" : ""}`}>{render ? render(it.k) : it.k}</span>
+                <span className="font-semibold ml-2">{it.v}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function flag(code: string | null | undefined) {
+  if (!code || code.length !== 2) return "🌐";
+  const c = code.toUpperCase();
+  return String.fromCodePoint(...[...c].map((x) => 127397 + x.charCodeAt(0)));
+}
+
+function timeAgo(iso: string) {
+  const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+  if (s < 60) return `${s}s ago`;
+  if (s < 3600) return `${Math.floor(s / 60)}m ago`;
+  if (s < 86400) return `${Math.floor(s / 3600)}h ago`;
+  return `${Math.floor(s / 86400)}d ago`;
+}
+
