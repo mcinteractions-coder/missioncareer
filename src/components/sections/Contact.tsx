@@ -12,6 +12,8 @@ export function Contact() {
     setError("");
     const form = e.currentTarget;
     const data = new FormData(form);
+    let sid: string | null = null;
+    try { sid = sessionStorage.getItem("mc_visitor_sid"); } catch { /* ignore */ }
     const payload = {
       full_name: String(data.get("full_name") || "").trim(),
       phone: String(data.get("phone") || "").trim() || null,
@@ -19,6 +21,7 @@ export function Contact() {
       country: String(data.get("country") || "").trim() || null,
       study_level: String(data.get("study_level") || "").trim() || null,
       message: String(data.get("message") || "").trim() || null,
+      session_id: sid,
     };
     if (!payload.full_name) { setError("Please enter your name."); return; }
     if (!payload.phone && !payload.email) { setError("Please share phone or email."); return; }

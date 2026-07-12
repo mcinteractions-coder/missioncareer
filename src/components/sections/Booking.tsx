@@ -59,6 +59,8 @@ export function Booking() {
     if (!time) { setError("Please pick a time slot."); return; }
     const form = e.currentTarget;
     const f = new FormData(form);
+    let sid: string | null = null;
+    try { sid = sessionStorage.getItem("mc_visitor_sid"); } catch { /* ignore */ }
     const payload = {
       full_name: String(f.get("full_name") || "").trim(),
       email: String(f.get("email") || "").trim(),
@@ -68,6 +70,7 @@ export function Booking() {
       slot_date: toISO(date),
       slot_time: time,
       mode,
+      session_id: sid,
     };
     if (!payload.full_name || !payload.phone) {
       setError("Name and phone are required."); return;

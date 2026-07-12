@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowLeft, Trash2, Upload, Star, Newspaper, Sparkles, Lock, Inbox, ArrowUp, ArrowDown, Pencil, X, CalendarDays, Clock, Phone, Mail, Globe2, Activity, MapPin, Smartphone, Monitor, Eye, Users, TrendingUp } from "lucide-react";
+import { ArrowLeft, Trash2, Upload, Star, Newspaper, Sparkles, Lock, Inbox, ArrowUp, ArrowDown, Pencil, X, CalendarDays, Clock, Phone, Mail, Globe2, Activity, MapPin, Smartphone, Monitor, Eye, Users, TrendingUp, Wand2, MousePointerClick, ChevronRight } from "lucide-react";
 import { fetchPosts, fileToDataURL, type Post, type PostKind } from "@/lib/content-store";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -14,6 +14,8 @@ import {
   adminListBookings,
   adminDeleteBooking,
   adminAnalytics,
+  adminListSessions,
+  adminSessionDetail,
 } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/admin")({
@@ -1055,6 +1057,9 @@ function AnalyticsPanel() {
         )}
       </div>
 
+      {/* Detailed visitor sessions with AI journey summaries */}
+      <VisitorSessionsPanel hours={hours} />
+
       {/* Recent visitor events feed */}
       <div className="bg-card rounded-2xl shadow-card p-5">
         <h3 className="font-bold text-base mb-3">Recent Visitor Activity</h3>
@@ -1121,5 +1126,290 @@ function timeAgo(iso: string) {
   if (s < 3600) return `${Math.floor(s / 60)}m ago`;
   if (s < 86400) return `${Math.floor(s / 3600)}h ago`;
   return `${Math.floor(s / 86400)}d ago`;
+}
+
+// ============ Visitor Sessions Drill-Down ============
+
+interface SessionRow {
+  session_id: string;
+  first_seen: string;
+  last_seen: string;
+  duration_sec: number;
+  pageviews: number;
+  unique_pages: number;
+  country: string | null;
+  city: string | null;
+  region: string | null;
+  device: string | null;
+  referrer: string;
+  entry_path: string;
+  identity: {
+    type: "booking" | "lead";
+    name: string;
+    phone: string | null;
+    email: string | null;
+    extra: string;
+  } | null;
+  converted: boolean;
+}
+
+function VisitorSessionsPanel({ hours }: { hours: number }) {
+  const [rows, setRows] = useState<SessionRow[] | null>(null);
+  const [err, setErr] = useState("");
+  const [filter, setFilter] = useState<"all" | "converted" | "anon">("all");
+  const [open, setOpen] = useState<SessionRow | null>(null);
+  const fn = useServerFn(adminListSessions);
+  const pin = sessionStorage.getItem("mc_admin_pin") || "";
+
+  const refresh = useCallback(async () => {
+    try {
+      const r = await fn({ data: { pin, hours } });
+      setRows((r as { sessions: SessionRow[] }).sessions);
+      setErr("");
+    } catch (e) {
+      setErr((e as Error).message);
+    }
+  }, [fn, pin, hours]);
+
+  useEffect(() => { refresh(); const t = setInterval(refresh, 20000); return () => clearInterval(t); }, [refresh]);
+
+  const shown = (rows ?? []).filter((r) => {
+    if (filter === "converted") return r.converted;
+    if (filter === "anon") return !r.converted;
+    return true;
+  });
+
+  const fmtDur = (s: number) => (s < 60 ? `${s}s` : s < 3600 ? `${Math.floor(s / 60)}m ${s % 60}s` : `${Math.floor(s / 3600)}h ${Math.floor((s % 3600) / 60)}m`);
+
+  return (
+    <div className="bg-card rounded-2xl shadow-card p-5">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <h3 className="font-bold text-base flex items-center gap-2">
+          <Users className="h-4 w-4 text-primary" /> Visitor Sessions
+          <span className="text-xs font-normal text-muted-foreground">· Click any row for full journey + AI summary</span>
+        </h3>
+        <div className="flex gap-2">
+          {(["all", "converted", "anon"] as const).map((k) => (
+            <button
+              key={k}
+              onClick={() => setFilter(k)}
+              className={`text-xs rounded-full px-3 py-1.5 font-semibold transition ${
+                filter === k ? "bg-gradient-primary text-primary-foreground shadow-soft" : "bg-secondary hover:bg-accent"
+              }`}
+            >{k === "all" ? "All" : k === "converted" ? "Filled form ✨" : "Anonymous"}</button>
+          ))}
+        </div>
+      </div>
+
+      {err && <p className="text-sm text-destructive mb-3">{err}</p>}
+      {rows === null ? (
+        <p className="text-xs text-muted-foreground">Loading sessions…</p>
+      ) : shown.length === 0 ? (
+        <p className="text-xs text-muted-foreground">No sessions in this window.</p>
+      ) : (
+        <div className="overflow-x-auto -mx-2">
+          <table className="w-full text-sm">
+            <thead className="text-xs uppercase text-muted-foreground">
+              <tr className="text-left">
+                <th className="py-2 px-2">Visitor</th>
+                <th className="py-2 px-2">Location</th>
+                <th className="py-2 px-2">Device</th>
+                <th className="py-2 px-2">Source</th>
+                <th className="py-2 px-2">Pages</th>
+                <th className="py-2 px-2">Duration</th>
+                <th className="py-2 px-2">Last active</th>
+                <th className="py-2 px-2"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {shown.map((r) => (
+                <tr
+                  key={r.session_id}
+                  onClick={() => setOpen(r)}
+                  className="border-t border-border hover:bg-accent/40 cursor-pointer"
+                >
+                  <td className="py-2.5 px-2">
+                    {r.identity ? (
+                      <div className="min-w-0">
+                        <div className="font-semibold text-foreground flex items-center gap-1.5">
+                          {r.identity.name}
+                          <span className={`text-[9px] uppercase tracking-wide rounded-full px-1.5 py-0.5 font-bold ${r.identity.type === "booking" ? "bg-primary text-primary-foreground" : "bg-amber-500/20 text-amber-700 dark:text-amber-300"}`}>
+                            {r.identity.type}
+                          </span>
+                        </div>
+                        <div className="text-[11px] text-muted-foreground truncate">
+                          {r.identity.phone || r.identity.email || "—"}
+                        </div>
+                      </div>
+                    ) : (
+                      <div>
+                        <div className="font-mono text-xs text-muted-foreground">Anonymous</div>
+                        <div className="text-[11px] text-muted-foreground">#{r.session_id.slice(0, 8)}</div>
+                      </div>
+                    )}
+                  </td>
+                  <td className="py-2.5 px-2 text-xs">
+                    {flag(r.country)} {[r.city, r.country].filter(Boolean).join(", ") || "Unknown"}
+                  </td>
+                  <td className="py-2.5 px-2 capitalize text-xs">{r.device || "—"}</td>
+                  <td className="py-2.5 px-2 text-xs truncate max-w-[140px]">{r.referrer}</td>
+                  <td className="py-2.5 px-2 text-xs">{r.pageviews} <span className="text-muted-foreground">({r.unique_pages}u)</span></td>
+                  <td className="py-2.5 px-2 text-xs">{fmtDur(r.duration_sec)}</td>
+                  <td className="py-2.5 px-2 text-xs text-muted-foreground whitespace-nowrap">{timeAgo(r.last_seen)}</td>
+                  <td className="py-2.5 px-2"><ChevronRight className="h-4 w-4 text-muted-foreground" /></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {open && <SessionDetailModal row={open} onClose={() => setOpen(null)} />}
+    </div>
+  );
+}
+
+interface SessionEvent { id: string; session_id: string; path: string; referrer: string | null; country: string | null; city: string | null; region: string | null; device: string | null; event_type: string; user_agent: string | null; timezone: string | null; created_at: string }
+interface SessionDetail {
+  events: SessionEvent[];
+  booking: { id: string; full_name: string; phone: string; email: string | null; country: string | null; slot_date: string; slot_time: string; mode: string; notes: string | null; created_at: string } | null;
+  lead: { id: string; full_name: string; phone: string | null; email: string | null; country: string | null; study_level: string | null; message: string | null; created_at: string } | null;
+  summary: { first_seen: string | null; last_seen: string | null; duration_min: number; pageviews: number; unique_pages: number; country: string | null; city: string | null; region: string | null; device: string | null; referrer: string | null; user_agent: string | null };
+  ai_summary: string;
+}
+
+function SessionDetailModal({ row, onClose }: { row: SessionRow; onClose: () => void }) {
+  const [data, setData] = useState<SessionDetail | null>(null);
+  const [err, setErr] = useState("");
+  const fn = useServerFn(adminSessionDetail);
+  const pin = sessionStorage.getItem("mc_admin_pin") || "";
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const r = await fn({ data: { pin, session_id: row.session_id } });
+        setData(r as SessionDetail);
+      } catch (e) {
+        setErr((e as Error).message);
+      }
+    })();
+  }, [fn, pin, row.session_id]);
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/60 flex items-start justify-center p-4 overflow-y-auto" onClick={onClose}>
+      <div className="bg-card rounded-2xl shadow-card w-full max-w-2xl my-8" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-start justify-between p-5 border-b border-border">
+          <div className="min-w-0">
+            <h3 className="font-extrabold text-lg flex items-center gap-2">
+              {row.identity ? row.identity.name : "Anonymous visitor"}
+              {row.identity && (
+                <span className={`text-[10px] uppercase rounded-full px-2 py-0.5 font-bold ${row.identity.type === "booking" ? "bg-primary text-primary-foreground" : "bg-amber-500/20 text-amber-700 dark:text-amber-300"}`}>
+                  {row.identity.type}
+                </span>
+              )}
+            </h3>
+            <div className="text-xs text-muted-foreground mt-1 flex flex-wrap gap-x-3 gap-y-1">
+              <span>{flag(row.country)} {[row.city, row.region, row.country].filter(Boolean).join(", ") || "Unknown"}</span>
+              <span className="capitalize">📱 {row.device}</span>
+              <span>🔗 {row.referrer}</span>
+            </div>
+          </div>
+          <button onClick={onClose} className="h-8 w-8 rounded-full hover:bg-accent flex items-center justify-center shrink-0"><X className="h-4 w-4" /></button>
+        </div>
+
+        <div className="p-5 space-y-5 max-h-[70vh] overflow-y-auto">
+          {err && <p className="text-sm text-destructive">{err}</p>}
+          {!data && !err && <p className="text-sm text-muted-foreground">Loading detail & generating AI summary…</p>}
+
+          {data && (
+            <>
+              {/* AI Summary */}
+              <div className="rounded-2xl border border-primary/30 bg-primary-soft/40 p-4">
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-primary mb-2">
+                  <Wand2 className="h-3.5 w-3.5" /> AI Journey Summary
+                </div>
+                {data.ai_summary ? (
+                  <p className="text-sm leading-relaxed text-foreground whitespace-pre-wrap">{data.ai_summary}</p>
+                ) : (
+                  <p className="text-xs text-muted-foreground italic">No summary available (not enough activity or AI unavailable).</p>
+                )}
+              </div>
+
+              {/* Contact card if identified */}
+              {(data.booking || data.lead) && (
+                <div className="rounded-2xl bg-secondary p-4 text-sm space-y-1.5">
+                  <div className="font-bold text-base mb-1">Contact details</div>
+                  {data.booking && (
+                    <>
+                      <p><Phone className="inline h-3.5 w-3.5 mr-1 text-primary" /><a href={`tel:${data.booking.phone}`} className="text-primary font-semibold">{data.booking.phone}</a></p>
+                      {data.booking.email && <p><Mail className="inline h-3.5 w-3.5 mr-1 text-primary" /><a href={`mailto:${data.booking.email}`} className="text-primary">{data.booking.email}</a></p>}
+                      {data.booking.country && <p><Globe2 className="inline h-3.5 w-3.5 mr-1 text-muted-foreground" /> {data.booking.country}</p>}
+                      <p><CalendarDays className="inline h-3.5 w-3.5 mr-1 text-muted-foreground" /> {data.booking.slot_date} · {data.booking.slot_time} · {data.booking.mode}</p>
+                      {data.booking.notes && <p className="text-xs text-muted-foreground border-t border-border pt-2 mt-2 whitespace-pre-wrap">📝 {data.booking.notes}</p>}
+                    </>
+                  )}
+                  {data.lead && !data.booking && (
+                    <>
+                      {data.lead.phone && <p><Phone className="inline h-3.5 w-3.5 mr-1 text-primary" /><a href={`tel:${data.lead.phone}`} className="text-primary font-semibold">{data.lead.phone}</a></p>}
+                      {data.lead.email && <p><Mail className="inline h-3.5 w-3.5 mr-1 text-primary" /><a href={`mailto:${data.lead.email}`} className="text-primary">{data.lead.email}</a></p>}
+                      {data.lead.country && <p><Globe2 className="inline h-3.5 w-3.5 mr-1 text-muted-foreground" /> {data.lead.country}</p>}
+                      {data.lead.study_level && <p className="text-xs text-muted-foreground">Study level: {data.lead.study_level}</p>}
+                      {data.lead.message && <p className="text-xs text-muted-foreground border-t border-border pt-2 mt-2 whitespace-pre-wrap">💬 {data.lead.message}</p>}
+                    </>
+                  )}
+                </div>
+              )}
+
+              {/* Stats */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+                <div className="rounded-xl bg-secondary p-3">
+                  <div className="text-[10px] uppercase text-muted-foreground">Duration</div>
+                  <div className="text-lg font-extrabold">{data.summary.duration_min}m</div>
+                </div>
+                <div className="rounded-xl bg-secondary p-3">
+                  <div className="text-[10px] uppercase text-muted-foreground">Pageviews</div>
+                  <div className="text-lg font-extrabold">{data.summary.pageviews}</div>
+                </div>
+                <div className="rounded-xl bg-secondary p-3">
+                  <div className="text-[10px] uppercase text-muted-foreground">Unique pages</div>
+                  <div className="text-lg font-extrabold">{data.summary.unique_pages}</div>
+                </div>
+                <div className="rounded-xl bg-secondary p-3">
+                  <div className="text-[10px] uppercase text-muted-foreground">Timezone</div>
+                  <div className="text-xs font-bold truncate">{data.events[0]?.timezone || "—"}</div>
+                </div>
+              </div>
+
+              {/* Timeline */}
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wide text-muted-foreground mb-2 flex items-center gap-2">
+                  <MousePointerClick className="h-3.5 w-3.5" /> Full page-by-page journey
+                </div>
+                <ol className="space-y-1.5 border-l-2 border-border pl-4">
+                  {data.events.filter((e) => e.event_type !== "heartbeat").map((e) => (
+                    <li key={e.id} className="relative text-xs">
+                      <span className="absolute -left-[21px] top-1 h-2.5 w-2.5 rounded-full bg-primary ring-4 ring-card" />
+                      <div className="flex gap-3">
+                        <span className="text-muted-foreground w-20 shrink-0">{new Date(e.created_at).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}</span>
+                        <span className="font-mono truncate">{e.path}</span>
+                      </div>
+                    </li>
+                  ))}
+                  {data.events.filter((e) => e.event_type !== "heartbeat").length === 0 && (
+                    <li className="text-xs text-muted-foreground">No pageviews recorded.</li>
+                  )}
+                </ol>
+              </div>
+
+              <div className="text-[10px] text-muted-foreground border-t border-border pt-3 break-all">
+                <div>Session ID: <span className="font-mono">{row.session_id}</span></div>
+                {data.summary.user_agent && <div className="mt-1">UA: {data.summary.user_agent}</div>}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
 
