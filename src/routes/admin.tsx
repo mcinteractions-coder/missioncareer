@@ -1496,14 +1496,15 @@ function FunnelCard({ funnel }: { funnel: AnalyticsData["funnel"] }) {
                   <span className="text-xs text-muted-foreground font-normal">({conversion}%)</span>
                 </span>
               </div>
-              <div className="h-8 bg-secondary rounded-lg overflow-hidden relative">
+              <div className="h-8 bg-secondary rounded-lg overflow-hidden">
                 <div
-                  className={`h-full bg-gradient-to-r ${step.color} transition-all duration-700`}
+                  className={`h-full bg-gradient-to-r ${step.color} transition-all duration-700 flex items-center px-3`}
                   style={{ width: `${pct}%` }}
-                />
-                <span className="absolute inset-0 flex items-center px-3 text-xs font-semibold text-foreground mix-blend-difference">
-                  {step.label}
-                </span>
+                >
+                  {pct > 25 && (
+                    <span className="text-xs font-semibold text-white truncate">{step.label}</span>
+                  )}
+                </div>
               </div>
             </div>
           );
