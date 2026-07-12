@@ -270,3 +270,190 @@ function sortMap(m: Record<string, number>) {
     .slice(0, 20);
 }
 
+// ============ Visitor session drill-down ============
+
+export const adminListSessions = createServerFn({ method: "POST" })
+  .inputValidator(z.object({ pin: z.string(), hours: z.number().int().min(1).max(720).default(24) }))
+  .handler(async ({ data }) => {
+    checkPin(data.pin);
+    const sinceIso = new Date(Date.now() - data.hours * 3600 * 1000).toISOString();
+
+    const [eventsRes, bookingsRes, leadsRes] = await Promise.all([
+      supabaseAdmin
+        .from("visitor_events")
+        .select("session_id, path, referrer, country, region, city, device, event_type, user_agent, created_at")
+        .gte("created_at", sinceIso)
+        .order("created_at", { ascending: false })
+        .limit(5000),
+      supabaseAdmin
+        .from("bookings")
+        .select("id, full_name, phone, email, country, slot_date, slot_time, mode, notes, created_at, session_id")
+        .not("session_id", "is", null)
+        .order("created_at", { ascending: false })
+        .limit(1000),
+      supabaseAdmin
+        .from("leads")
+        .select("id, full_name, phone, email, country, study_level, message, created_at, session_id")
+        .not("session_id", "is", null)
+        .order("created_at", { ascending: false })
+        .limit(1000),
+    ]);
+    if (eventsRes.error) throw new Error(eventsRes.error.message);
+
+    const events = eventsRes.data ?? [];
+    const bookingsBySid = new Map<string, typeof bookingsRes.data extends (infer T)[] | null ? T : never>();
+    for (const b of bookingsRes.data ?? []) if (b.session_id) bookingsBySid.set(b.session_id, b);
+    const leadsBySid = new Map<string, typeof leadsRes.data extends (infer T)[] | null ? T : never>();
+    for (const l of leadsRes.data ?? []) if (l.session_id) leadsBySid.set(l.session_id, l);
+
+    const bySid = new Map<string, typeof events>();
+    for (const e of events) {
+      const arr = bySid.get(e.session_id) ?? [];
+      arr.push(e);
+      bySid.set(e.session_id, arr);
+    }
+
+    const sessions = Array.from(bySid.entries()).map(([sid, evts]) => {
+      const sorted = [...evts].sort((a, b) => a.created_at.localeCompare(b.created_at));
+      const first = sorted[0];
+      const last = sorted[sorted.length - 1];
+      const pv = sorted.filter((e) => e.event_type !== "heartbeat");
+      const uniquePaths = new Set(pv.map((e) => e.path));
+      const durationSec = Math.max(0, Math.round((new Date(last.created_at).getTime() - new Date(first.created_at).getTime()) / 1000));
+      const booking = bookingsBySid.get(sid);
+      const lead = leadsBySid.get(sid);
+      const identity = booking
+        ? { type: "booking" as const, name: booking.full_name, phone: booking.phone, email: booking.email, extra: `${booking.slot_date} · ${booking.slot_time} (${booking.mode})` }
+        : lead
+          ? { type: "lead" as const, name: lead.full_name, phone: lead.phone, email: lead.email, extra: lead.study_level || "" }
+          : null;
+      let ref = "Direct";
+      if (first.referrer) { try { ref = new URL(first.referrer).hostname || "Direct"; } catch { /* keep */ } }
+      return {
+        session_id: sid,
+        first_seen: first.created_at,
+        last_seen: last.created_at,
+        duration_sec: durationSec,
+        pageviews: pv.length,
+        unique_pages: uniquePaths.size,
+        country: first.country,
+        city: first.city,
+        region: first.region,
+        device: first.device,
+        referrer: ref,
+        entry_path: sorted.find((e) => e.event_type !== "heartbeat")?.path ?? first.path,
+        identity,
+        converted: !!identity,
+      };
+    });
+
+    // sort: converted first, then newest last_seen
+    sessions.sort((a, b) => {
+      if (a.converted !== b.converted) return a.converted ? -1 : 1;
+      return b.last_seen.localeCompare(a.last_seen);
+    });
+
+    return { sessions: sessions.slice(0, 300) };
+  });
+
+export const adminSessionDetail = createServerFn({ method: "POST" })
+  .inputValidator(z.object({ pin: z.string(), session_id: z.string().min(1).max(64) }))
+  .handler(async ({ data }) => {
+    checkPin(data.pin);
+    const [evtsRes, bookingRes, leadRes] = await Promise.all([
+      supabaseAdmin
+        .from("visitor_events")
+        .select("*")
+        .eq("session_id", data.session_id)
+        .order("created_at", { ascending: true })
+        .limit(2000),
+      supabaseAdmin.from("bookings").select("*").eq("session_id", data.session_id).maybeSingle(),
+      supabaseAdmin.from("leads").select("*").eq("session_id", data.session_id).maybeSingle(),
+    ]);
+    if (evtsRes.error) throw new Error(evtsRes.error.message);
+
+    const events = evtsRes.data ?? [];
+    const booking = bookingRes.data ?? null;
+    const lead = leadRes.data ?? null;
+
+    // Build AI-friendly journey timeline (pageviews only)
+    const pv = events.filter((e) => e.event_type !== "heartbeat");
+    const journey = pv.map((e) => {
+      const t = new Date(e.created_at).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      return `${t} → ${e.path}`;
+    });
+    const first = events[0];
+    const last = events[events.length - 1];
+    const durationMin = first && last ? Math.round((new Date(last.created_at).getTime() - new Date(first.created_at).getTime()) / 60000) : 0;
+
+    let aiSummary = "";
+    const key = process.env.LOVABLE_API_KEY;
+    if (key && journey.length > 0) {
+      try {
+        const identityLine = booking
+          ? `IDENTITY: ${booking.full_name} (booked counseling for ${booking.slot_date} at ${booking.slot_time}, mode=${booking.mode}, phone=${booking.phone}${booking.email ? ", email=" + booking.email : ""}${booking.country ? ", country=" + booking.country : ""})${booking.notes ? ", notes: " + booking.notes : ""}`
+          : lead
+            ? `IDENTITY: ${lead.full_name} (submitted contact lead, phone=${lead.phone || "-"}, email=${lead.email || "-"}${lead.country ? ", country=" + lead.country : ""}${lead.study_level ? ", study level=" + lead.study_level : ""})${lead.message ? ", message: " + lead.message : ""}`
+            : "IDENTITY: Anonymous visitor (did not submit any form)";
+        const geo = [first?.city, first?.region, first?.country].filter(Boolean).join(", ") || "Unknown location";
+        const ua = first?.user_agent || "";
+        const ref = first?.referrer || "Direct";
+
+        const prompt = `You are analysing website visitor behaviour for the admin of Mission Career (a study-abroad consultancy in Kandivali East, Mumbai).
+
+${identityLine}
+Location: ${geo}
+Device: ${first?.device || "unknown"}
+Referrer: ${ref}
+Session duration: ~${durationMin} minute(s)
+Total pageviews: ${pv.length}, unique pages: ${new Set(pv.map((e) => e.path)).size}
+User agent: ${ua.slice(0, 120)}
+
+PAGE-BY-PAGE JOURNEY (chronological):
+${journey.slice(0, 60).join("\n")}${journey.length > 60 ? `\n… (+${journey.length - 60} more)` : ""}
+
+Write a concise (3-5 sentence) plain-English summary FOR THE ADMIN describing what this visitor did on the site — which sections they explored (e.g. Destinations, Success Stories, Booking, Blog), how engaged they seemed, whether they filled a form, and any signal about intent (e.g. serious lead vs casual browsing). Address the admin directly. No markdown, no bullet points, just a short paragraph.`;
+
+        const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            "Lovable-API-Key": key,
+          },
+          body: JSON.stringify({
+            model: "google/gemini-3-flash-preview",
+            messages: [{ role: "user", content: prompt }],
+          }),
+        });
+        if (resp.ok) {
+          const j = (await resp.json()) as { choices?: { message?: { content?: string } }[] };
+          aiSummary = j.choices?.[0]?.message?.content?.trim() || "";
+        } else {
+          aiSummary = `(AI summary unavailable — gateway responded ${resp.status})`;
+        }
+      } catch (e) {
+        aiSummary = `(AI summary failed: ${(e as Error).message})`;
+      }
+    }
+
+    return {
+      events,
+      booking,
+      lead,
+      summary: {
+        first_seen: first?.created_at ?? null,
+        last_seen: last?.created_at ?? null,
+        duration_min: durationMin,
+        pageviews: pv.length,
+        unique_pages: new Set(pv.map((e) => e.path)).size,
+        country: first?.country ?? null,
+        city: first?.city ?? null,
+        region: first?.region ?? null,
+        device: first?.device ?? null,
+        referrer: first?.referrer ?? null,
+        user_agent: first?.user_agent ?? null,
+      },
+      ai_summary: aiSummary,
+    };
+  });
+
