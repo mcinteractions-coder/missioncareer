@@ -24,6 +24,7 @@ export type Database = {
           mode: string
           notes: string | null
           phone: string
+          session_id: string | null
           slot_date: string
           slot_time: string
           status: string
@@ -37,6 +38,7 @@ export type Database = {
           mode?: string
           notes?: string | null
           phone: string
+          session_id?: string | null
           slot_date: string
           slot_time: string
           status?: string
@@ -50,6 +52,7 @@ export type Database = {
           mode?: string
           notes?: string | null
           phone?: string
+          session_id?: string | null
           slot_date?: string
           slot_time?: string
           status?: string
@@ -89,6 +92,7 @@ export type Database = {
           id: string
           message: string | null
           phone: string | null
+          session_id: string | null
           study_level: string | null
         }
         Insert: {
@@ -99,6 +103,7 @@ export type Database = {
           id?: string
           message?: string | null
           phone?: string | null
+          session_id?: string | null
           study_level?: string | null
         }
         Update: {
@@ -109,6 +114,7 @@ export type Database = {
           id?: string
           message?: string | null
           phone?: string | null
+          session_id?: string | null
           study_level?: string | null
         }
         Relationships: []
