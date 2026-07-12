@@ -54,7 +54,6 @@ export const adminAddPost = createServerFn({ method: "POST" })
     return row;
   });
 
-
 export const adminDeletePost = createServerFn({ method: "POST" })
   .inputValidator(z.object({ pin: z.string(), id: z.string().uuid() }))
   .handler(async ({ data }) => {
@@ -83,7 +82,6 @@ export const adminUpdatePost = createServerFn({ method: "POST" })
       sort_order: z.number().int().optional(),
       rating: z.number().int().min(1).max(5).nullable().optional(),
     }),
-
   )
   .handler(async ({ data }) => {
     checkPin(data.pin);
@@ -93,7 +91,10 @@ export const adminUpdatePost = createServerFn({ method: "POST" })
       if (v !== undefined) clean[k] = v;
     }
     if (Object.keys(clean).length === 0) return { ok: true };
-    const { error } = await supabaseAdmin.from("posts").update(clean as never).eq("id", id);
+    const { error } = await supabaseAdmin
+      .from("posts")
+      .update(clean as never)
+      .eq("id", id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
@@ -103,14 +104,22 @@ export const adminSwapOrder = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     checkPin(data.pin);
     const { data: rows, error: e1 } = await supabaseAdmin
-      .from("posts").select("id, sort_order").in("id", [data.a, data.b]);
+      .from("posts")
+      .select("id, sort_order")
+      .in("id", [data.a, data.b]);
     if (e1) throw new Error(e1.message);
     const ra = rows?.find((r) => r.id === data.a);
     const rb = rows?.find((r) => r.id === data.b);
     if (!ra || !rb) throw new Error("Not found");
-    const { error: ea } = await supabaseAdmin.from("posts").update({ sort_order: rb.sort_order }).eq("id", ra.id);
+    const { error: ea } = await supabaseAdmin
+      .from("posts")
+      .update({ sort_order: rb.sort_order })
+      .eq("id", ra.id);
     if (ea) throw new Error(ea.message);
-    const { error: eb } = await supabaseAdmin.from("posts").update({ sort_order: ra.sort_order }).eq("id", rb.id);
+    const { error: eb } = await supabaseAdmin
+      .from("posts")
+      .update({ sort_order: ra.sort_order })
+      .eq("id", rb.id);
     if (eb) throw new Error(eb.message);
     return { ok: true };
   });
@@ -161,7 +170,9 @@ export const adminDeleteBooking = createServerFn({ method: "POST" })
   });
 
 export const adminAnalytics = createServerFn({ method: "POST" })
-  .inputValidator(z.object({ pin: z.string(), hours: z.number().int().min(1).max(720).default(24) }))
+  .inputValidator(
+    z.object({ pin: z.string(), hours: z.number().int().min(1).max(720).default(24) }),
+  )
   .handler(async ({ data }) => {
     checkPin(data.pin);
     const sinceIso = new Date(Date.now() - data.hours * 3600 * 1000).toISOString();
@@ -170,7 +181,9 @@ export const adminAnalytics = createServerFn({ method: "POST" })
     const [eventsRes, liveRes, bookingsRes, leadsRes] = await Promise.all([
       supabaseAdmin
         .from("visitor_events")
-        .select("id, session_id, path, referrer, country, region, city, device, timezone, event_type, user_agent, created_at")
+        .select(
+          "id, session_id, path, referrer, country, region, city, device, timezone, event_type, user_agent, created_at",
+        )
         .gte("created_at", sinceIso)
         .order("created_at", { ascending: false })
         .limit(2000),
@@ -221,7 +234,11 @@ export const adminAnalytics = createServerFn({ method: "POST" })
         byDevice[d] = (byDevice[d] || 0) + 1;
         let ref = "Direct";
         if (e.referrer) {
-          try { ref = new URL(e.referrer).hostname || "Direct"; } catch { /* keep */ }
+          try {
+            ref = new URL(e.referrer).hostname || "Direct";
+          } catch {
+            /* keep */
+          }
         }
         byReferrer[ref] = (byReferrer[ref] || 0) + 1;
         const hourKey = new Date(e.created_at).toISOString().slice(0, 13); // YYYY-MM-DDTHH
@@ -230,20 +247,34 @@ export const adminAnalytics = createServerFn({ method: "POST" })
     }
     const liveSessions = new Set(live.map((l) => l.session_id));
 
+    const visitors = sessions.size;
+    const totalLeads = leads.length;
+    const totalBookings = bookings.length;
+
     return {
       totals: {
         pageviews: events.filter((e) => e.event_type !== "heartbeat").length,
-        uniqueSessions: sessions.size,
+        uniqueSessions: visitors,
         liveVisitors: liveSessions.size,
-        bookings: bookings.length,
-        leads: leads.length,
+        bookings: totalBookings,
+        leads: totalLeads,
+      },
+      funnel: {
+        visitors,
+        leads: totalLeads,
+        bookings: totalBookings,
+        leadRate: visitors > 0 ? totalLeads / visitors : 0,
+        bookingRate: visitors > 0 ? totalBookings / visitors : 0,
+        bookingFromLeadRate: totalLeads > 0 ? totalBookings / totalLeads : 0,
       },
       byCountry: sortMap(byCountry),
       byCity: sortMap(byCity),
       byPath: sortMap(byPath),
       byDevice: sortMap(byDevice),
       byReferrer: sortMap(byReferrer),
-      byHour: Object.entries(byHour).map(([k, v]) => ({ k, v })).sort((a, b) => a.k.localeCompare(b.k)),
+      byHour: Object.entries(byHour)
+        .map(([k, v]) => ({ k, v }))
+        .sort((a, b) => a.k.localeCompare(b.k)),
       liveSessions: Array.from(liveSessions).map((sid) => {
         const rows = live.filter((l) => l.session_id === sid);
         const latest = rows[0]!;
@@ -273,7 +304,9 @@ function sortMap(m: Record<string, number>) {
 // ============ Visitor session drill-down ============
 
 export const adminListSessions = createServerFn({ method: "POST" })
-  .inputValidator(z.object({ pin: z.string(), hours: z.number().int().min(1).max(720).default(24) }))
+  .inputValidator(
+    z.object({ pin: z.string(), hours: z.number().int().min(1).max(720).default(24) }),
+  )
   .handler(async ({ data }) => {
     checkPin(data.pin);
     const sinceIso = new Date(Date.now() - data.hours * 3600 * 1000).toISOString();
@@ -281,19 +314,25 @@ export const adminListSessions = createServerFn({ method: "POST" })
     const [eventsRes, bookingsRes, leadsRes] = await Promise.all([
       supabaseAdmin
         .from("visitor_events")
-        .select("session_id, path, referrer, country, region, city, device, event_type, user_agent, created_at")
+        .select(
+          "session_id, path, referrer, country, region, city, device, event_type, user_agent, created_at",
+        )
         .gte("created_at", sinceIso)
         .order("created_at", { ascending: false })
         .limit(5000),
       supabaseAdmin
         .from("bookings")
-        .select("id, full_name, phone, email, country, slot_date, slot_time, mode, notes, created_at, session_id")
+        .select(
+          "id, full_name, phone, email, country, slot_date, slot_time, mode, notes, created_at, session_id",
+        )
         .not("session_id", "is", null)
         .order("created_at", { ascending: false })
         .limit(1000),
       supabaseAdmin
         .from("leads")
-        .select("id, full_name, phone, email, country, study_level, message, created_at, session_id")
+        .select(
+          "id, full_name, phone, email, country, study_level, message, created_at, session_id",
+        )
         .not("session_id", "is", null)
         .order("created_at", { ascending: false })
         .limit(1000),
@@ -301,9 +340,15 @@ export const adminListSessions = createServerFn({ method: "POST" })
     if (eventsRes.error) throw new Error(eventsRes.error.message);
 
     const events = eventsRes.data ?? [];
-    const bookingsBySid = new Map<string, typeof bookingsRes.data extends (infer T)[] | null ? T : never>();
+    const bookingsBySid = new Map<
+      string,
+      typeof bookingsRes.data extends (infer T)[] | null ? T : never
+    >();
     for (const b of bookingsRes.data ?? []) if (b.session_id) bookingsBySid.set(b.session_id, b);
-    const leadsBySid = new Map<string, typeof leadsRes.data extends (infer T)[] | null ? T : never>();
+    const leadsBySid = new Map<
+      string,
+      typeof leadsRes.data extends (infer T)[] | null ? T : never
+    >();
     for (const l of leadsRes.data ?? []) if (l.session_id) leadsBySid.set(l.session_id, l);
 
     const bySid = new Map<string, typeof events>();
@@ -319,16 +364,39 @@ export const adminListSessions = createServerFn({ method: "POST" })
       const last = sorted[sorted.length - 1];
       const pv = sorted.filter((e) => e.event_type !== "heartbeat");
       const uniquePaths = new Set(pv.map((e) => e.path));
-      const durationSec = Math.max(0, Math.round((new Date(last.created_at).getTime() - new Date(first.created_at).getTime()) / 1000));
+      const durationSec = Math.max(
+        0,
+        Math.round(
+          (new Date(last.created_at).getTime() - new Date(first.created_at).getTime()) / 1000,
+        ),
+      );
       const booking = bookingsBySid.get(sid);
       const lead = leadsBySid.get(sid);
       const identity = booking
-        ? { type: "booking" as const, name: booking.full_name, phone: booking.phone, email: booking.email, extra: `${booking.slot_date} · ${booking.slot_time} (${booking.mode})` }
+        ? {
+            type: "booking" as const,
+            name: booking.full_name,
+            phone: booking.phone,
+            email: booking.email,
+            extra: `${booking.slot_date} · ${booking.slot_time} (${booking.mode})`,
+          }
         : lead
-          ? { type: "lead" as const, name: lead.full_name, phone: lead.phone, email: lead.email, extra: lead.study_level || "" }
+          ? {
+              type: "lead" as const,
+              name: lead.full_name,
+              phone: lead.phone,
+              email: lead.email,
+              extra: lead.study_level || "",
+            }
           : null;
       let ref = "Direct";
-      if (first.referrer) { try { ref = new URL(first.referrer).hostname || "Direct"; } catch { /* keep */ } }
+      if (first.referrer) {
+        try {
+          ref = new URL(first.referrer).hostname || "Direct";
+        } catch {
+          /* keep */
+        }
+      }
       return {
         session_id: sid,
         first_seen: first.created_at,
@@ -379,12 +447,21 @@ export const adminSessionDetail = createServerFn({ method: "POST" })
     // Build AI-friendly journey timeline (pageviews only)
     const pv = events.filter((e) => e.event_type !== "heartbeat");
     const journey = pv.map((e) => {
-      const t = new Date(e.created_at).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      const t = new Date(e.created_at).toLocaleTimeString("en-IN", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      });
       return `${t} → ${e.path}`;
     });
     const first = events[0];
     const last = events[events.length - 1];
-    const durationMin = first && last ? Math.round((new Date(last.created_at).getTime() - new Date(first.created_at).getTime()) / 60000) : 0;
+    const durationMin =
+      first && last
+        ? Math.round(
+            (new Date(last.created_at).getTime() - new Date(first.created_at).getTime()) / 60000,
+          )
+        : 0;
 
     let aiSummary = "";
     const key = process.env.LOVABLE_API_KEY;
@@ -395,7 +472,9 @@ export const adminSessionDetail = createServerFn({ method: "POST" })
           : lead
             ? `IDENTITY: ${lead.full_name} (submitted contact lead, phone=${lead.phone || "-"}, email=${lead.email || "-"}${lead.country ? ", country=" + lead.country : ""}${lead.study_level ? ", study level=" + lead.study_level : ""})${lead.message ? ", message: " + lead.message : ""}`
             : "IDENTITY: Anonymous visitor (did not submit any form)";
-        const geo = [first?.city, first?.region, first?.country].filter(Boolean).join(", ") || "Unknown location";
+        const geo =
+          [first?.city, first?.region, first?.country].filter(Boolean).join(", ") ||
+          "Unknown location";
         const ua = first?.user_agent || "";
         const ref = first?.referrer || "Direct";
 
@@ -457,3 +536,108 @@ Write a concise (3-5 sentence) plain-English summary FOR THE ADMIN describing wh
     };
   });
 
+export const adminAiInsights = createServerFn({ method: "POST" })
+  .inputValidator(
+    z.object({ pin: z.string(), hours: z.number().int().min(1).max(720).default(24) }),
+  )
+  .handler(async ({ data }) => {
+    checkPin(data.pin);
+    const sinceIso = new Date(Date.now() - data.hours * 3600 * 1000).toISOString();
+
+    const [eventsRes, bookingsRes, leadsRes] = await Promise.all([
+      supabaseAdmin
+        .from("visitor_events")
+        .select("session_id, path, country, city, device, referrer, event_type, created_at")
+        .gte("created_at", sinceIso)
+        .order("created_at", { ascending: false })
+        .limit(2000),
+      supabaseAdmin
+        .from("bookings")
+        .select("id, full_name, phone, email, country, slot_date, slot_time, mode, created_at")
+        .gte("created_at", sinceIso)
+        .order("created_at", { ascending: false })
+        .limit(200),
+      supabaseAdmin
+        .from("leads")
+        .select("id, full_name, phone, email, country, study_level, created_at")
+        .gte("created_at", sinceIso)
+        .order("created_at", { ascending: false })
+        .limit(200),
+    ]);
+    if (eventsRes.error) throw new Error(eventsRes.error.message);
+
+    const events = eventsRes.data ?? [];
+    const bookings = bookingsRes.data ?? [];
+    const leads = leadsRes.data ?? [];
+
+    const sessions = new Set<string>();
+    const byPath: Record<string, number> = {};
+    const byCountry: Record<string, number> = {};
+    const byDevice: Record<string, number> = {};
+    const byReferrer: Record<string, number> = {};
+    for (const e of events) {
+      if (e.event_type !== "heartbeat") {
+        sessions.add(e.session_id);
+        byPath[e.path] = (byPath[e.path] || 0) + 1;
+        byCountry[e.country || "Unknown"] = (byCountry[e.country || "Unknown"] || 0) + 1;
+        byDevice[e.device || "unknown"] = (byDevice[e.device || "unknown"] || 0) + 1;
+        let ref = "Direct";
+        if (e.referrer) {
+          try {
+            ref = new URL(e.referrer).hostname || "Direct";
+          } catch {
+            /* keep */
+          }
+        }
+        byReferrer[ref] = (byReferrer[ref] || 0) + 1;
+      }
+    }
+
+    const topPages = sortMap(byPath).slice(0, 5);
+    const topCountries = sortMap(byCountry).slice(0, 5);
+    const topDevices = sortMap(byDevice).slice(0, 3);
+    const topReferrers = sortMap(byReferrer).slice(0, 5);
+
+    const visitors = sessions.size;
+    const leadRate =
+      visitors > 0 ? (((leads.length + bookings.length) / visitors) * 100).toFixed(1) : "0.0";
+    const bookingRate = visitors > 0 ? ((bookings.length / visitors) * 100).toFixed(1) : "0.0";
+
+    const key = process.env.LOVABLE_API_KEY;
+    if (!key) return { insights: "AI insights require LOVABLE_API_KEY to be configured." };
+
+    const prompt = `You are the analytics assistant for Mission Career (study-abroad consultancy in Kandivali East, Mumbai). Analyze the following website performance data for the last ${data.hours} hours and write 3-4 concise, actionable insights for the admin. Be direct, no fluff, no markdown bullets. Each insight should be 1-2 sentences. Suggest one concrete action if relevant.
+
+Key metrics:
+- Visitors: ${visitors}
+- Bookings: ${bookings.length}
+- Leads: ${leads.length}
+- Conversion rate (visitor to any form): ${leadRate}%
+- Booking conversion rate: ${bookingRate}%
+
+Top pages: ${topPages.map((x) => `${x.k} (${x.v})`).join(", ")}
+Top countries: ${topCountries.map((x) => `${x.k} (${x.v})`).join(", ")}
+Top devices: ${topDevices.map((x) => `${x.k} (${x.v})`).join(", ")}
+Top sources: ${topReferrers.map((x) => `${x.k} (${x.v})`).join(", ")}`;
+
+    try {
+      const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "Lovable-API-Key": key,
+        },
+        body: JSON.stringify({
+          model: "google/gemini-3-flash-preview",
+          messages: [{ role: "user", content: prompt }],
+        }),
+      });
+      if (!resp.ok)
+        return { insights: `AI insights temporarily unavailable (gateway ${resp.status}).` };
+      const j = (await resp.json()) as { choices?: { message?: { content?: string } }[] };
+      const insights = j.choices?.[0]?.message?.content?.trim() || "";
+      return { insights: insights || "No insights generated." };
+    } catch (e) {
+      return { insights: `AI insights failed: ${(e as Error).message}` };
+    }
+  });
