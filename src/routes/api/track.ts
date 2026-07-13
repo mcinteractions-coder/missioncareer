@@ -38,7 +38,9 @@ export const Route = createFileRoute("/api/track")({
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
           // Support batched events via meta being an array
-          const metaArr = Array.isArray(body.meta) ? body.meta : [body.meta ?? null];
+          const metaArr: (Record<string, unknown> | null)[] = Array.isArray(body.meta)
+            ? body.meta
+            : [body.meta ?? null];
           const rows = metaArr.map((m) => ({
             session_id: body.session_id!.slice(0, 64),
             path: body.path!.slice(0, 500),
@@ -51,9 +53,10 @@ export const Route = createFileRoute("/api/track")({
             device,
             timezone: (body.timezone || "").slice(0, 64) || null,
             event_type: (body.event_type || "pageview").slice(0, 32),
-            meta: m ?? null,
+            meta: (m ?? null) as never,
           }));
           await supabaseAdmin.from("visitor_events").insert(rows);
+
 
 
           return new Response("ok", {
