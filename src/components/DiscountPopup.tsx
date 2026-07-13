@@ -15,6 +15,28 @@ function getSessionId() {
   return sid;
 }
 
+function trackPopupEvent(event_type: string) {
+  try {
+    if (typeof window === "undefined") return;
+    const sid = getSessionId();
+    if (!sid) return;
+    fetch("/api/track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      keepalive: true,
+      body: JSON.stringify({
+        session_id: sid,
+        path: window.location.pathname,
+        referrer: document.referrer || "",
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
+        event_type,
+      }),
+    }).catch(() => {});
+  } catch {
+    /* ignore */
+  }
+}
+
 export default function DiscountPopup() {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState<"form" | "reveal">("form");
@@ -29,14 +51,19 @@ export default function DiscountPopup() {
     if (window.location.pathname.startsWith("/admin")) return;
     const already = localStorage.getItem(STORAGE_KEY);
     if (already) return;
-    const t = setTimeout(() => setOpen(true), 6000);
+    const t = setTimeout(() => {
+      setOpen(true);
+      trackPopupEvent("discount_shown");
+    }, 6000);
     return () => clearTimeout(t);
   }, []);
 
   const close = () => {
     setOpen(false);
     localStorage.setItem(STORAGE_KEY, "claimed");
+    trackPopupEvent("discount_closed");
   };
+
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,6 +87,7 @@ export default function DiscountPopup() {
         message: `Discount popup signup — FREE counseling session unlocked`,
       });
       if (insErr) throw insErr;
+      trackPopupEvent("discount_submitted");
       setStep("reveal");
       localStorage.setItem(STORAGE_KEY, "claimed");
     } catch (err: any) {

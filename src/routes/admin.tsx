@@ -48,6 +48,7 @@ import {
   adminListSessions,
   adminSessionDetail,
   adminAiInsights,
+  adminDiscountPopupStats,
 } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/admin")({
@@ -1791,6 +1792,9 @@ function AnalyticsPanel() {
         )}
       </div>
 
+      {/* Discount popup analytics */}
+      <DiscountPopupPanel hours={hours} />
+
       {/* Detailed visitor sessions with AI journey summaries */}
       <VisitorSessionsPanel hours={hours} />
 
@@ -2345,3 +2349,146 @@ function SessionDetailModal({ row, onClose }: { row: SessionRow; onClose: () => 
     </div>
   );
 }
+
+interface DiscountPopupRow {
+  session_id: string;
+  status: "submitted" | "dismissed" | "shown_only";
+  shown_at: string;
+  last_action_at: string;
+  country?: string | null;
+  city?: string | null;
+  device?: string | null;
+  path?: string;
+  name: string | null;
+  phone: string | null;
+  email: string | null;
+}
+interface DiscountPopupData {
+  totals: { shown: number; submitted: number; dismissed: number; conversionRate: number };
+  rows: DiscountPopupRow[];
+}
+
+function DiscountPopupPanel({ hours }: { hours: number }) {
+  const [data, setData] = useState<DiscountPopupData | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+  const fn = useServerFn(adminDiscountPopupStats);
+  const pin = sessionStorage.getItem("mc_admin_pin") || "";
+
+  useEffect(() => {
+    if (!pin) return;
+    setData(null);
+    setErr(null);
+    fn({ data: { pin, hours } })
+      .then((r) => setData(r as DiscountPopupData))
+      .catch((e) => setErr((e as Error).message));
+  }, [fn, pin, hours]);
+
+  const statusBadge = (s: DiscountPopupRow["status"]) => {
+    if (s === "submitted")
+      return (
+        <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 font-semibold">
+          Submitted
+        </span>
+      );
+    if (s === "dismissed")
+      return (
+        <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-500/15 text-red-600 font-semibold">
+          Dismissed
+        </span>
+      );
+    return (
+      <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-600 font-semibold">
+        Shown only
+      </span>
+    );
+  };
+
+  return (
+    <div className="bg-card rounded-2xl shadow-card p-5">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="font-bold text-base flex items-center gap-2">
+          🎁 Discount Popup — Visitor Actions
+        </h3>
+        {data && (
+          <span className="text-xs text-muted-foreground">
+            Conversion:{" "}
+            <span className="font-semibold text-foreground">
+              {(data.totals.conversionRate * 100).toFixed(1)}%
+            </span>
+          </span>
+        )}
+      </div>
+
+      {err && <p className="text-xs text-destructive mb-3">{err}</p>}
+      {!data && !err && <p className="text-xs text-muted-foreground">Loading…</p>}
+
+      {data && (
+        <>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+            <div className="rounded-lg border border-border p-3">
+              <div className="text-[10px] uppercase text-muted-foreground">Popup Shown</div>
+              <div className="text-xl font-bold">{data.totals.shown}</div>
+            </div>
+            <div className="rounded-lg border border-border p-3">
+              <div className="text-[10px] uppercase text-muted-foreground">Number Submitted</div>
+              <div className="text-xl font-bold text-emerald-600">{data.totals.submitted}</div>
+            </div>
+            <div className="rounded-lg border border-border p-3">
+              <div className="text-[10px] uppercase text-muted-foreground">Dismissed</div>
+              <div className="text-xl font-bold text-red-600">{data.totals.dismissed}</div>
+            </div>
+            <div className="rounded-lg border border-border p-3">
+              <div className="text-[10px] uppercase text-muted-foreground">Conversion</div>
+              <div className="text-xl font-bold text-primary">
+                {(data.totals.conversionRate * 100).toFixed(1)}%
+              </div>
+            </div>
+          </div>
+
+          {data.rows.length === 0 ? (
+            <p className="text-xs text-muted-foreground">
+              No popup interactions in this range yet.
+            </p>
+          ) : (
+            <div className="overflow-x-auto max-h-[500px]">
+              <table className="w-full text-sm">
+                <thead className="text-xs text-muted-foreground border-b border-border sticky top-0 bg-card">
+                  <tr>
+                    <th className="text-left py-2 pr-3">Action</th>
+                    <th className="text-left py-2 pr-3">Name</th>
+                    <th className="text-left py-2 pr-3">Phone</th>
+                    <th className="text-left py-2 pr-3">Location</th>
+                    <th className="text-left py-2 pr-3">Device</th>
+                    <th className="text-left py-2 pr-3">Page</th>
+                    <th className="text-left py-2 pr-3">When</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.rows.map((r) => (
+                    <tr key={r.session_id} className="border-b border-border/50">
+                      <td className="py-2 pr-3">{statusBadge(r.status)}</td>
+                      <td className="py-2 pr-3 font-semibold">{r.name || "—"}</td>
+                      <td className="py-2 pr-3 font-mono text-xs">{r.phone || "—"}</td>
+                      <td className="py-2 pr-3 text-xs">
+                        {flag(r.country)}{" "}
+                        {[r.city, r.country].filter(Boolean).join(", ") || "Unknown"}
+                      </td>
+                      <td className="py-2 pr-3 text-xs capitalize">{r.device || "—"}</td>
+                      <td className="py-2 pr-3 font-mono text-xs truncate max-w-[160px]">
+                        {r.path || "—"}
+                      </td>
+                      <td className="py-2 pr-3 text-xs text-muted-foreground">
+                        {timeAgo(r.last_action_at)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
