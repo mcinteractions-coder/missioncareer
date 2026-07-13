@@ -1792,6 +1792,9 @@ function AnalyticsPanel() {
         )}
       </div>
 
+      {/* Discount popup analytics */}
+      <DiscountPopupPanel hours={hours} />
+
       {/* Detailed visitor sessions with AI journey summaries */}
       <VisitorSessionsPanel hours={hours} />
 
