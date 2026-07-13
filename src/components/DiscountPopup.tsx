@@ -76,7 +76,6 @@ export default function DiscountPopup() {
   const handleWhatsAppClick = () => {
     const cleaned = phone.replace(/\D/g, "");
     trackPopupEvent("discount_whatsapp_click", cleaned ? { phone: cleaned } : undefined);
-    setOpen(false);
     window.open(WHATSAPP_URL, "_blank", "noopener,noreferrer");
   };
 
