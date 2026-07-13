@@ -51,20 +51,29 @@ export default function DiscountPopup() {
     if (window.location.pathname.startsWith("/admin")) return;
     const already = localStorage.getItem(STORAGE_KEY);
     if (already) return;
-    const t = setTimeout(() => {
-      setOpen(true);
-      trackPopupEvent("discount_shown");
-    }, 6000);
-    return () => clearTimeout(t);
+    // Show immediately — mandatory gate before accessing site
+    setOpen(true);
+    trackPopupEvent("discount_shown");
   }, []);
 
-  const close = (source: "awesome_btn" | "backdrop" | "auto" = "auto") => {
+  // Lock body scroll while the popup is open (mandatory gate)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  const close = (source: "awesome_btn" | "auto" = "auto") => {
     setOpen(false);
     localStorage.setItem(STORAGE_KEY, "claimed");
     if (source === "awesome_btn") trackPopupEvent("discount_awesome_click");
-    else if (source === "backdrop") trackPopupEvent("discount_backdrop_click");
     trackPopupEvent("discount_closed");
   };
+
 
 
   const submit = async (e: React.FormEvent) => {
@@ -105,11 +114,13 @@ export default function DiscountPopup() {
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-300"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300"
       onClick={(e) => {
-        if (e.target === e.currentTarget) close("backdrop");
+        // Mandatory gate — backdrop click does NOT close the popup
+        if (e.target === e.currentTarget) trackPopupEvent("discount_backdrop_click");
       }}
     >
+
       <div className="relative w-full max-w-md rounded-2xl bg-gradient-to-br from-background to-muted border border-border shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
         {/* Decorative header */}
         <div className="relative h-28 bg-gradient-to-r from-primary via-primary/80 to-primary overflow-hidden">
