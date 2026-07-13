@@ -641,3 +641,113 @@ Top sources: ${topReferrers.map((x) => `${x.k} (${x.v})`).join(", ")}`;
       return { insights: `AI insights failed: ${(e as Error).message}` };
     }
   });
+
+// ============ Discount popup analytics ============
+
+export const adminDiscountPopupStats = createServerFn({ method: "POST" })
+  .inputValidator(
+    z.object({ pin: z.string(), hours: z.number().int().min(1).max(720).default(24) }),
+  )
+  .handler(async ({ data }) => {
+    checkPin(data.pin);
+    const sinceIso = new Date(Date.now() - data.hours * 3600 * 1000).toISOString();
+
+    const [evtsRes, leadsRes] = await Promise.all([
+      supabaseAdmin
+        .from("visitor_events")
+        .select("session_id, event_type, path, country, city, device, created_at")
+        .in("event_type", ["discount_shown", "discount_submitted", "discount_closed"])
+        .gte("created_at", sinceIso)
+        .order("created_at", { ascending: false })
+        .limit(3000),
+      supabaseAdmin
+        .from("leads")
+        .select("id, full_name, phone, email, country, session_id, message, created_at")
+        .ilike("message", "Discount popup%")
+        .gte("created_at", sinceIso)
+        .order("created_at", { ascending: false })
+        .limit(500),
+    ]);
+    if (evtsRes.error) throw new Error(evtsRes.error.message);
+    if (leadsRes.error) throw new Error(leadsRes.error.message);
+
+    const events = evtsRes.data ?? [];
+    const leads = leadsRes.data ?? [];
+
+    const shownSids = new Set<string>();
+    const submittedSids = new Set<string>();
+    const closedSids = new Set<string>();
+    for (const e of events) {
+      if (e.event_type === "discount_shown") shownSids.add(e.session_id);
+      else if (e.event_type === "discount_submitted") submittedSids.add(e.session_id);
+      else if (e.event_type === "discount_closed") closedSids.add(e.session_id);
+    }
+
+    const shown = shownSids.size;
+    const submitted = submittedSids.size;
+    const dismissed = Array.from(closedSids).filter((s) => !submittedSids.has(s)).length;
+    const conversionRate = shown > 0 ? submitted / shown : 0;
+
+    // Build per-session actions
+    const bySid = new Map<
+      string,
+      { events: typeof events; first: string; last: string; country?: string | null; city?: string | null; device?: string | null; path?: string }
+    >();
+    for (const e of events) {
+      const cur = bySid.get(e.session_id);
+      if (!cur) {
+        bySid.set(e.session_id, {
+          events: [e],
+          first: e.created_at,
+          last: e.created_at,
+          country: e.country,
+          city: e.city,
+          device: e.device,
+          path: e.path,
+        });
+      } else {
+        cur.events.push(e);
+        if (e.created_at < cur.first) cur.first = e.created_at;
+        if (e.created_at > cur.last) cur.last = e.created_at;
+      }
+    }
+
+    const leadBySid = new Map<string, (typeof leads)[number]>();
+    for (const l of leads) if (l.session_id) leadBySid.set(l.session_id, l);
+
+    const rows = Array.from(bySid.entries())
+      .map(([sid, info]) => {
+        const types = new Set(info.events.map((e) => e.event_type));
+        const lead = leadBySid.get(sid) || null;
+        const status = types.has("discount_submitted")
+          ? "submitted"
+          : types.has("discount_closed")
+            ? "dismissed"
+            : "shown_only";
+        return {
+          session_id: sid,
+          status,
+          shown_at: info.first,
+          last_action_at: info.last,
+          country: info.country,
+          city: info.city,
+          device: info.device,
+          path: info.path,
+          name: lead?.full_name || null,
+          phone: lead?.phone || null,
+          email: lead?.email || null,
+        };
+      })
+      .sort((a, b) => b.last_action_at.localeCompare(a.last_action_at));
+
+    return {
+      totals: {
+        shown,
+        submitted,
+        dismissed,
+        conversionRate,
+      },
+      rows: rows.slice(0, 300),
+      leads,
+    };
+  });
