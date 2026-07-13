@@ -1,0 +1,1 @@
+ALTER TABLE public.visitor_events ADD COLUMN IF NOT EXISTS meta jsonb;
