@@ -137,6 +137,13 @@ export default function DiscountPopup() {
           <p className="text-[11px] text-muted-foreground/80 mt-3 italic">
             Limited time offer for new students.
           </p>
+
+          <button
+            onClick={handleClose}
+            className="mt-3 w-full py-2 rounded-xl border border-border text-xs font-medium text-muted-foreground hover:bg-muted transition"
+          >
+            Close the offer & continue to website
+          </button>
         </div>
       </div>
     </div>
