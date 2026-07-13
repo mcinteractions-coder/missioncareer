@@ -114,11 +114,13 @@ export default function DiscountPopup() {
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-300"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300"
       onClick={(e) => {
-        if (e.target === e.currentTarget) close("backdrop");
+        // Mandatory gate — backdrop click does NOT close the popup
+        if (e.target === e.currentTarget) trackPopupEvent("discount_backdrop_click");
       }}
     >
+
       <div className="relative w-full max-w-md rounded-2xl bg-gradient-to-br from-background to-muted border border-border shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
         {/* Decorative header */}
         <div className="relative h-28 bg-gradient-to-r from-primary via-primary/80 to-primary overflow-hidden">
