@@ -886,6 +886,5 @@ export const adminWhatsAppPopupStats = createServerFn({ method: "POST" })
       },
       buttonTotals,
       rows: rows.slice(0, 300),
-      leads,
     };
   });
