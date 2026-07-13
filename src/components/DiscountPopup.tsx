@@ -15,6 +15,28 @@ function getSessionId() {
   return sid;
 }
 
+function trackPopupEvent(event_type: string) {
+  try {
+    if (typeof window === "undefined") return;
+    const sid = getSessionId();
+    if (!sid) return;
+    fetch("/api/track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      keepalive: true,
+      body: JSON.stringify({
+        session_id: sid,
+        path: window.location.pathname,
+        referrer: document.referrer || "",
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
+        event_type,
+      }),
+    }).catch(() => {});
+  } catch {
+    /* ignore */
+  }
+}
+
 export default function DiscountPopup() {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState<"form" | "reveal">("form");
