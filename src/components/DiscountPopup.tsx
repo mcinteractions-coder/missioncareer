@@ -111,6 +111,14 @@ export default function DiscountPopup() {
             <ArrowRight className="w-4 h-4" />
           </button>
 
+          <button
+            onClick={handleWhatsAppClick}
+            className="w-full mt-3 py-2.5 rounded-xl border border-[#25D366]/40 text-[#25D366] font-semibold text-sm hover:bg-[#25D366]/10 transition flex items-center justify-center gap-2"
+          >
+            <MessageCircle className="w-4 h-4" />
+            Talk to us on WhatsApp instead
+          </button>
+
           <p className="text-[11px] text-muted-foreground/80 mt-4 italic">
             No forms to fill — just one tap and you're chatting with us.
           </p>
