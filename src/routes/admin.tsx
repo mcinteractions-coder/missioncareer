@@ -2121,9 +2121,16 @@ interface SessionDetail {
     device: string | null;
     referrer: string | null;
     user_agent: string | null;
+    max_depth_pct?: number;
+    active_seconds?: number;
+    exit_reason?: string | null;
+    exit_at?: string | null;
   };
+  section_engagement?: { section: string; seconds: number }[];
+  clicks?: { at: string; text: string; section: string | null; href: string | null }[];
   ai_summary: string;
 }
+
 
 function SessionDetailModal({ row, onClose }: { row: SessionRow; onClose: () => void }) {
   const [data, setData] = useState<SessionDetail | null>(null);
