@@ -51,20 +51,29 @@ export default function DiscountPopup() {
     if (window.location.pathname.startsWith("/admin")) return;
     const already = localStorage.getItem(STORAGE_KEY);
     if (already) return;
-    const t = setTimeout(() => {
-      setOpen(true);
-      trackPopupEvent("discount_shown");
-    }, 6000);
-    return () => clearTimeout(t);
+    // Show immediately — mandatory gate before accessing site
+    setOpen(true);
+    trackPopupEvent("discount_shown");
   }, []);
 
-  const close = (source: "awesome_btn" | "backdrop" | "auto" = "auto") => {
+  // Lock body scroll while the popup is open (mandatory gate)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  const close = (source: "awesome_btn" | "auto" = "auto") => {
     setOpen(false);
     localStorage.setItem(STORAGE_KEY, "claimed");
     if (source === "awesome_btn") trackPopupEvent("discount_awesome_click");
-    else if (source === "backdrop") trackPopupEvent("discount_backdrop_click");
     trackPopupEvent("discount_closed");
   };
+
 
 
   const submit = async (e: React.FormEvent) => {
