@@ -2431,7 +2431,7 @@ function SessionDetailModal({ row, onClose }: { row: SessionRow; onClose: () => 
 
 interface DiscountPopupRow {
   session_id: string;
-  status: "submitted" | "dismissed" | "shown_only";
+  status: "clicked" | "dismissed" | "shown_only";
   shown_at: string;
   last_action_at: string;
   country?: string | null;
@@ -2446,7 +2446,7 @@ interface DiscountPopupRow {
   lastButton: { button: string; at: string } | null;
 }
 interface DiscountPopupData {
-  totals: { shown: number; submitted: number; dismissed: number; conversionRate: number };
+  totals: { shown: number; clicked: number; dismissed: number; clickRate: number };
   buttonTotals: Record<string, number>;
   rows: DiscountPopupRow[];
 }
