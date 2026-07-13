@@ -612,7 +612,13 @@ Write a rich (5-8 sentence) plain-English narrative FOR THE ADMIN describing thi
         device: first?.device ?? null,
         referrer: first?.referrer ?? null,
         user_agent: first?.user_agent ?? null,
+        max_depth_pct: maxDepthPct,
+        active_seconds: Math.round(totalActiveMs / 1000),
+        exit_reason: exitReason,
+        exit_at: exitAt,
       },
+      section_engagement: sectionEngagement,
+      clicks: clickList,
       ai_summary: aiSummary,
     };
   });
