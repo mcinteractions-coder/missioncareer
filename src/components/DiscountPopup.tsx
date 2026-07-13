@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Gift, Sparkles, Loader2, PartyPopper, CheckCircle2, Zap } from "lucide-react";
+import { MessageCircle, ArrowRight } from "lucide-react";
 
-const STORAGE_KEY = "mc_discount_popup_v1";
+const STORAGE_KEY = "mc_whatsapp_gate_v1";
 const SESSION_KEY = "mc_session_id";
+const PHONE = "919870003748";
+const WHATSAPP_MSG = encodeURIComponent(
+  "Hi Mission Career! I'd like to know more about studying abroad."
+);
+const WHATSAPP_URL = `https://wa.me/${PHONE}?text=${WHATSAPP_MSG}`;
 
 function getSessionId() {
   if (typeof window === "undefined") return null;
@@ -39,21 +43,14 @@ function trackPopupEvent(event_type: string) {
 
 export default function DiscountPopup() {
   const [open, setOpen] = useState(false);
-  const [step, setStep] = useState<"form" | "reveal">("form");
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    // Don't show on admin
     if (window.location.pathname.startsWith("/admin")) return;
     const already = localStorage.getItem(STORAGE_KEY);
     if (already) return;
-    // Show immediately — mandatory gate before accessing site
     setOpen(true);
-    trackPopupEvent("discount_shown");
+    trackPopupEvent("whatsapp_popup_shown");
   }, []);
 
   // Lock body scroll while the popup is open (mandatory gate)
@@ -67,48 +64,12 @@ export default function DiscountPopup() {
     };
   }, [open]);
 
-  const close = (source: "awesome_btn" | "auto" = "auto") => {
-    setOpen(false);
+  const handleWhatsAppClick = () => {
+    trackPopupEvent("whatsapp_button_click");
     localStorage.setItem(STORAGE_KEY, "claimed");
-    if (source === "awesome_btn") trackPopupEvent("discount_awesome_click");
-    trackPopupEvent("discount_closed");
+    setOpen(false);
+    window.open(WHATSAPP_URL, "_blank", "noopener,noreferrer");
   };
-
-
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    trackPopupEvent("discount_reveal_click");
-    setError(null);
-    const trimmedName = name.trim();
-    const cleanPhone = phone.replace(/\s+/g, "");
-    if (trimmedName.length < 2) {
-      setError("Please enter your name");
-      return;
-    }
-    if (!/^[+\d][\d]{7,14}$/.test(cleanPhone)) {
-      setError("Please enter a valid phone number");
-      return;
-    }
-    setLoading(true);
-    try {
-      const { error: insErr } = await supabase.from("leads").insert({
-        full_name: trimmedName.slice(0, 100),
-        phone: cleanPhone.slice(0, 20),
-        session_id: getSessionId(),
-        message: `Discount popup signup — FREE counseling session unlocked`,
-      });
-      if (insErr) throw insErr;
-      trackPopupEvent("discount_submitted");
-      setStep("reveal");
-      localStorage.setItem(STORAGE_KEY, "claimed");
-    } catch (err: any) {
-      setError("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
 
   if (!open) return null;
 
@@ -117,122 +78,42 @@ export default function DiscountPopup() {
       className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300"
       onClick={(e) => {
         // Mandatory gate — backdrop click does NOT close the popup
-        if (e.target === e.currentTarget) trackPopupEvent("discount_backdrop_click");
+        if (e.target === e.currentTarget) trackPopupEvent("whatsapp_backdrop_click");
       }}
     >
-
-      <div className="relative w-full max-w-md rounded-2xl bg-gradient-to-br from-background to-muted border border-border shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
-        {/* Decorative header */}
-        <div className="relative h-28 bg-gradient-to-r from-primary via-primary/80 to-primary overflow-hidden">
-          <div className="absolute inset-0 opacity-25">
-            <Sparkles className="absolute top-3 left-6 w-6 h-6 text-white animate-pulse" />
-            <Sparkles className="absolute top-10 right-12 w-4 h-4 text-white animate-pulse" style={{ animationDelay: "0.5s" }} />
-            <Sparkles className="absolute bottom-3 left-16 w-5 h-5 text-white animate-pulse" style={{ animationDelay: "1s" }} />
-            <Zap className="absolute top-5 right-24 w-5 h-5 text-white animate-pulse" style={{ animationDelay: "0.3s" }} />
+      <div className="relative w-full max-w-sm rounded-2xl bg-gradient-to-br from-background to-muted border border-border shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+        {/* WhatsApp green header */}
+        <div className="relative h-32 bg-gradient-to-r from-[#25D366] to-[#128C7E] overflow-hidden">
+          <div className="absolute inset-0 opacity-20">
+            <MessageCircle className="absolute top-4 left-6 w-8 h-8 text-white" />
+            <MessageCircle className="absolute top-12 right-10 w-5 h-5 text-white" />
+            <MessageCircle className="absolute bottom-2 left-20 w-6 h-6 text-white" />
           </div>
-          <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-16 h-16 rounded-full bg-background border-4 border-primary flex items-center justify-center">
-            {step === "form" ? (
-              <Gift className="w-7 h-7 text-primary" />
-            ) : (
-              <PartyPopper className="w-7 h-7 text-primary" />
-            )}
+          <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-16 h-16 rounded-full bg-background border-4 border-[#25D366] flex items-center justify-center">
+            <MessageCircle className="w-8 h-8 text-[#25D366]" fill="currentColor" />
           </div>
         </div>
 
-        <div className="pt-12 px-6 pb-6">
-          {step === "form" ? (
-            <>
-              <div className="text-center mb-5">
-                <h3 className="text-xl font-bold mb-1">Unlock Your Special Offer 🎁</h3>
-                <p className="text-sm text-muted-foreground">
-                  Register now and get a chance to win{" "}
-                  <span className="font-semibold text-primary">up to 20% OFF</span> or even
-                  a <span className="font-semibold text-primary">FREE</span> counseling session
-                </p>
-                <p className="text-[11px] text-muted-foreground/80 mt-2 italic">
-                  We're only asking your number so we can send you this exclusive offer.
-                </p>
-              </div>
+        <div className="pt-12 px-6 pb-6 text-center">
+          <h3 className="text-xl font-bold mb-2">Talk to us directly on WhatsApp</h3>
+          <p className="text-sm text-muted-foreground mb-6">
+            Get instant, personalised guidance from our study-abroad counsellors.
+            Tap the button below to start chatting on WhatsApp right now.
+          </p>
 
-              <form onSubmit={submit} className="space-y-3">
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Your full name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    maxLength={100}
-                    className="w-full px-4 py-2.5 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
-                    required
-                  />
-                </div>
-                <div>
-                  <input
-                    type="tel"
-                    placeholder="Phone number (e.g. +91 98765...)"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    maxLength={20}
-                    className="w-full px-4 py-2.5 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
-                    required
-                  />
-                </div>
+          <button
+            onClick={handleWhatsAppClick}
+            className="w-full py-3 rounded-xl bg-[#25D366] text-white font-bold text-sm hover:bg-[#22bf5a] transition flex items-center justify-center gap-2 shadow-lg"
+            style={{ boxShadow: "0 8px 24px rgba(37,211,102,0.35)" }}
+          >
+            <MessageCircle className="w-5 h-5" fill="currentColor" />
+            Directly talk to us on WhatsApp
+            <ArrowRight className="w-4 h-4" />
+          </button>
 
-                {error && (
-                  <p className="text-xs text-destructive text-center">{error}</p>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full py-2.5 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition disabled:opacity-60 flex items-center justify-center gap-2"
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" /> Please wait...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-4 h-4" /> Reveal My Discount
-                    </>
-                  )}
-                </button>
-              </form>
-            </>
-          ) : (
-            <div className="text-center py-2">
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-primary/10 mb-3 animate-in zoom-in duration-500">
-                <CheckCircle2 className="w-8 h-8 text-primary" />
-              </div>
-
-              <p className="text-sm text-muted-foreground mb-1">Boom {name.split(" ")[0]}! 🎉</p>
-
-              <div className="my-4 space-y-2">
-                <div className="text-4xl sm:text-5xl font-black bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent leading-tight">
-                  Your Counselling Session is
-                </div>
-                <div className="text-5xl sm:text-6xl font-black text-primary animate-pulse">
-                  ABSOLUTELY FREE
-                </div>
-              </div>
-
-              <p className="text-sm text-muted-foreground mb-4">
-                No hidden charges. No payment needed. Just pure guidance.
-              </p>
-
-              <p className="text-sm text-foreground/80 mb-5">
-                Our counsellor will call you shortly on{" "}
-                <span className="font-semibold">{phone}</span> to book your free session.
-              </p>
-
-              <button
-                onClick={() => close("awesome_btn")}
-                className="w-full py-2.5 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition flex items-center justify-center gap-2"
-              >
-                <PartyPopper className="w-4 h-4" /> Awesome, thanks!
-              </button>
-            </div>
-          )}
+          <p className="text-[11px] text-muted-foreground/80 mt-4 italic">
+            No forms to fill — just one tap and you're chatting with us.
+          </p>
         </div>
       </div>
     </div>
