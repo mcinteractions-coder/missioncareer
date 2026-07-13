@@ -2452,10 +2452,10 @@ interface DiscountPopupData {
 }
 
 
-function DiscountPopupPanel({ hours }: { hours: number }) {
+function WhatsAppPopupPanel({ hours }: { hours: number }) {
   const [data, setData] = useState<DiscountPopupData | null>(null);
   const [err, setErr] = useState<string | null>(null);
-  const fn = useServerFn(adminDiscountPopupStats);
+  const fn = useServerFn(adminWhatsAppPopupStats);
   const pin = sessionStorage.getItem("mc_admin_pin") || "";
 
   useEffect(() => {
@@ -2464,20 +2464,20 @@ function DiscountPopupPanel({ hours }: { hours: number }) {
     setErr(null);
     fn({ data: { pin, hours } })
       .then((r) => setData(r as DiscountPopupData))
-      .catch((e) => setErr((e as Error).message));
+      .catch((e: Error) => setErr(e.message));
   }, [fn, pin, hours]);
 
   const statusBadge = (s: DiscountPopupRow["status"]) => {
-    if (s === "submitted")
+    if (s === "clicked")
       return (
         <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 font-semibold">
-          Submitted
+          Clicked WhatsApp
         </span>
       );
     if (s === "dismissed")
       return (
         <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-500/15 text-red-600 font-semibold">
-          Dismissed
+          Tried to close
         </span>
       );
     return (
@@ -2491,13 +2491,13 @@ function DiscountPopupPanel({ hours }: { hours: number }) {
     <div className="bg-card rounded-2xl shadow-card p-5">
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-bold text-base flex items-center gap-2">
-          🎁 Discount Popup — Visitor Actions
+          💬 WhatsApp Direct-Talk Popup — Visitor Actions
         </h3>
         {data && (
           <span className="text-xs text-muted-foreground">
-            Conversion:{" "}
+            Click rate:{" "}
             <span className="font-semibold text-foreground">
-              {(data.totals.conversionRate * 100).toFixed(1)}%
+              {(data.totals.clickRate * 100).toFixed(1)}%
             </span>
           </span>
         )}
@@ -2514,17 +2514,17 @@ function DiscountPopupPanel({ hours }: { hours: number }) {
               <div className="text-xl font-bold">{data.totals.shown}</div>
             </div>
             <div className="rounded-lg border border-border p-3">
-              <div className="text-[10px] uppercase text-muted-foreground">Number Submitted</div>
-              <div className="text-xl font-bold text-emerald-600">{data.totals.submitted}</div>
+              <div className="text-[10px] uppercase text-muted-foreground">WhatsApp Clicks</div>
+              <div className="text-xl font-bold text-emerald-600">{data.totals.clicked}</div>
             </div>
             <div className="rounded-lg border border-border p-3">
-              <div className="text-[10px] uppercase text-muted-foreground">Dismissed</div>
+              <div className="text-[10px] uppercase text-muted-foreground">Tried to close</div>
               <div className="text-xl font-bold text-red-600">{data.totals.dismissed}</div>
             </div>
             <div className="rounded-lg border border-border p-3">
-              <div className="text-[10px] uppercase text-muted-foreground">Conversion</div>
+              <div className="text-[10px] uppercase text-muted-foreground">Click Rate</div>
               <div className="text-xl font-bold text-primary">
-                {(data.totals.conversionRate * 100).toFixed(1)}%
+                {(data.totals.clickRate * 100).toFixed(1)}%
               </div>
             </div>
           </div>
@@ -2534,20 +2534,13 @@ function DiscountPopupPanel({ hours }: { hours: number }) {
             <div className="text-[11px] uppercase tracking-wide text-muted-foreground mb-2 font-semibold">
               🖱️ Button Clicks (which button people pressed)
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="rounded-lg border border-primary/30 bg-primary/5 p-3">
-                <div className="text-[10px] uppercase text-muted-foreground">Reveal My Discount</div>
-                <div className="text-xl font-bold text-primary">
-                  {data.buttonTotals["Reveal My Discount"] ?? 0}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="rounded-lg border border-[#25D366]/30 bg-[#25D366]/10 p-3">
+                <div className="text-[10px] uppercase text-muted-foreground">Talk on WhatsApp</div>
+                <div className="text-xl font-bold text-[#25D366]">
+                  {data.buttonTotals["Talk on WhatsApp"] ?? 0}
                 </div>
-                <div className="text-[10px] text-muted-foreground mt-0.5">Form submit button</div>
-              </div>
-              <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-3">
-                <div className="text-[10px] uppercase text-muted-foreground">Awesome, thanks!</div>
-                <div className="text-xl font-bold text-emerald-600">
-                  {data.buttonTotals["Awesome, thanks!"] ?? 0}
-                </div>
-                <div className="text-[10px] text-muted-foreground mt-0.5">Closed after reveal</div>
+                <div className="text-[10px] text-muted-foreground mt-0.5">Opened WhatsApp chat</div>
               </div>
               <div className="rounded-lg border border-red-500/30 bg-red-500/5 p-3">
                 <div className="text-[10px] uppercase text-muted-foreground">Backdrop (outside)</div>
@@ -2561,7 +2554,7 @@ function DiscountPopupPanel({ hours }: { hours: number }) {
 
           {data.rows.length === 0 ? (
             <p className="text-xs text-muted-foreground">
-              No popup interactions in this range yet.
+              No WhatsApp popup interactions in this range yet.
             </p>
           ) : (
             <div className="overflow-x-auto max-h-[500px]">
@@ -2569,8 +2562,6 @@ function DiscountPopupPanel({ hours }: { hours: number }) {
                 <thead className="text-xs text-muted-foreground border-b border-border sticky top-0 bg-card">
                   <tr>
                     <th className="text-left py-2 pr-3">Action</th>
-                    <th className="text-left py-2 pr-3">Name</th>
-                    <th className="text-left py-2 pr-3">Phone</th>
                     <th className="text-left py-2 pr-3">Buttons Clicked</th>
                     <th className="text-left py-2 pr-3">Location</th>
                     <th className="text-left py-2 pr-3">Device</th>
@@ -2579,23 +2570,19 @@ function DiscountPopupPanel({ hours }: { hours: number }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.rows.map((r) => (
+                  {data.rows.map((r: DiscountPopupRow) => (
                     <tr key={r.session_id} className="border-b border-border/50">
                       <td className="py-2 pr-3">{statusBadge(r.status)}</td>
-                      <td className="py-2 pr-3 font-semibold">{r.name || "—"}</td>
-                      <td className="py-2 pr-3 font-mono text-xs">{r.phone || "—"}</td>
                       <td className="py-2 pr-3 text-xs">
                         {r.buttons.length === 0 ? (
                           <span className="text-muted-foreground italic">No click</span>
                         ) : (
                           <div className="flex flex-wrap gap-1 max-w-[240px]">
-                            {r.buttons.map((b, i) => {
+                            {r.buttons.map((b: { button: string; at: string }, i: number) => {
                               const color =
-                                b.button === "Reveal My Discount"
-                                  ? "bg-primary/15 text-primary"
-                                  : b.button === "Awesome, thanks!"
-                                    ? "bg-emerald-500/15 text-emerald-600"
-                                    : "bg-red-500/15 text-red-600";
+                                b.button === "Talk on WhatsApp"
+                                  ? "bg-[#25D366]/15 text-[#128C7E]"
+                                  : "bg-red-500/15 text-red-600";
                               return (
                                 <span
                                   key={i}
