@@ -136,8 +136,8 @@ export default function DiscountPopup() {
               </button>
             </>
           ) : (
-            <div className="w-full py-4 rounded-xl bg-primary/10 border-2 border-dashed border-primary text-primary font-extrabold text-lg tracking-wide">
-              🎉 20% OFF – Code: MC20
+            <div className="w-full py-4 rounded-xl bg-primary/10 border-2 border-dashed border-primary text-primary font-extrabold text-base tracking-wide">
+              🎉 100% OFF on Counseling
             </div>
           )}
 
