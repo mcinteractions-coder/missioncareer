@@ -759,9 +759,9 @@ Top sources: ${topReferrers.map((x) => `${x.k} (${x.v})`).join(", ")}`;
     }
   });
 
-// ============ Discount popup analytics ============
+// ============ WhatsApp direct-talk popup analytics ============
 
-export const adminDiscountPopupStats = createServerFn({ method: "POST" })
+export const adminWhatsAppPopupStats = createServerFn({ method: "POST" })
   .inputValidator(
     z.object({ pin: z.string(), hours: z.number().int().min(1).max(720).default(24) }),
   )
@@ -769,48 +769,34 @@ export const adminDiscountPopupStats = createServerFn({ method: "POST" })
     checkPin(data.pin);
     const sinceIso = new Date(Date.now() - data.hours * 3600 * 1000).toISOString();
 
-    const [evtsRes, leadsRes] = await Promise.all([
-      supabaseAdmin
-        .from("visitor_events")
-        .select("session_id, event_type, path, country, city, device, created_at")
-        .in("event_type", [
-          "discount_shown",
-          "discount_submitted",
-          "discount_closed",
-          "discount_reveal_click",
-          "discount_awesome_click",
-          "discount_backdrop_click",
-        ])
-        .gte("created_at", sinceIso)
-        .order("created_at", { ascending: false })
-        .limit(3000),
-      supabaseAdmin
-        .from("leads")
-        .select("id, full_name, phone, email, country, session_id, message, created_at")
-        .ilike("message", "Discount popup%")
-        .gte("created_at", sinceIso)
-        .order("created_at", { ascending: false })
-        .limit(500),
-    ]);
+    const evtsRes = await supabaseAdmin
+      .from("visitor_events")
+      .select("session_id, event_type, path, country, city, device, created_at")
+      .in("event_type", [
+        "whatsapp_popup_shown",
+        "whatsapp_button_click",
+        "whatsapp_backdrop_click",
+      ])
+      .gte("created_at", sinceIso)
+      .order("created_at", { ascending: false })
+      .limit(3000);
     if (evtsRes.error) throw new Error(evtsRes.error.message);
-    if (leadsRes.error) throw new Error(leadsRes.error.message);
 
     const events = evtsRes.data ?? [];
-    const leads = leadsRes.data ?? [];
 
     const shownSids = new Set<string>();
-    const submittedSids = new Set<string>();
-    const closedSids = new Set<string>();
+    const clickedSids = new Set<string>();
+    const backdropSids = new Set<string>();
     for (const e of events) {
-      if (e.event_type === "discount_shown") shownSids.add(e.session_id);
-      else if (e.event_type === "discount_submitted") submittedSids.add(e.session_id);
-      else if (e.event_type === "discount_closed") closedSids.add(e.session_id);
+      if (e.event_type === "whatsapp_popup_shown") shownSids.add(e.session_id);
+      else if (e.event_type === "whatsapp_button_click") clickedSids.add(e.session_id);
+      else if (e.event_type === "whatsapp_backdrop_click") backdropSids.add(e.session_id);
     }
 
     const shown = shownSids.size;
-    const submitted = submittedSids.size;
-    const dismissed = Array.from(closedSids).filter((s) => !submittedSids.has(s)).length;
-    const conversionRate = shown > 0 ? submitted / shown : 0;
+    const clicked = clickedSids.size;
+    const dismissed = Array.from(backdropSids).filter((s) => !clickedSids.has(s)).length;
+    const clickRate = shown > 0 ? clicked / shown : 0;
 
     // Build per-session actions
     const bySid = new Map<
@@ -836,24 +822,19 @@ export const adminDiscountPopupStats = createServerFn({ method: "POST" })
       }
     }
 
-    const leadBySid = new Map<string, (typeof leads)[number]>();
-    for (const l of leads) if (l.session_id) leadBySid.set(l.session_id, l);
-
     const rows = Array.from(bySid.entries())
       .map(([sid, info]) => {
         const types = new Set(info.events.map((e) => e.event_type));
-        const lead = leadBySid.get(sid) || null;
-        const status = types.has("discount_submitted")
-          ? "submitted"
-          : types.has("discount_closed")
+        const status = types.has("whatsapp_button_click")
+          ? "clicked"
+          : types.has("whatsapp_backdrop_click")
             ? "dismissed"
             : "shown_only";
 
         // Button click labels
         const buttonMap: Record<string, string> = {
-          discount_reveal_click: "Reveal My Discount",
-          discount_awesome_click: "Awesome, thanks!",
-          discount_backdrop_click: "Backdrop (outside)",
+          whatsapp_button_click: "Talk on WhatsApp",
+          whatsapp_backdrop_click: "Backdrop (outside)",
         };
         const buttonEvents = info.events
           .filter((e) => buttonMap[e.event_type])
@@ -875,9 +856,9 @@ export const adminDiscountPopupStats = createServerFn({ method: "POST" })
           city: info.city,
           device: info.device,
           path: info.path,
-          name: lead?.full_name || null,
-          phone: lead?.phone || null,
-          email: lead?.email || null,
+          name: null,
+          phone: null,
+          email: null,
           buttons: buttonEvents,
           buttonCounts,
           lastButton,
@@ -887,8 +868,7 @@ export const adminDiscountPopupStats = createServerFn({ method: "POST" })
 
     // Aggregate button totals across all sessions
     const buttonTotals: Record<string, number> = {
-      "Reveal My Discount": 0,
-      "Awesome, thanks!": 0,
+      "Talk on WhatsApp": 0,
       "Backdrop (outside)": 0,
     };
     for (const r of rows) {
@@ -900,9 +880,9 @@ export const adminDiscountPopupStats = createServerFn({ method: "POST" })
     return {
       totals: {
         shown,
-        submitted,
+        clicked,
         dismissed,
-        conversionRate,
+        clickRate,
       },
       buttonTotals,
       rows: rows.slice(0, 300),
