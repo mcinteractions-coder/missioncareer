@@ -2362,11 +2362,16 @@ interface DiscountPopupRow {
   name: string | null;
   phone: string | null;
   email: string | null;
+  buttons: { button: string; at: string }[];
+  buttonCounts: Record<string, number>;
+  lastButton: { button: string; at: string } | null;
 }
 interface DiscountPopupData {
   totals: { shown: number; submitted: number; dismissed: number; conversionRate: number };
+  buttonTotals: Record<string, number>;
   rows: DiscountPopupRow[];
 }
+
 
 function DiscountPopupPanel({ hours }: { hours: number }) {
   const [data, setData] = useState<DiscountPopupData | null>(null);
