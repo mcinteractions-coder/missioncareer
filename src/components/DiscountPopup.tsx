@@ -215,7 +215,7 @@ export default function DiscountPopup() {
               </p>
 
               <button
-                onClick={close}
+                onClick={() => close("awesome_btn")}
                 className="w-full py-2.5 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition flex items-center justify-center gap-2"
               >
                 <PartyPopper className="w-4 h-4" /> Awesome, thanks!
