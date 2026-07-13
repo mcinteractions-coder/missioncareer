@@ -83,20 +83,8 @@ export default function DiscountPopup() {
   if (!open) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-300"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) handleClose();
-      }}
-    >
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300">
       <div className="relative w-full max-w-sm rounded-2xl bg-gradient-to-br from-background to-muted border border-border shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
-        <button
-          onClick={handleClose}
-          className="absolute top-3 right-3 z-10 p-1.5 rounded-full bg-background/70 hover:bg-background transition"
-          aria-label="Close"
-        >
-          <X className="w-4 h-4" />
-        </button>
 
         <div className="relative h-28 bg-gradient-to-r from-primary via-accent to-primary overflow-hidden">
           <div className="absolute inset-0 opacity-25">
