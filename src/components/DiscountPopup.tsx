@@ -58,15 +58,18 @@ export default function DiscountPopup() {
     return () => clearTimeout(t);
   }, []);
 
-  const close = () => {
+  const close = (source: "awesome_btn" | "backdrop" | "auto" = "auto") => {
     setOpen(false);
     localStorage.setItem(STORAGE_KEY, "claimed");
+    if (source === "awesome_btn") trackPopupEvent("discount_awesome_click");
+    else if (source === "backdrop") trackPopupEvent("discount_backdrop_click");
     trackPopupEvent("discount_closed");
   };
 
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    trackPopupEvent("discount_reveal_click");
     setError(null);
     const trimmedName = name.trim();
     const cleanPhone = phone.replace(/\s+/g, "");
@@ -96,6 +99,7 @@ export default function DiscountPopup() {
       setLoading(false);
     }
   };
+
 
   if (!open) return null;
 
