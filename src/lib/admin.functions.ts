@@ -600,7 +600,7 @@ ${whatsappOutcome}
 
 ${exitLine}
 
-Write a rich (6-9 sentence) plain-English narrative FOR THE ADMIN describing this specific visitor's journey: which sections they scrolled to and lingered on the longest, which they skipped, exactly what they clicked, how deep they scrolled, whether they filled a form, and when/how they left. IMPORTANT — include one clear sentence about EXACTLY what they did with the "Unlock Your Special Offer" popup (was it shown, did they type name/phone and click Reveal My Discount, did they try to close by clicking outside, did they click "Awesome, thanks!" after the FREE session reveal, or did they ignore it). Sound like a story ("This visitor first landed on…, then spent 42 seconds reading Success Stories, tapped WhatsApp, saw the Unlock Your Special Offer popup and submitted their phone, then scrolled to Booking…"). No markdown, no bullets, just a paragraph.`;
+Write a rich (6-9 sentence) plain-English narrative FOR THE ADMIN describing this specific visitor's journey: which sections they scrolled to and lingered on the longest, which they skipped, exactly what they clicked, how deep they scrolled, whether they filled a form, and when/how they left. IMPORTANT — include one clear sentence about EXACTLY what they did with the "Talk to us directly on WhatsApp" popup (was it shown, did they click the WhatsApp button and open chat, did they try to close it by clicking outside, or did they ignore it). Sound like a story ("This visitor first landed on…, then spent 42 seconds reading Success Stories, tapped WhatsApp, saw the WhatsApp direct-talk popup and opened chat, then scrolled to Booking…"). No markdown, no bullets, just a paragraph.`;
 
 
 
