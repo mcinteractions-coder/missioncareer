@@ -731,6 +731,24 @@ export const adminDiscountPopupStats = createServerFn({ method: "POST" })
           : types.has("discount_closed")
             ? "dismissed"
             : "shown_only";
+
+        // Button click labels
+        const buttonMap: Record<string, string> = {
+          discount_reveal_click: "Reveal My Discount",
+          discount_awesome_click: "Awesome, thanks!",
+          discount_backdrop_click: "Backdrop (outside)",
+        };
+        const buttonEvents = info.events
+          .filter((e) => buttonMap[e.event_type])
+          .sort((a, b) => a.created_at.localeCompare(b.created_at))
+          .map((e) => ({
+            button: buttonMap[e.event_type],
+            at: e.created_at,
+          }));
+        const buttonCounts: Record<string, number> = {};
+        for (const b of buttonEvents) buttonCounts[b.button] = (buttonCounts[b.button] || 0) + 1;
+        const lastButton = buttonEvents.length ? buttonEvents[buttonEvents.length - 1] : null;
+
         return {
           session_id: sid,
           status,
@@ -743,9 +761,24 @@ export const adminDiscountPopupStats = createServerFn({ method: "POST" })
           name: lead?.full_name || null,
           phone: lead?.phone || null,
           email: lead?.email || null,
+          buttons: buttonEvents,
+          buttonCounts,
+          lastButton,
         };
       })
       .sort((a, b) => b.last_action_at.localeCompare(a.last_action_at));
+
+    // Aggregate button totals across all sessions
+    const buttonTotals: Record<string, number> = {
+      "Reveal My Discount": 0,
+      "Awesome, thanks!": 0,
+      "Backdrop (outside)": 0,
+    };
+    for (const r of rows) {
+      for (const [b, c] of Object.entries(r.buttonCounts)) {
+        buttonTotals[b] = (buttonTotals[b] || 0) + c;
+      }
+    }
 
     return {
       totals: {
@@ -754,6 +787,7 @@ export const adminDiscountPopupStats = createServerFn({ method: "POST" })
         dismissed,
         conversionRate,
       },
+      buttonTotals,
       rows: rows.slice(0, 300),
       leads,
     };
