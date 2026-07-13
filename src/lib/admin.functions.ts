@@ -656,7 +656,14 @@ export const adminDiscountPopupStats = createServerFn({ method: "POST" })
       supabaseAdmin
         .from("visitor_events")
         .select("session_id, event_type, path, country, city, device, created_at")
-        .in("event_type", ["discount_shown", "discount_submitted", "discount_closed"])
+        .in("event_type", [
+          "discount_shown",
+          "discount_submitted",
+          "discount_closed",
+          "discount_reveal_click",
+          "discount_awesome_click",
+          "discount_backdrop_click",
+        ])
         .gte("created_at", sinceIso)
         .order("created_at", { ascending: false })
         .limit(3000),
