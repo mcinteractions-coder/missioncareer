@@ -87,6 +87,7 @@ export default function DiscountPopup() {
         message: `Discount popup signup — FREE counseling session unlocked`,
       });
       if (insErr) throw insErr;
+      trackPopupEvent("discount_submitted");
       setStep("reveal");
       localStorage.setItem(STORAGE_KEY, "claimed");
     } catch (err: any) {
