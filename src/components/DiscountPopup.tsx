@@ -64,10 +64,6 @@ export default function DiscountPopup() {
     trackPopupEvent("discount_closed");
   };
 
-  const close = () => {
-    setOpen(false);
-    localStorage.setItem(STORAGE_KEY, "claimed");
-  };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
