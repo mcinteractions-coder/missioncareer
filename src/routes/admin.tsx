@@ -2372,7 +2372,7 @@ function DiscountPopupPanel({ hours }: { hours: number }) {
   const [data, setData] = useState<DiscountPopupData | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const fn = useServerFn(adminDiscountPopupStats);
-  const pin = getPin();
+  const pin = sessionStorage.getItem("mc_admin_pin") || "";
 
   useEffect(() => {
     if (!pin) return;
