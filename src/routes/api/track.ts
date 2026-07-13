@@ -12,6 +12,7 @@ export const Route = createFileRoute("/api/track")({
             referrer?: string;
             timezone?: string;
             event_type?: string;
+            meta?: Record<string, unknown> | Record<string, unknown>[];
           };
           if (!body?.session_id || !body?.path) {
             return new Response("Bad request", { status: 400 });
@@ -35,9 +36,14 @@ export const Route = createFileRoute("/api/track")({
               : "desktop";
 
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-          await supabaseAdmin.from("visitor_events").insert({
-            session_id: body.session_id.slice(0, 64),
-            path: body.path.slice(0, 500),
+
+          // Support batched events via meta being an array
+          const metaArr: (Record<string, unknown> | null)[] = Array.isArray(body.meta)
+            ? body.meta
+            : [body.meta ?? null];
+          const rows = metaArr.map((m) => ({
+            session_id: body.session_id!.slice(0, 64),
+            path: body.path!.slice(0, 500),
             referrer: (body.referrer || "").slice(0, 500) || null,
             country,
             region,
@@ -47,7 +53,11 @@ export const Route = createFileRoute("/api/track")({
             device,
             timezone: (body.timezone || "").slice(0, 64) || null,
             event_type: (body.event_type || "pageview").slice(0, 32),
-          });
+            meta: (m ?? null) as never,
+          }));
+          await supabaseAdmin.from("visitor_events").insert(rows);
+
+
 
           return new Response("ok", {
             headers: { "cache-control": "no-store" },

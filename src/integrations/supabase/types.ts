@@ -185,6 +185,7 @@ export type Database = {
           event_type: string
           id: string
           ip_hash: string | null
+          meta: Json | null
           path: string
           referrer: string | null
           region: string | null
@@ -200,6 +201,7 @@ export type Database = {
           event_type?: string
           id?: string
           ip_hash?: string | null
+          meta?: Json | null
           path: string
           referrer?: string | null
           region?: string | null
@@ -215,6 +217,7 @@ export type Database = {
           event_type?: string
           id?: string
           ip_hash?: string | null
+          meta?: Json | null
           path?: string
           referrer?: string | null
           region?: string | null

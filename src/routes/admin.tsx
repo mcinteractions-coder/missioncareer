@@ -2121,9 +2121,16 @@ interface SessionDetail {
     device: string | null;
     referrer: string | null;
     user_agent: string | null;
+    max_depth_pct?: number;
+    active_seconds?: number;
+    exit_reason?: string | null;
+    exit_at?: string | null;
   };
+  section_engagement?: { section: string; seconds: number }[];
+  clicks?: { at: string; text: string; section: string | null; href: string | null }[];
   ai_summary: string;
 }
+
 
 function SessionDetailModal({ row, onClose }: { row: SessionRow; onClose: () => void }) {
   const [data, setData] = useState<SessionDetail | null>(null);
@@ -2204,10 +2211,82 @@ function SessionDetailModal({ row, onClose }: { row: SessionRow; onClose: () => 
                 )}
               </div>
 
+              {/* Section engagement */}
+              {data.section_engagement && data.section_engagement.length > 0 && (
+                <div className="rounded-2xl border border-border p-4">
+                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-muted-foreground mb-3">
+                    <Eye className="h-3.5 w-3.5" /> Sections viewed (time in view)
+                  </div>
+                  <div className="space-y-1.5">
+                    {(() => {
+                      const max = Math.max(
+                        1,
+                        ...data.section_engagement.map((s) => s.seconds),
+                      );
+                      return data.section_engagement.map((s) => (
+                        <div key={s.section} className="flex items-center gap-2 text-xs">
+                          <div className="w-28 truncate font-mono">{s.section}</div>
+                          <div className="flex-1 h-2 rounded-full bg-secondary overflow-hidden">
+                            <div
+                              className="h-full bg-primary"
+                              style={{ width: `${Math.max(4, (s.seconds / max) * 100)}%` }}
+                            />
+                          </div>
+                          <div className="w-14 text-right tabular-nums">{s.seconds}s</div>
+                        </div>
+                      ));
+                    })()}
+                  </div>
+                  <div className="mt-3 text-[11px] text-muted-foreground flex flex-wrap gap-x-4 gap-y-1">
+                    <span>Max scroll depth: {data.summary.max_depth_pct ?? 0}%</span>
+                    <span>Active time: {data.summary.active_seconds ?? 0}s</span>
+                    {data.summary.exit_reason && (
+                      <span>
+                        Exited: {data.summary.exit_reason}
+                        {data.summary.exit_at
+                          ? ` at ${new Date(data.summary.exit_at).toLocaleTimeString("en-IN")}`
+                          : ""}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Clicks */}
+              {data.clicks && data.clicks.length > 0 && (
+                <div className="rounded-2xl border border-border p-4">
+                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-muted-foreground mb-3">
+                    <MousePointerClick className="h-3.5 w-3.5" /> Clicks ({data.clicks.length})
+                  </div>
+                  <ul className="space-y-1.5 text-xs max-h-56 overflow-y-auto">
+                    {data.clicks.map((c, i) => (
+                      <li key={i} className="flex items-start gap-2">
+                        <span className="text-muted-foreground tabular-nums shrink-0">
+                          {new Date(c.at).toLocaleTimeString("en-IN", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
+                          })}
+                        </span>
+                        <span className="font-medium truncate">
+                          {c.text || <em className="text-muted-foreground">(no text)</em>}
+                        </span>
+                        {c.section && (
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary text-muted-foreground shrink-0">
+                            {c.section}
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
               {/* Contact card if identified */}
               {(data.booking || data.lead) && (
                 <div className="rounded-2xl bg-secondary p-4 text-sm space-y-1.5">
                   <div className="font-bold text-base mb-1">Contact details</div>
+
                   {data.booking && (
                     <>
                       <p>
