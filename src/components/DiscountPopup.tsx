@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Gift, Sparkles, X, ArrowRight, MessageCircle } from "lucide-react";
 
-const STORAGE_KEY = "mc_discount_popup_v1";
 const SESSION_KEY = "mc_session_id";
 const PHONE = "919870003748";
 const WHATSAPP_MSG = encodeURIComponent(
@@ -19,7 +18,7 @@ function getSessionId() {
   return sid;
 }
 
-function trackPopupEvent(event_type: string) {
+function trackPopupEvent(event_type: string, metadata?: Record<string, unknown>) {
   try {
     if (typeof window === "undefined") return;
     const sid = getSessionId();
@@ -34,6 +33,7 @@ function trackPopupEvent(event_type: string) {
         referrer: document.referrer || "",
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
         event_type,
+        metadata,
       }),
     }).catch(() => {});
   } catch {
@@ -44,31 +44,38 @@ function trackPopupEvent(event_type: string) {
 export default function DiscountPopup() {
   const [open, setOpen] = useState(false);
   const [revealed, setRevealed] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (window.location.pathname.startsWith("/admin")) return;
-    const already = localStorage.getItem(STORAGE_KEY);
-    if (already) return;
     setOpen(true);
     trackPopupEvent("discount_popup_shown");
   }, []);
 
+  const isValidPhone = (v: string) => /^\d{10}$/.test(v.replace(/\D/g, ""));
+
   const handleReveal = () => {
-    trackPopupEvent("discount_reveal_click");
+    const cleaned = phone.replace(/\D/g, "");
+    if (!isValidPhone(cleaned)) {
+      setError("Please enter a valid 10-digit phone number");
+      return;
+    }
+    setError("");
+    trackPopupEvent("discount_phone_submit", { phone: cleaned });
+    trackPopupEvent("discount_reveal_click", { phone: cleaned });
     setRevealed(true);
-    localStorage.setItem(STORAGE_KEY, "revealed");
   };
 
   const handleClose = () => {
     trackPopupEvent("discount_popup_dismiss");
-    localStorage.setItem(STORAGE_KEY, "dismissed");
     setOpen(false);
   };
 
   const handleWhatsAppClick = () => {
-    trackPopupEvent("discount_whatsapp_click");
-    localStorage.setItem(STORAGE_KEY, "whatsapp");
+    const cleaned = phone.replace(/\D/g, "");
+    trackPopupEvent("discount_whatsapp_click", cleaned ? { phone: cleaned } : undefined);
     setOpen(false);
     window.open(WHATSAPP_URL, "_blank", "noopener,noreferrer");
   };
@@ -104,46 +111,67 @@ export default function DiscountPopup() {
 
         <div className="pt-10 px-6 pb-6 text-center">
           <h3 className="text-xl font-bold mb-2">Unlock Your Special Offer</h3>
-          <p className="text-sm text-muted-foreground mb-5">
-            An exclusive discount is waiting for you on our study-abroad services.
+          <p className="text-sm text-muted-foreground mb-4">
+            Enter your phone number to reveal an exclusive discount on our study-abroad services.
           </p>
 
           {!revealed ? (
-            <button
-              onClick={handleReveal}
-              className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm hover:opacity-90 transition flex items-center justify-center gap-2 shadow-lg"
-            >
-              <Gift className="w-5 h-5" />
-              Reveal My Discount
-              <ArrowRight className="w-4 h-4" />
-            </button>
+            <>
+              <div className="flex items-stretch gap-2 mb-1 text-left">
+                <span className="inline-flex items-center px-3 rounded-lg border border-border bg-muted text-sm font-semibold">
+                  +91
+                </span>
+                <input
+                  type="tel"
+                  inputMode="numeric"
+                  autoComplete="tel"
+                  placeholder="10-digit mobile number"
+                  value={phone}
+                  onChange={(e) => {
+                    setPhone(e.target.value.replace(/\D/g, "").slice(0, 10));
+                    if (error) setError("");
+                  }}
+                  className="flex-1 px-3 py-2.5 rounded-lg border border-border bg-background text-sm outline-none focus:ring-2 focus:ring-primary/40"
+                />
+              </div>
+              {error && (
+                <p className="text-[11px] text-red-500 text-left mb-1">{error}</p>
+              )}
+
+              <button
+                onClick={handleReveal}
+                disabled={!isValidPhone(phone)}
+                className="mt-3 w-full py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm hover:opacity-90 transition flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Gift className="w-5 h-5" />
+                Reveal My Discount
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </>
           ) : (
             <div className="w-full py-4 rounded-xl bg-primary/10 border-2 border-dashed border-primary text-primary font-extrabold text-lg tracking-wide">
               🎉 20% OFF – Code: MC20
             </div>
           )}
 
-          <a
-            href={WHATSAPP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
             onClick={handleWhatsAppClick}
-            className="mt-3 inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-[#25D366] hover:underline"
+            className="mt-3 w-full py-2.5 rounded-xl border border-[#25D366]/40 text-[#25D366] font-semibold text-sm hover:bg-[#25D366]/10 transition flex items-center justify-center gap-2"
           >
-            <MessageCircle className="w-3.5 h-3.5" fill="currentColor" />
-            Talk to us on WhatsApp
-          </a>
+            <MessageCircle className="w-4 h-4" fill="currentColor" />
+            Talk to us on WhatsApp instead
+          </button>
+
+          <button
+            onClick={handleClose}
+            className="mt-2 w-full py-2 rounded-xl text-xs font-medium text-muted-foreground hover:bg-muted transition"
+          >
+            Lose the offer & continue to website
+          </button>
 
           <p className="text-[11px] text-muted-foreground/80 mt-3 italic">
             Limited time offer for new students.
           </p>
-
-          <button
-            onClick={handleClose}
-            className="mt-3 w-full py-2 rounded-xl border border-border text-xs font-medium text-muted-foreground hover:bg-muted transition"
-          >
-            Close the offer & continue to website
-          </button>
         </div>
       </div>
     </div>
