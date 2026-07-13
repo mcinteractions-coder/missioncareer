@@ -51,9 +51,18 @@ export default function DiscountPopup() {
     if (window.location.pathname.startsWith("/admin")) return;
     const already = localStorage.getItem(STORAGE_KEY);
     if (already) return;
-    const t = setTimeout(() => setOpen(true), 6000);
+    const t = setTimeout(() => {
+      setOpen(true);
+      trackPopupEvent("discount_shown");
+    }, 6000);
     return () => clearTimeout(t);
   }, []);
+
+  const close = () => {
+    setOpen(false);
+    localStorage.setItem(STORAGE_KEY, "claimed");
+    trackPopupEvent("discount_closed");
+  };
 
   const close = () => {
     setOpen(false);
