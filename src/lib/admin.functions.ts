@@ -445,7 +445,9 @@ export const adminSessionDetail = createServerFn({ method: "POST" })
     const lead = leadRes.data ?? null;
 
     // Build AI-friendly journey timeline (pageviews only)
-    const pv = events.filter((e) => e.event_type !== "heartbeat");
+    const pv = events.filter(
+      (e) => e.event_type !== "heartbeat" && e.event_type !== "engagement_batch",
+    );
     const journey = pv.map((e) => {
       const t = new Date(e.created_at).toLocaleTimeString("en-IN", {
         hour: "2-digit",
@@ -463,9 +465,65 @@ export const adminSessionDetail = createServerFn({ method: "POST" })
           )
         : 0;
 
+    // ---------- Section engagement + clicks + exits (from meta) ----------
+    type MetaObj = Record<string, unknown>;
+    const sectionMs: Record<string, number> = {};
+    const clicks: {
+      at: string;
+      text: string;
+      section: string | null;
+      href: string | null;
+    }[] = [];
+    let maxDepthPct = 0;
+    let exitReason: string | null = null;
+    let exitAt: string | null = null;
+    let totalActiveMs = 0;
+
+    for (const e of events) {
+      const raw = (e as { meta?: unknown }).meta;
+      if (!raw) continue;
+      const items: MetaObj[] = Array.isArray(raw) ? (raw as MetaObj[]) : [raw as MetaObj];
+      for (const m of items) {
+        const type = (m.event_type as string | undefined) || e.event_type;
+        if (
+          type === "section_view" &&
+          typeof m.section === "string" &&
+          typeof m.duration_ms === "number"
+        ) {
+          sectionMs[m.section] = (sectionMs[m.section] || 0) + m.duration_ms;
+        } else if (type === "click") {
+          clicks.push({
+            at: e.created_at,
+            text: String(m.text || "").slice(0, 120),
+            section: (m.section as string) || null,
+            href: (m.href as string) || null,
+          });
+        } else if (type === "page_exit") {
+          if (typeof m.max_depth_pct === "number" && m.max_depth_pct > maxDepthPct)
+            maxDepthPct = m.max_depth_pct;
+          exitReason = (m.reason as string) || exitReason;
+          exitAt = e.created_at;
+          if (typeof m.total_ms === "number")
+            totalActiveMs = Math.max(totalActiveMs, m.total_ms);
+          const totals = m.section_totals_ms as Record<string, number> | undefined;
+          if (totals) {
+            for (const [k, v] of Object.entries(totals)) {
+              if (typeof v === "number" && v > (sectionMs[k] || 0)) sectionMs[k] = v;
+            }
+          }
+        }
+      }
+    }
+
+    const sectionEngagement = Object.entries(sectionMs)
+      .map(([section, ms]) => ({ section, seconds: Math.round(ms / 1000) }))
+      .filter((r) => r.seconds > 0)
+      .sort((a, b) => b.seconds - a.seconds);
+    const clickList = clicks.slice(-40);
+
     let aiSummary = "";
     const key = process.env.LOVABLE_API_KEY;
-    if (key && journey.length > 0) {
+    if (key && (journey.length > 0 || sectionEngagement.length > 0)) {
       try {
         const identityLine = booking
           ? `IDENTITY: ${booking.full_name} (booked counseling for ${booking.slot_date} at ${booking.slot_time}, mode=${booking.mode}, phone=${booking.phone}${booking.email ? ", email=" + booking.email : ""}${booking.country ? ", country=" + booking.country : ""})${booking.notes ? ", notes: " + booking.notes : ""}`
@@ -478,6 +536,20 @@ export const adminSessionDetail = createServerFn({ method: "POST" })
         const ua = first?.user_agent || "";
         const ref = first?.referrer || "Direct";
 
+        const sectionLines =
+          sectionEngagement.map((s) => `- ${s.section}: ${s.seconds}s`).join("\n") ||
+          "- (no section engagement captured)";
+        const clickLines =
+          clickList
+            .map(
+              (c) =>
+                `- "${c.text}"${c.section ? ` (in ${c.section})` : ""}${c.href ? ` → ${c.href}` : ""}`,
+            )
+            .join("\n") || "- (no clicks captured)";
+        const exitLine = exitAt
+          ? `EXIT: ${new Date(exitAt).toLocaleTimeString("en-IN")} (${exitReason || "unknown"}), max scroll depth ${maxDepthPct}%, ~${Math.round(totalActiveMs / 1000)}s on page`
+          : "EXIT: (still active or exit not captured)";
+
         const prompt = `You are analysing website visitor behaviour for the admin of Mission Career (a study-abroad consultancy in Kandivali East, Mumbai).
 
 ${identityLine}
@@ -489,9 +561,18 @@ Total pageviews: ${pv.length}, unique pages: ${new Set(pv.map((e) => e.path)).si
 User agent: ${ua.slice(0, 120)}
 
 PAGE-BY-PAGE JOURNEY (chronological):
-${journey.slice(0, 60).join("\n")}${journey.length > 60 ? `\n… (+${journey.length - 60} more)` : ""}
+${journey.slice(0, 30).join("\n")}${journey.length > 30 ? `\n… (+${journey.length - 30} more)` : ""}
 
-Write a concise (3-5 sentence) plain-English summary FOR THE ADMIN describing what this visitor did on the site — which sections they explored (e.g. Destinations, Success Stories, Booking, Blog), how engaged they seemed, whether they filled a form, and any signal about intent (e.g. serious lead vs casual browsing). Address the admin directly. No markdown, no bullet points, just a short paragraph.`;
+SECTION-BY-SECTION TIME (how long each on-page section stayed in view):
+${sectionLines}
+
+CLICKS (chronological, last 40):
+${clickLines}
+
+${exitLine}
+
+Write a rich (5-8 sentence) plain-English narrative FOR THE ADMIN describing this specific visitor's journey: which sections they scrolled to and lingered on the longest, which they skipped, exactly what they clicked, how deep they scrolled, whether they filled a form, and when/how they left. Sound like a story ("This visitor first landed on…, then spent 42 seconds reading Success Stories, tapped WhatsApp, scrolled down to Booking but did not submit, and left after 3 minutes when the tab was hidden."). No markdown, no bullets, just a paragraph.`;
+
 
         const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
           method: "POST",
