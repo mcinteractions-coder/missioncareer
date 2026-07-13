@@ -48,7 +48,7 @@ import {
   adminListSessions,
   adminSessionDetail,
   adminAiInsights,
-  adminDiscountPopupStats,
+  adminWhatsAppPopupStats,
 } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/admin")({
