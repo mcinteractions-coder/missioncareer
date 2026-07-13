@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { MessageCircle, ArrowRight } from "lucide-react";
+import { Gift, Sparkles, X, ArrowRight, MessageCircle } from "lucide-react";
 
-const STORAGE_KEY = "mc_whatsapp_gate_v1";
+const STORAGE_KEY = "mc_discount_popup_v1";
 const SESSION_KEY = "mc_session_id";
 const PHONE = "919870003748";
 const WHATSAPP_MSG = encodeURIComponent(
@@ -43,6 +43,7 @@ function trackPopupEvent(event_type: string) {
 
 export default function DiscountPopup() {
   const [open, setOpen] = useState(false);
+  const [revealed, setRevealed] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -50,23 +51,24 @@ export default function DiscountPopup() {
     const already = localStorage.getItem(STORAGE_KEY);
     if (already) return;
     setOpen(true);
-    trackPopupEvent("whatsapp_popup_shown");
+    trackPopupEvent("discount_popup_shown");
   }, []);
 
-  // Lock body scroll while the popup is open (mandatory gate)
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (!open) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, [open]);
+  const handleReveal = () => {
+    trackPopupEvent("discount_reveal_click");
+    setRevealed(true);
+    localStorage.setItem(STORAGE_KEY, "revealed");
+  };
+
+  const handleClose = () => {
+    trackPopupEvent("discount_popup_dismiss");
+    localStorage.setItem(STORAGE_KEY, "dismissed");
+    setOpen(false);
+  };
 
   const handleWhatsAppClick = () => {
-    trackPopupEvent("whatsapp_button_click");
-    localStorage.setItem(STORAGE_KEY, "claimed");
+    trackPopupEvent("discount_whatsapp_click");
+    localStorage.setItem(STORAGE_KEY, "whatsapp");
     setOpen(false);
     window.open(WHATSAPP_URL, "_blank", "noopener,noreferrer");
   };
@@ -75,52 +77,65 @@ export default function DiscountPopup() {
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-300"
       onClick={(e) => {
-        // Mandatory gate — backdrop click does NOT close the popup
-        if (e.target === e.currentTarget) trackPopupEvent("whatsapp_backdrop_click");
+        if (e.target === e.currentTarget) handleClose();
       }}
     >
       <div className="relative w-full max-w-sm rounded-2xl bg-gradient-to-br from-background to-muted border border-border shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
-        {/* WhatsApp green header */}
-        <div className="relative h-32 bg-gradient-to-r from-[#25D366] to-[#128C7E] overflow-hidden">
-          <div className="absolute inset-0 opacity-20">
-            <MessageCircle className="absolute top-4 left-6 w-8 h-8 text-white" />
-            <MessageCircle className="absolute top-12 right-10 w-5 h-5 text-white" />
-            <MessageCircle className="absolute bottom-2 left-20 w-6 h-6 text-white" />
+        <button
+          onClick={handleClose}
+          className="absolute top-3 right-3 z-10 p-1.5 rounded-full bg-background/70 hover:bg-background transition"
+          aria-label="Close"
+        >
+          <X className="w-4 h-4" />
+        </button>
+
+        <div className="relative h-28 bg-gradient-to-r from-primary via-accent to-primary overflow-hidden">
+          <div className="absolute inset-0 opacity-25">
+            <Sparkles className="absolute top-3 left-6 w-6 h-6 text-white" />
+            <Sparkles className="absolute top-10 right-10 w-4 h-4 text-white" />
+            <Sparkles className="absolute bottom-3 left-24 w-5 h-5 text-white" />
           </div>
-          <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-16 h-16 rounded-full bg-background border-4 border-[#25D366] flex items-center justify-center">
-            <MessageCircle className="w-8 h-8 text-[#25D366]" fill="currentColor" />
+          <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 w-14 h-14 rounded-full bg-background border-4 border-primary flex items-center justify-center">
+            <Gift className="w-7 h-7 text-primary" />
           </div>
         </div>
 
-        <div className="pt-12 px-6 pb-6 text-center">
-          <h3 className="text-xl font-bold mb-2">Talk to us directly on WhatsApp</h3>
-          <p className="text-sm text-muted-foreground mb-6">
-            Get instant, personalised guidance from our study-abroad counsellors.
-            Tap the button below to start chatting on WhatsApp right now.
+        <div className="pt-10 px-6 pb-6 text-center">
+          <h3 className="text-xl font-bold mb-2">Unlock Your Special Offer</h3>
+          <p className="text-sm text-muted-foreground mb-5">
+            An exclusive discount is waiting for you on our study-abroad services.
           </p>
 
-          <button
-            onClick={handleWhatsAppClick}
-            className="w-full py-3 rounded-xl bg-[#25D366] text-white font-bold text-sm hover:bg-[#22bf5a] transition flex items-center justify-center gap-2 shadow-lg"
-            style={{ boxShadow: "0 8px 24px rgba(37,211,102,0.35)" }}
-          >
-            <MessageCircle className="w-5 h-5" fill="currentColor" />
-            Directly talk to us on WhatsApp
-            <ArrowRight className="w-4 h-4" />
-          </button>
+          {!revealed ? (
+            <button
+              onClick={handleReveal}
+              className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm hover:opacity-90 transition flex items-center justify-center gap-2 shadow-lg"
+            >
+              <Gift className="w-5 h-5" />
+              Reveal My Discount
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          ) : (
+            <div className="w-full py-4 rounded-xl bg-primary/10 border-2 border-dashed border-primary text-primary font-extrabold text-lg tracking-wide">
+              🎉 20% OFF – Code: MC20
+            </div>
+          )}
 
-          <button
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={handleWhatsAppClick}
-            className="w-full mt-3 py-2.5 rounded-xl border border-[#25D366]/40 text-[#25D366] font-semibold text-sm hover:bg-[#25D366]/10 transition flex items-center justify-center gap-2"
+            className="mt-3 inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-[#25D366] hover:underline"
           >
-            <MessageCircle className="w-4 h-4" />
-            Talk to us on WhatsApp instead
-          </button>
+            <MessageCircle className="w-3.5 h-3.5" fill="currentColor" />
+            Talk to us on WhatsApp
+          </a>
 
-          <p className="text-[11px] text-muted-foreground/80 mt-4 italic">
-            No forms to fill — just one tap and you're chatting with us.
+          <p className="text-[11px] text-muted-foreground/80 mt-3 italic">
+            Limited time offer for new students.
           </p>
         </div>
       </div>
