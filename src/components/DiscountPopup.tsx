@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Gift, Sparkles, X, ArrowRight, MessageCircle } from "lucide-react";
+import { Gift, Sparkles, ArrowRight, MessageCircle } from "lucide-react";
 
 const SESSION_KEY = "mc_session_id";
 const PHONE = "919870003748";
