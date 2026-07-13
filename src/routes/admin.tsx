@@ -1792,8 +1792,8 @@ function AnalyticsPanel() {
         )}
       </div>
 
-      {/* Discount popup analytics */}
-      <DiscountPopupPanel hours={hours} />
+      {/* WhatsApp direct-talk popup analytics */}
+      <WhatsAppPopupPanel hours={hours} />
 
       {/* Detailed visitor sessions with AI journey summaries */}
       <VisitorSessionsPanel hours={hours} />
