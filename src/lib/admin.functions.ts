@@ -594,9 +594,9 @@ ${sectionLines}
 CLICKS (chronological, last 40):
 ${clickLines}
 
-UNLOCK YOUR SPECIAL OFFER POPUP — exact activity:
-${discountEvents.length ? discountEvents.join("\n") : "- (no popup activity recorded)"}
-${discountOutcome}
+WHATSAPP DIRECT-TALK POPUP — exact activity:
+${whatsappEvents.length ? whatsappEvents.join("\n") : "- (no popup activity recorded)"}
+${whatsappOutcome}
 
 ${exitLine}
 
