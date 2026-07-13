@@ -232,6 +232,7 @@ function RootComponent() {
       <ChatBot />
       <WhatsAppFloat />
       <VisitorTracker />
+      <DiscountPopup />
     </QueryClientProvider>
   );
 }
