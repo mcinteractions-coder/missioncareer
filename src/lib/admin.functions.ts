@@ -521,32 +521,29 @@ export const adminSessionDetail = createServerFn({ method: "POST" })
       .sort((a, b) => b.seconds - a.seconds);
     const clickList = clicks.slice(-40);
 
-    // ---------- Unlock Your Special Offer popup activity ----------
-    const DISCOUNT_LABEL: Record<string, string> = {
-      discount_shown: "Popup shown to visitor",
-      discount_reveal_click: "Clicked 'Reveal My Discount' (submitted name + phone)",
-      discount_submitted: "Lead saved successfully",
-      discount_awesome_click: "Clicked 'Awesome, thanks!' after seeing FREE session reveal",
-      discount_backdrop_click: "Tried to close by clicking outside (blocked — mandatory)",
-      discount_closed: "Popup closed",
+    // ---------- WhatsApp direct-talk popup activity ----------
+    const WHATSAPP_LABEL: Record<string, string> = {
+      whatsapp_popup_shown: "WhatsApp popup shown to visitor",
+      whatsapp_button_click: "Clicked 'Directly talk to us on WhatsApp' and opened WhatsApp",
+      whatsapp_backdrop_click: "Tried to close by clicking outside (blocked — mandatory gate)",
     };
-    const discountEvents = events
-      .filter((e) => e.event_type && e.event_type.startsWith("discount_"))
+    const whatsappEvents = events
+      .filter((e) => e.event_type && e.event_type.startsWith("whatsapp_"))
       .map((e) => {
         const t = new Date(e.created_at).toLocaleTimeString("en-IN", {
           hour: "2-digit",
           minute: "2-digit",
           second: "2-digit",
         });
-        return `- ${t} → ${DISCOUNT_LABEL[e.event_type] || e.event_type}`;
+        return `- ${t} → ${WHATSAPP_LABEL[e.event_type] || e.event_type}`;
       });
-    const discountOutcome = discountEvents.length
-      ? events.some((e) => e.event_type === "discount_submitted")
-        ? "OUTCOME: Visitor SUBMITTED the offer form (phone captured)."
-        : events.some((e) => e.event_type === "discount_backdrop_click")
-          ? "OUTCOME: Visitor tried to dismiss the offer without submitting."
-          : "OUTCOME: Visitor saw the offer but did not submit."
-      : "OUTCOME: Offer popup was not shown for this visitor.";
+    const whatsappOutcome = whatsappEvents.length
+      ? events.some((e) => e.event_type === "whatsapp_button_click")
+        ? "OUTCOME: Visitor clicked the WhatsApp button and was sent to chat."
+        : events.some((e) => e.event_type === "whatsapp_backdrop_click")
+          ? "OUTCOME: Visitor tried to dismiss the WhatsApp gate by clicking outside."
+          : "OUTCOME: Visitor saw the WhatsApp popup but did not click the button."
+      : "OUTCOME: WhatsApp popup was not shown for this visitor.";
 
 
     let aiSummary = "";
