@@ -58,15 +58,18 @@ export default function DiscountPopup() {
     return () => clearTimeout(t);
   }, []);
 
-  const close = () => {
+  const close = (source: "awesome_btn" | "backdrop" | "auto" = "auto") => {
     setOpen(false);
     localStorage.setItem(STORAGE_KEY, "claimed");
+    if (source === "awesome_btn") trackPopupEvent("discount_awesome_click");
+    else if (source === "backdrop") trackPopupEvent("discount_backdrop_click");
     trackPopupEvent("discount_closed");
   };
 
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    trackPopupEvent("discount_reveal_click");
     setError(null);
     const trimmedName = name.trim();
     const cleanPhone = phone.replace(/\s+/g, "");
@@ -97,10 +100,16 @@ export default function DiscountPopup() {
     }
   };
 
+
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-300">
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-300"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) close("backdrop");
+      }}
+    >
       <div className="relative w-full max-w-md rounded-2xl bg-gradient-to-br from-background to-muted border border-border shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
         {/* Decorative header */}
         <div className="relative h-28 bg-gradient-to-r from-primary via-primary/80 to-primary overflow-hidden">
@@ -206,7 +215,7 @@ export default function DiscountPopup() {
               </p>
 
               <button
-                onClick={close}
+                onClick={() => close("awesome_btn")}
                 className="w-full py-2.5 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition flex items-center justify-center gap-2"
               >
                 <PartyPopper className="w-4 h-4" /> Awesome, thanks!

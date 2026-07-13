@@ -2362,11 +2362,16 @@ interface DiscountPopupRow {
   name: string | null;
   phone: string | null;
   email: string | null;
+  buttons: { button: string; at: string }[];
+  buttonCounts: Record<string, number>;
+  lastButton: { button: string; at: string } | null;
 }
 interface DiscountPopupData {
   totals: { shown: number; submitted: number; dismissed: number; conversionRate: number };
+  buttonTotals: Record<string, number>;
   rows: DiscountPopupRow[];
 }
+
 
 function DiscountPopupPanel({ hours }: { hours: number }) {
   const [data, setData] = useState<DiscountPopupData | null>(null);
@@ -2445,6 +2450,36 @@ function DiscountPopupPanel({ hours }: { hours: number }) {
             </div>
           </div>
 
+          {/* Button click totals */}
+          <div className="mb-4">
+            <div className="text-[11px] uppercase tracking-wide text-muted-foreground mb-2 font-semibold">
+              🖱️ Button Clicks (which button people pressed)
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="rounded-lg border border-primary/30 bg-primary/5 p-3">
+                <div className="text-[10px] uppercase text-muted-foreground">Reveal My Discount</div>
+                <div className="text-xl font-bold text-primary">
+                  {data.buttonTotals["Reveal My Discount"] ?? 0}
+                </div>
+                <div className="text-[10px] text-muted-foreground mt-0.5">Form submit button</div>
+              </div>
+              <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-3">
+                <div className="text-[10px] uppercase text-muted-foreground">Awesome, thanks!</div>
+                <div className="text-xl font-bold text-emerald-600">
+                  {data.buttonTotals["Awesome, thanks!"] ?? 0}
+                </div>
+                <div className="text-[10px] text-muted-foreground mt-0.5">Closed after reveal</div>
+              </div>
+              <div className="rounded-lg border border-red-500/30 bg-red-500/5 p-3">
+                <div className="text-[10px] uppercase text-muted-foreground">Backdrop (outside)</div>
+                <div className="text-xl font-bold text-red-600">
+                  {data.buttonTotals["Backdrop (outside)"] ?? 0}
+                </div>
+                <div className="text-[10px] text-muted-foreground mt-0.5">Clicked outside popup</div>
+              </div>
+            </div>
+          </div>
+
           {data.rows.length === 0 ? (
             <p className="text-xs text-muted-foreground">
               No popup interactions in this range yet.
@@ -2457,6 +2492,7 @@ function DiscountPopupPanel({ hours }: { hours: number }) {
                     <th className="text-left py-2 pr-3">Action</th>
                     <th className="text-left py-2 pr-3">Name</th>
                     <th className="text-left py-2 pr-3">Phone</th>
+                    <th className="text-left py-2 pr-3">Buttons Clicked</th>
                     <th className="text-left py-2 pr-3">Location</th>
                     <th className="text-left py-2 pr-3">Device</th>
                     <th className="text-left py-2 pr-3">Page</th>
@@ -2469,6 +2505,31 @@ function DiscountPopupPanel({ hours }: { hours: number }) {
                       <td className="py-2 pr-3">{statusBadge(r.status)}</td>
                       <td className="py-2 pr-3 font-semibold">{r.name || "—"}</td>
                       <td className="py-2 pr-3 font-mono text-xs">{r.phone || "—"}</td>
+                      <td className="py-2 pr-3 text-xs">
+                        {r.buttons.length === 0 ? (
+                          <span className="text-muted-foreground italic">No click</span>
+                        ) : (
+                          <div className="flex flex-wrap gap-1 max-w-[240px]">
+                            {r.buttons.map((b, i) => {
+                              const color =
+                                b.button === "Reveal My Discount"
+                                  ? "bg-primary/15 text-primary"
+                                  : b.button === "Awesome, thanks!"
+                                    ? "bg-emerald-500/15 text-emerald-600"
+                                    : "bg-red-500/15 text-red-600";
+                              return (
+                                <span
+                                  key={i}
+                                  className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${color}`}
+                                  title={new Date(b.at).toLocaleString()}
+                                >
+                                  {b.button}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </td>
                       <td className="py-2 pr-3 text-xs">
                         {flag(r.country)}{" "}
                         {[r.city, r.country].filter(Boolean).join(", ") || "Unknown"}
@@ -2486,6 +2547,7 @@ function DiscountPopupPanel({ hours }: { hours: number }) {
               </table>
             </div>
           )}
+
         </>
       )}
     </div>
