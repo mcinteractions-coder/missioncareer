@@ -42,14 +42,19 @@ function trackPopupEvent(event_type: string, metadata?: Record<string, unknown>)
 }
 
 export default function DiscountPopup() {
-  const [open, setOpen] = useState(false);
+  const initialOpen =
+    typeof window === "undefined" ? true : !window.location.pathname.startsWith("/admin");
+  const [open, setOpen] = useState(initialOpen);
   const [revealed, setRevealed] = useState(false);
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (window.location.pathname.startsWith("/admin")) return;
+    if (window.location.pathname.startsWith("/admin")) {
+      setOpen(false);
+      return;
+    }
     setOpen(true);
     trackPopupEvent("discount_popup_shown");
   }, []);
