@@ -33,12 +33,11 @@ export function About() {
   const [filters, setFilters] = useState<FinderFilters>({});
   const [submitted, setSubmitted] = useState(false);
   const [admits, setAdmits] = useState<Post[]>([]);
-  const [reviews, setReviews] = useState<Post[]>([]);
 
   useEffect(() => {
     fetchPosts("admit").then(setAdmits);
-    fetchPosts("review").then(setReviews);
   }, []);
+
 
   const results = useMemo(() => (submitted ? searchUniversities(filters) : []), [filters, submitted]);
 
