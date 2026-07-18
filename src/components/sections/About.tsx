@@ -3,6 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import { searchUniversities, type FinderFilters, BUDGET_BANDS } from "@/lib/universities";
 import { Counter } from "@/components/Counter";
 import { fetchPosts, type Post } from "@/lib/content-store";
+import { reviews as staticReviews } from "@/data/reviews";
+
 
 type FieldKey = keyof FinderFilters;
 const FIELDS: { key: FieldKey; label: string; options: string[] }[] = [
