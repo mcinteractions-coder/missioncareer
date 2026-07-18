@@ -206,34 +206,33 @@ export function About() {
                   <Quote className="h-4 w-4 text-primary" /> Student Reviews
                 </p>
                 <div className="flex items-center gap-1 text-xs font-semibold bg-amber-500/10 text-amber-600 rounded-full px-2.5 py-1">
-                  <span className="text-amber-500">★</span> 4.9 · {reviews.length}
+                  <span className="text-amber-500">★</span> 4.9 · {staticReviews.length}
                 </div>
               </div>
               <div className="grid sm:grid-cols-2 gap-3 max-h-96 overflow-y-auto pr-2 relative">
-                {reviews.map((r, i) => (
-                  <div key={r.id} className="group relative rounded-2xl bg-card border border-border/60 p-4 hover:shadow-glow hover:border-primary/40 transition-all">
+                {staticReviews.map((r, i) => (
+                  <div key={`${r.name}-${i}`} className="group relative rounded-2xl bg-card border border-border/60 p-4 hover:shadow-glow hover:border-primary/40 transition-all">
                     <Quote className="absolute top-2 right-2 h-4 w-4 text-primary/20 group-hover:text-primary/40 transition" />
                     <div className="flex items-center gap-2.5">
-                      {r.image ? (
-                        <img src={r.image} alt={r.title} className="h-9 w-9 rounded-full object-cover ring-2 ring-primary/20" />
-                      ) : (
-                        <div className={`h-9 w-9 rounded-full bg-gradient-to-br ${GRADIENTS[i % GRADIENTS.length]} text-white text-sm font-bold flex items-center justify-center`}>
-                          {r.title.charAt(0).toUpperCase()}
-                        </div>
-                      )}
+                      <div className={`h-9 w-9 rounded-full bg-gradient-to-br ${r.gradient} text-white text-sm font-bold flex items-center justify-center shrink-0`}>
+                        {r.initials}
+                      </div>
                       <div className="min-w-0">
-                        <p className="font-semibold text-foreground text-sm truncate">{r.title}</p>
+                        <p className="font-semibold text-foreground text-sm truncate">{r.name}</p>
                         <div className="text-amber-500 text-xs leading-none">
-                          {"★".repeat(r.rating ?? 5)}<span className="text-muted-foreground/40">{"★".repeat(5 - (r.rating ?? 5))}</span>
+                          {"★".repeat(r.rating)}<span className="text-muted-foreground/40">{"★".repeat(5 - r.rating)}</span>
                         </div>
                       </div>
                     </div>
-                    <p className="mt-2.5 text-sm text-foreground/80 leading-relaxed">{r.text}</p>
+                    <p className="mt-2.5 text-sm text-foreground/80 leading-relaxed line-clamp-5">{r.text}</p>
+                    {r.destination && (
+                      <p className="mt-2 text-xs font-semibold text-primary">🎓 {r.destination}</p>
+                    )}
                   </div>
                 ))}
-                {reviews.length === 0 && <p className="text-xs text-muted-foreground col-span-2">No reviews yet.</p>}
               </div>
             </div>
+
           </div>
 
         </div>
