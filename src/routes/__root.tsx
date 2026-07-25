@@ -15,7 +15,7 @@ import { ChatBot } from "@/components/ChatBot";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
 import { VisitorTracker } from "@/components/VisitorTracker";
 import { SectionEngagementTracker } from "@/components/SectionEngagementTracker";
-import DiscountPopup from "@/components/DiscountPopup";
+
 
 
 const LOCAL_BUSINESS_JSONLD = {
@@ -236,8 +236,6 @@ function RootComponent() {
       <WhatsAppFloat />
       <VisitorTracker />
       <SectionEngagementTracker />
-      <DiscountPopup />
-
     </QueryClientProvider>
   );
 }
