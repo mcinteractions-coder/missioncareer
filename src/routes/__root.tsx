@@ -236,8 +236,6 @@ function RootComponent() {
       <WhatsAppFloat />
       <VisitorTracker />
       <SectionEngagementTracker />
-      <DiscountPopup />
-
     </QueryClientProvider>
   );
 }
