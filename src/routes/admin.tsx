@@ -35,6 +35,7 @@ import {
 } from "lucide-react";
 import { fetchPosts, fileToDataURL, type Post, type PostKind } from "@/lib/content-store";
 import { supabase } from "@/integrations/supabase/client";
+import { Booking } from "@/components/sections/Booking";
 import {
   adminAddPost,
   adminDeletePost,
