@@ -13,7 +13,6 @@ const links = [
   { label: "Success Stories", href: "#success" },
   { label: "Globe", href: "#globe" },
   { label: "Deadlines", href: "#deadlines" },
-  { label: "Book Slot", href: "#booking" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -60,7 +59,7 @@ export function Navbar() {
         <div className="hidden lg:flex items-center gap-2 shrink-0">
           <ThemeToggle />
           <a
-            href="#booking"
+            href="#contact"
             className="inline-flex items-center rounded-full bg-gradient-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-soft hover:shadow-glow transition-shadow whitespace-nowrap"
           >
             Free Counseling
@@ -94,7 +93,7 @@ export function Navbar() {
               </a>
             ))}
             <a
-              href="#booking"
+              href="#contact"
               onClick={() => setOpen(false)}
               className="mt-2 inline-flex justify-center rounded-full bg-gradient-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
             >

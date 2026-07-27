@@ -35,6 +35,7 @@ import {
 } from "lucide-react";
 import { fetchPosts, fileToDataURL, type Post, type PostKind } from "@/lib/content-store";
 import { supabase } from "@/integrations/supabase/client";
+import { Booking } from "@/components/sections/Booking";
 import {
   adminAddPost,
   adminDeletePost,
@@ -117,11 +118,12 @@ function AdminPage() {
   return <AdminPanel />;
 }
 
-type TabKey = PostKind | "leads" | "bookings" | "analytics";
+type TabKey = PostKind | "leads" | "bookings" | "analytics" | "bookslot";
 
 const TABS: { key: TabKey; label: string; icon: typeof Newspaper }[] = [
   { key: "analytics", label: "Live Analytics", icon: Activity },
   { key: "bookings", label: "Counseling Bookings", icon: CalendarDays },
+  { key: "bookslot", label: "Book Your Slot", icon: CalendarDays },
   { key: "blog", label: "Blog Posts", icon: Newspaper },
   { key: "success", label: "Success Stories", icon: Star },
   { key: "review", label: "Reviews", icon: Star },
@@ -266,6 +268,8 @@ function AdminPanel() {
           <LeadsPanel />
         ) : tab === "bookings" ? (
           <BookingsPanel />
+        ) : tab === "bookslot" ? (
+          <Booking />
         ) : tab === "analytics" ? (
           <AnalyticsPanel />
         ) : (
