@@ -1,6 +1,6 @@
 import {
   Sparkles, GraduationCap, Globe2, FileCheck, Wallet, Plane, LifeBuoy, ArrowRight,
-  Star, Award, CalendarCheck,
+  Star, Award, MessageCircle,
 } from "lucide-react";
 import pooja from "@/assets/pooja-welling.png";
 import gautam from "@/assets/gautam-umashankar.png";
@@ -70,41 +70,23 @@ export function Hero() {
                 className="absolute inset-0 w-full h-full"
                 title="Mission Career"
               />
-              {/* Badge button covering the Gemini sparkle watermark (bottom-right) */}
-              <a
-                href="#contact"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="absolute bottom-10 right-10 md:bottom-12 md:right-14 z-20 inline-flex flex-col items-center justify-center gap-1 rounded-lg px-2.5 py-2 md:px-3 md:py-2.5 text-[10px] md:text-[11px] font-semibold text-white shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-105"
-                style={{
-                  background: "linear-gradient(135deg, rgba(59,130,246,0.95) 0%, rgba(96,165,250,0.95) 100%)",
-                  boxShadow: "0 4px 16px rgba(59,130,246,0.5), 0 0 0 1px rgba(255,255,255,0.2) inset",
-                }}
-              >
-                <Sparkles className="h-3.5 w-3.5 md:h-4 md:w-4" />
-                <span className="whitespace-nowrap">Mission Career</span>
-              </a>
             </div>
 
-            {/* Bottom gradient overlay + Book Your Slot button */}
+            {/* Bottom gradient overlay + Talk to us on WhatsApp button */}
             <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
             <div className="absolute bottom-5 md:bottom-7 left-0 right-0 flex justify-center pointer-events-auto">
               <a
-                href="#booking"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" });
-                }}
+                href="https://wa.me/919870003748?text=Hi%20Mission%20Career!%20I'd%20like%20to%20know%20more%20about%20studying%20abroad."
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group inline-flex items-center gap-2.5 rounded-full px-7 py-3 text-sm md:text-base font-semibold text-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95"
                 style={{
-                  background: "linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #93c5fd 100%)",
-                  boxShadow: "0 8px 32px rgba(59,130,246,0.45), 0 0 0 1px rgba(255,255,255,0.18) inset",
+                  background: "linear-gradient(135deg, #25D366 0%, #128C7E 100%)",
+                  boxShadow: "0 8px 32px rgba(37,211,102,0.45), 0 0 0 1px rgba(255,255,255,0.18) inset",
                 }}
               >
-                <CalendarCheck className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
-                <span>Book Your Slot</span>
+                <MessageCircle className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" fill="currentColor" />
+                <span>Talk to us on WhatsApp</span>
                 <span className="ml-1 inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
               </a>
             </div>
