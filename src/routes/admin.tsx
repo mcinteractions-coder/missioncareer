@@ -273,6 +273,8 @@ function AdminPanel() {
           <BookingsPanel />
         ) : tab === "bookslot" ? (
           <Booking />
+        ) : tab === "seminar" ? (
+          <SeminarDeck />
         ) : tab === "analytics" ? (
           <AnalyticsPanel />
         ) : (
