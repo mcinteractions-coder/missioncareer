@@ -32,10 +32,12 @@ import {
   Zap,
   Target,
   Lightbulb,
+  Presentation,
 } from "lucide-react";
 import { fetchPosts, fileToDataURL, type Post, type PostKind } from "@/lib/content-store";
 import { supabase } from "@/integrations/supabase/client";
 import { Booking } from "@/components/sections/Booking";
+import { SeminarDeck } from "@/components/sections/SeminarDeck";
 import {
   adminAddPost,
   adminDeletePost,
