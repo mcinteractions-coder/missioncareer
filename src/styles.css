@@ -190,6 +190,39 @@
 
 
 
+/* Cinematic slide reveal for Seminar Deck */
+@keyframes slide-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.96) translateY(12px);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+.animate-slide-reveal {
+  animation: slide-reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes present-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-present-enter {
+  animation: present-enter 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
 @layer base {
   * { border-color: var(--color-border); }
   html { scroll-behavior: smooth; }
