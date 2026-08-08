@@ -95,6 +95,17 @@ export function Booking() {
         currency: "INR",
       });
     }
+    // Meta Pixel conversion tracking
+    if (typeof window !== "undefined" && typeof (window as any).fbq === "function") {
+      (window as any).fbq("track", "Lead", {
+        content_name: "Book Your Slot",
+        value: 1.0,
+        currency: "INR",
+      });
+      (window as any).fbq("trackCustom", "BookingConfirmed", {
+        content_name: "Book Your Slot",
+      });
+    }
     form.reset();
   };
 
