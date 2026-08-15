@@ -899,3 +899,9 @@
 .festive-section [class*="gradient-primary"] {
   background-image: linear-gradient(135deg, #ff9933 0%, #e8730f 52%, #138808 100%) !important;
 }
+
+/* festive sections re-map the primary gradient token itself */
+.festive-section {
+  --gradient-primary: linear-gradient(135deg, #ff9933 0%, #e8730f 52%, #138808 100%);
+}
+.festive-section .bg-gradient-primary { background: var(--gradient-primary) !important; }
