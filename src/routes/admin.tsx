@@ -52,6 +52,8 @@ import {
   adminSessionDetail,
   adminAiInsights,
   adminWhatsAppPopupStats,
+  adminListDreamCards,
+  adminDeleteDreamCard,
 } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/admin")({
@@ -120,13 +122,14 @@ function AdminPage() {
   return <AdminPanel />;
 }
 
-type TabKey = PostKind | "leads" | "bookings" | "analytics" | "bookslot" | "seminar";
+type TabKey = PostKind | "leads" | "bookings" | "analytics" | "bookslot" | "seminar" | "dreamcards";
 
 const TABS: { key: TabKey; label: string; icon: typeof Newspaper }[] = [
   { key: "analytics", label: "Live Analytics", icon: Activity },
   { key: "bookings", label: "Counseling Bookings", icon: CalendarDays },
   { key: "bookslot", label: "Book Your Slot", icon: CalendarDays },
   { key: "seminar", label: "Seminar Deck", icon: Presentation },
+  { key: "dreamcards", label: "Dream Cards", icon: Sparkles },
   { key: "blog", label: "Blog Posts", icon: Newspaper },
   { key: "success", label: "Success Stories", icon: Star },
   { key: "review", label: "Reviews", icon: Star },
@@ -277,6 +280,8 @@ function AdminPanel() {
           <SeminarDeck />
         ) : tab === "analytics" ? (
           <AnalyticsPanel />
+        ) : tab === "dreamcards" ? (
+          <DreamCardsPanel />
         ) : (
           <PostsPanel kind={tab} />
         )}
@@ -1147,6 +1152,116 @@ function LeadsPanel() {
                   {l.message}
                 </p>
               )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+interface DreamCardRow {
+  id: string;
+  full_name: string;
+  phone: string | null;
+  email: string | null;
+  country: string | null;
+  course: string | null;
+  study_level: string | null;
+  dream_university: string | null;
+  dream_course: string | null;
+  dream_city: string | null;
+  dream_country: string | null;
+  salary_estimate: string | null;
+  lifestyle: string | null;
+  one_line: string | null;
+  emoji: string | null;
+  color: string | null;
+  created_at: string;
+}
+
+function DreamCardsPanel() {
+  const [cards, setCards] = useState<DreamCardRow[] | null>(null);
+  const [error, setError] = useState("");
+  const listFn = useServerFn(adminListDreamCards);
+  const deleteFn = useServerFn(adminDeleteDreamCard);
+  const pin = sessionStorage.getItem("mc_admin_pin") || "";
+
+  const refresh = useCallback(async () => {
+    setError("");
+    try {
+      const rows = await listFn({ data: { pin } });
+      setCards(rows as DreamCardRow[]);
+    } catch (e) {
+      setError((e as Error).message);
+      setCards([]);
+    }
+  }, [listFn, pin]);
+
+  useEffect(() => {
+    refresh();
+    const channel = supabase
+      .channel("admin-dreamcards")
+      .on("postgres_changes", { event: "*", schema: "public", table: "dream_cards" }, () => {
+        refresh();
+      })
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [refresh]);
+
+  const onDelete = async (id: string) => {
+    if (!confirm("Delete this dream card?")) return;
+    try {
+      await deleteFn({ data: { pin, id } });
+      refresh();
+    } catch (e) {
+      alert("Delete failed: " + (e as Error).message);
+    }
+  };
+
+  if (cards === null) return <p className="text-sm text-muted-foreground">Loading dream cards…</p>;
+
+  return (
+    <div>
+      <h2 className="font-bold text-lg mb-4">AI Dream Cards ({cards.length})</h2>
+      {error && <p className="text-sm text-destructive mb-4">{error}</p>}
+      {cards.length === 0 ? (
+        <div className="bg-card rounded-2xl shadow-card p-10 text-center">
+          <Sparkles className="mx-auto h-10 w-10 text-muted-foreground mb-3" />
+          <p className="text-sm text-muted-foreground">
+            No dream cards yet. Submissions from the homepage AI feature will appear here.
+          </p>
+        </div>
+      ) : (
+        <div className="grid md:grid-cols-2 gap-4">
+          {cards.map((c) => (
+            <div key={c.id} className="bg-card rounded-2xl shadow-card p-5">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <h3 className="font-bold text-foreground flex items-center gap-2">
+                    <span className="text-2xl">{c.emoji}</span>
+                    {c.full_name}
+                  </h3>
+                  <p className="text-xs text-muted-foreground">{new Date(c.created_at).toLocaleString()}</p>
+                </div>
+                <button onClick={() => onDelete(c.id)} className="text-xs text-destructive inline-flex items-center gap-1">
+                  <Trash2 className="h-3.5 w-3.5" /> Delete
+                </button>
+              </div>
+              <div className="mt-3 space-y-2 text-sm">
+                <p className="font-semibold text-foreground">{c.one_line}</p>
+                <div className="grid sm:grid-cols-2 gap-2">
+                  {c.phone && <div><span className="text-muted-foreground">Phone:</span> <a href={`tel:${c.phone}`} className="text-primary font-medium">{c.phone}</a></div>}
+                  {c.email && <div><span className="text-muted-foreground">Email:</span> <a href={`mailto:${c.email}`} className="text-primary font-medium">{c.email}</a></div>}
+                  <div><span className="text-muted-foreground">Dream:</span> {c.dream_course} @ {c.dream_university}</div>
+                  <div><span className="text-muted-foreground">Location:</span> {c.dream_city}, {c.dream_country}</div>
+                  <div><span className="text-muted-foreground">Salary:</span> {c.salary_estimate}</div>
+                  <div><span className="text-muted-foreground">Input:</span> {c.study_level} in {c.country}</div>
+                </div>
+                {c.lifestyle && <p className="text-foreground border-t border-border pt-2">{c.lifestyle}</p>}
+              </div>
             </div>
           ))}
         </div>

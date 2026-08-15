@@ -83,6 +83,69 @@ export type Database = {
         }
         Relationships: []
       }
+      dream_cards: {
+        Row: {
+          color: string | null
+          country: string | null
+          course: string | null
+          created_at: string
+          dream_city: string | null
+          dream_country: string | null
+          dream_course: string | null
+          dream_university: string | null
+          email: string | null
+          emoji: string | null
+          full_name: string
+          id: string
+          lifestyle: string | null
+          one_line: string | null
+          phone: string | null
+          salary_estimate: string | null
+          session_id: string | null
+          study_level: string | null
+        }
+        Insert: {
+          color?: string | null
+          country?: string | null
+          course?: string | null
+          created_at?: string
+          dream_city?: string | null
+          dream_country?: string | null
+          dream_course?: string | null
+          dream_university?: string | null
+          email?: string | null
+          emoji?: string | null
+          full_name: string
+          id?: string
+          lifestyle?: string | null
+          one_line?: string | null
+          phone?: string | null
+          salary_estimate?: string | null
+          session_id?: string | null
+          study_level?: string | null
+        }
+        Update: {
+          color?: string | null
+          country?: string | null
+          course?: string | null
+          created_at?: string
+          dream_city?: string | null
+          dream_country?: string | null
+          dream_course?: string | null
+          dream_university?: string | null
+          email?: string | null
+          emoji?: string | null
+          full_name?: string
+          id?: string
+          lifestyle?: string | null
+          one_line?: string | null
+          phone?: string | null
+          salary_estimate?: string | null
+          session_id?: string | null
+          study_level?: string | null
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           country: string | null

@@ -19,6 +19,7 @@ import { TodaysMeetings } from "@/components/sections/TodaysMeetings";
 import { Footer } from "@/components/sections/Footer";
 import { FestivalPopup } from "@/components/FestivalPopup";
 import { DocumentGrader } from "@/components/sections/DocumentGrader";
+import { DreamCard } from "@/components/sections/DreamCard";
 import { IndependenceBanner, IndependenceRibbon, IndependenceAmbience, TricolorDivider, FestiveSection } from "@/components/IndependenceTheme";
 
 
@@ -67,6 +68,8 @@ function Index() {
       <div data-reveal><FestiveSection><Deadlines /></FestiveSection></div>
       <TricolorDivider />
       <div data-reveal><FestiveSection><Blog /></FestiveSection></div>
+      <TricolorDivider />
+      <div data-reveal><FestiveSection><DreamCard /></FestiveSection></div>
       <TricolorDivider />
       <div data-reveal><FestiveSection><TodaysMeetings /></FestiveSection></div>
       <TricolorDivider />

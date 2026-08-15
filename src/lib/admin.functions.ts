@@ -888,3 +888,27 @@ export const adminWhatsAppPopupStats = createServerFn({ method: "POST" })
       rows: rows.slice(0, 300),
     };
   });
+
+// ============ Dream Cards ============
+
+export const adminListDreamCards = createServerFn({ method: "POST" })
+  .inputValidator(pinSchema)
+  .handler(async ({ data }) => {
+    checkPin(data.pin);
+    const { data: rows, error } = await supabaseAdmin
+      .from("dream_cards")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(500);
+    if (error) throw new Error(error.message);
+    return rows ?? [];
+  });
+
+export const adminDeleteDreamCard = createServerFn({ method: "POST" })
+  .inputValidator(z.object({ pin: z.string(), id: z.string().uuid() }))
+  .handler(async ({ data }) => {
+    checkPin(data.pin);
+    const { error } = await supabaseAdmin.from("dream_cards").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
