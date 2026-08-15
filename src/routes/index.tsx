@@ -69,6 +69,8 @@ function Index() {
       <TricolorDivider />
       <div data-reveal><FestiveSection><Blog /></FestiveSection></div>
       <TricolorDivider />
+      <div data-reveal><FestiveSection><DreamCard /></FestiveSection></div>
+      <TricolorDivider />
       <div data-reveal><FestiveSection><TodaysMeetings /></FestiveSection></div>
       <TricolorDivider />
       <div data-reveal><FestiveSection><Contact /></FestiveSection></div>
