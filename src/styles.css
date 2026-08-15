@@ -895,3 +895,7 @@
   --tw-gradient-from: #ff9933;
   --tw-gradient-to: #138808;
 }
+.festive-section [class*="bg-gradient-primary"],
+.festive-section [class*="gradient-primary"] {
+  background-image: linear-gradient(135deg, #ff9933 0%, #e8730f 52%, #138808 100%) !important;
+}
