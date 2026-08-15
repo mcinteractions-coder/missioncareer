@@ -187,11 +187,6 @@ function WavingFlag({ className = "" }: { className?: string }) {
           <rect x="0" y="27" width="120" height="26" fill="#ffffff" />
           <rect x="0" y="53" width="120" height="27" fill="#138808" />
         </g>
-        <g transform="translate(48 28) scale(0.24)">
-          <g className="text-tricolor-chakra">
-            <AshokaChakra className="h-0 w-0" />
-          </g>
-        </g>
         <circle cx="60" cy="40" r="11" fill="none" stroke="#0a3d91" strokeWidth="1.6" />
         <circle cx="60" cy="40" r="2" fill="#0a3d91" />
         {Array.from({ length: 16 }).map((_, i) => (
