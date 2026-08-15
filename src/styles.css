@@ -810,3 +810,70 @@
   [style*="rangoli-pulse"],
   [style*="firework-burst"] { animation: none !important; }
 }
+
+/* --- Independence Day: colour wash + recolouring of every section --- */
+@keyframes festive-wash-shift {
+  0%, 100% { opacity: 0.55; background-position: 0% 50%; }
+  50% { opacity: 0.9; background-position: 100% 50%; }
+}
+
+@keyframes lantern-sway {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(10px) rotate(5deg); }
+}
+
+@keyframes star-drift {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0.15; }
+  50% { opacity: 0.55; }
+  100% { transform: translateY(-40px) rotate(180deg); opacity: 0.15; }
+}
+
+@keyframes festive-border-run {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 0% 400%; }
+}
+
+.festive-section {
+  --festive-saffron: #ff9933;
+  --festive-green: #138808;
+}
+
+/* headings go tricolor */
+.festive-section h1,
+.festive-section h2,
+.festive-section h3 {
+  background-image: linear-gradient(100deg, #ff9933 0%, #ffb066 22%, currentColor 50%, #1aa30a 78%, #138808 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: tricolor-sweep 7s linear infinite;
+}
+
+/* icons, badges & buttons get tricolor tint */
+.festive-section svg:not([data-keep-color]) {
+  filter: hue-rotate(-6deg) saturate(1.25);
+}
+.festive-section .bg-primary,
+.festive-section button[class*="bg-primary"],
+.festive-section a[class*="bg-primary"] {
+  background-image: linear-gradient(135deg, #ff9933 0%, #e8730f 48%, #138808 100%) !important;
+  color: #fff !important;
+  border-color: rgba(255, 153, 51, 0.5) !important;
+}
+.festive-section [class*="border"] {
+  border-color: color-mix(in oklab, var(--festive-saffron) 32%, transparent);
+}
+.festive-section [class*="rounded"][class*="bg-card"],
+.festive-section [class*="rounded"][class*="bg-background"] {
+  box-shadow: 0 8px 30px -18px rgba(255, 153, 51, 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .festive-section h1,
+  .festive-section h2,
+  .festive-section h3,
+  [style*="lantern-sway"],
+  [style*="star-drift"],
+  [style*="festive-wash-shift"] { animation: none !important; }
+}
