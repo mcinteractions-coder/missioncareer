@@ -768,3 +768,45 @@
   .indep-shine::after,
   .indep-ring::before { animation: none; }
 }
+
+/* --- Independence Day: extra festive motion --- */
+@keyframes bunting-sway {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+
+@keyframes diya-flicker {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  35% { transform: scale(1.18) translateY(-1px); opacity: 1; }
+  70% { transform: scale(0.92); opacity: 0.75; }
+}
+
+@keyframes sparkle-twinkle {
+  0%, 100% { transform: scale(0.4) rotate(0deg); opacity: 0; }
+  50% { transform: scale(1) rotate(90deg); opacity: 1; }
+}
+
+@keyframes marigold-swing {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(4px) rotate(2deg); }
+}
+
+@keyframes rangoli-pulse {
+  0%, 100% { transform: rotate(0deg) scale(1); opacity: 0.12; }
+  50% { transform: rotate(180deg) scale(1.08); opacity: 0.22; }
+}
+
+@keyframes firework-burst {
+  0% { transform: scale(0.2); opacity: 0; }
+  25% { opacity: 1; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [style*="bunting-sway"],
+  [style*="diya-flicker"],
+  [style*="sparkle-twinkle"],
+  [style*="marigold-swing"],
+  [style*="rangoli-pulse"],
+  [style*="firework-burst"] { animation: none !important; }
+}

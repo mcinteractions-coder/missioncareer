@@ -355,23 +355,189 @@ export function IndependenceAmbience() {
   );
 }
 
+/** Triangular tricolor bunting flags strung across the top of a section. */
+function Bunting() {
+  const flags = Array.from({ length: 22 });
+  return (
+    <div className="pointer-events-none absolute left-0 right-0 top-0 z-10 flex justify-between px-2" aria-hidden="true">
+      {flags.map((_, i) => (
+        <span
+          key={i}
+          className="block origin-top"
+          style={{ animation: `bunting-sway ${2.6 + (i % 5) * 0.4}s ease-in-out ${(i % 7) * 0.18}s infinite` }}
+        >
+          <svg width="16" height="22" viewBox="0 0 16 22">
+            <path d="M0 0 H16 L8 20 Z" fill={["#ff9933", "#ffffff", "#138808"][i % 3]} opacity="0.85" />
+            <path d="M0 0 H16" stroke="#0a3d91" strokeWidth="2" opacity="0.5" />
+          </svg>
+        </span>
+      ))}
+    </div>
+  );
+}
+
+/** Marigold (genda) flower garland hanging in a section corner. */
+function MarigoldGarland({ side = "left" }: { side?: "left" | "right" }) {
+  const beads = Array.from({ length: 9 });
+  return (
+    <div
+      className={`pointer-events-none absolute top-0 hidden md:block ${side === "left" ? "left-3" : "right-3"}`}
+      style={{ animation: "marigold-swing 4.5s ease-in-out infinite", transformOrigin: "top center" }}
+      aria-hidden="true"
+    >
+      <div className="flex flex-col items-center gap-1">
+        {beads.map((_, i) => (
+          <span
+            key={i}
+            className="block rounded-full"
+            style={{
+              width: 9 - (i % 3),
+              height: 9 - (i % 3),
+              background: i % 2 === 0 ? "#ff9933" : "#ffb84d",
+              boxShadow: "0 0 6px rgba(255,153,51,0.6)",
+              opacity: 0.85,
+            }}
+          />
+        ))}
+        <span
+          className="mt-0.5 block h-3 w-3 rounded-full"
+          style={{ background: "#138808", boxShadow: "0 0 8px rgba(19,136,8,0.6)" }}
+        />
+      </div>
+    </div>
+  );
+}
+
+/** Twinkling sparkles scattered inside a section. */
+function Sparkles({ count = 10 }: { count?: number }) {
+  const items = useMemo(
+    () =>
+      Array.from({ length: count }).map((_, i) => ({
+        id: i,
+        left: `${(i * 9.3 + (i % 4) * 5) % 96}%`,
+        top: `${(i * 11.7 + (i % 3) * 8) % 92}%`,
+        size: 6 + (i % 3) * 4,
+        color: ["#ff9933", "#ffffff", "#138808", "#0a3d91"][i % 4],
+        delay: `${(i % 6) * 0.7}s`,
+        duration: `${2.6 + (i % 4) * 0.8}s`,
+      })),
+    [count],
+  );
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      {items.map((s) => (
+        <svg
+          key={s.id}
+          width={s.size}
+          height={s.size}
+          viewBox="0 0 10 10"
+          className="absolute"
+          style={{ left: s.left, top: s.top, animation: `sparkle-twinkle ${s.duration} ease-in-out ${s.delay} infinite` }}
+        >
+          <path d="M5 0 L6 4 L10 5 L6 6 L5 10 L4 6 L0 5 L4 4 Z" fill={s.color} />
+        </svg>
+      ))}
+    </div>
+  );
+}
+
+/** Faint rotating rangoli mandala watermark behind a section. */
+function RangoliWatermark({ side = "right" }: { side?: "left" | "right" }) {
+  const petals = Array.from({ length: 12 });
+  return (
+    <div
+      className={`pointer-events-none absolute -bottom-16 hidden h-64 w-64 md:block ${side === "left" ? "-left-16" : "-right-16"}`}
+      style={{ animation: "rangoli-pulse 12s ease-in-out infinite" }}
+      aria-hidden="true"
+    >
+      <svg viewBox="0 0 100 100" className="h-full w-full">
+        {petals.map((_, i) => (
+          <ellipse
+            key={i}
+            cx="50"
+            cy="22"
+            rx="7"
+            ry="20"
+            fill="none"
+            stroke={["#ff9933", "#138808", "#0a3d91"][i % 3]}
+            strokeWidth="1.2"
+            transform={`rotate(${(360 / 12) * i} 50 50)`}
+          />
+        ))}
+        <circle cx="50" cy="50" r="10" fill="none" stroke="#ff9933" strokeWidth="1.2" />
+      </svg>
+    </div>
+  );
+}
+
+/** Bursting firework rings pinned to the section corners. */
+function Fireworks() {
+  const bursts = useMemo(
+    () =>
+      Array.from({ length: 4 }).map((_, i) => ({
+        id: i,
+        left: `${12 + i * 24}%`,
+        top: `${10 + (i % 2) * 60}%`,
+        color: ["#ff9933", "#ffffff", "#138808", "#0a3d91"][i % 4],
+        delay: `${i * 1.6}s`,
+      })),
+    [],
+  );
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      {bursts.map((b) => (
+        <span
+          key={b.id}
+          className="absolute hidden h-16 w-16 rounded-full md:block"
+          style={{
+            left: b.left,
+            top: b.top,
+            border: `2px solid ${b.color}`,
+            opacity: 0,
+            animation: `firework-burst 4.2s ease-out ${b.delay} infinite`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+/** Small diya (oil lamp) with a flickering flame. */
+function Diya({ className = "" }: { className?: string }) {
+  return (
+    <span className={`inline-flex ${className}`} aria-hidden="true">
+      <svg viewBox="0 0 24 24" className="h-full w-full">
+        <path
+          d="M12 4 C13.6 6.4 14.6 7.8 14.6 9.4 C14.6 11 13.4 12.2 12 12.2 C10.6 12.2 9.4 11 9.4 9.4 C9.4 7.8 10.4 6.4 12 4 Z"
+          fill="#ff9933"
+          style={{ animation: "diya-flicker 1.6s ease-in-out infinite", transformOrigin: "12px 12px" }}
+        />
+        <path d="M3 14 H21 C20 18.5 16.5 21 12 21 C7.5 21 4 18.5 3 14 Z" fill="#8b4a1f" />
+        <path d="M3 14 H21" stroke="#138808" strokeWidth="1.4" />
+      </svg>
+    </span>
+  );
+}
+
 /** Tricolor divider with a spinning chakra, placed between sections. */
 export function TricolorDivider() {
   return (
-    <div className="relative my-2 flex items-center justify-center" aria-hidden="true">
+    <div className="relative my-2 flex items-center justify-center gap-1" aria-hidden="true">
       <div className="h-[2px] flex-1" style={{ background: "linear-gradient(90deg,transparent,#ff9933)" }} />
-      <div className="tricolor-glow mx-3 flex h-8 w-8 items-center justify-center rounded-full bg-card/85 backdrop-blur">
+      <Diya className="h-5 w-5" />
+      <div className="tricolor-glow mx-2 flex h-8 w-8 items-center justify-center rounded-full bg-card/85 backdrop-blur">
         <AshokaChakra className="h-5 w-5 text-tricolor-chakra dark:text-primary" speed={7} />
       </div>
+      <Diya className="h-5 w-5" />
       <div className="h-[2px] flex-1" style={{ background: "linear-gradient(90deg,#138808,transparent)" }} />
     </div>
   );
 }
 
-/** Wraps a section with a festive tricolor edge + corner flag accent. */
+/** Wraps a section with a festive tricolor edge + bunting, garlands, sparkles & rangoli. */
 export function FestiveSection({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative">
+    <div className="relative overflow-hidden">
       <div
         className="pointer-events-none absolute inset-y-0 left-0 w-[3px] opacity-70"
         style={{ background: "linear-gradient(180deg,#ff9933,#ffffff,#138808)" }}
@@ -382,7 +548,15 @@ export function FestiveSection({ children }: { children: React.ReactNode }) {
         style={{ background: "linear-gradient(180deg,#138808,#ffffff,#ff9933)" }}
         aria-hidden="true"
       />
-      {children}
+      <Bunting />
+      <MarigoldGarland side="left" />
+      <MarigoldGarland side="right" />
+      <Sparkles count={12} />
+      <Fireworks />
+      <RangoliWatermark side="right" />
+      <RangoliWatermark side="left" />
+      <div className="relative z-[1]">{children}</div>
     </div>
   );
 }
+
