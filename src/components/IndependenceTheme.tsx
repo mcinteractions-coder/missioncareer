@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 function AshokaChakra({ className = "" }: { className?: string }) {
   const spin = { animation: "chakra-spin 9s linear infinite" } as const;
@@ -66,16 +66,12 @@ function TricolorParticles() {
 
 /** Celebratory Independence Day banner shown above the hero. */
 export function IndependenceBanner() {
-  const [years, setYears] = useState(0);
-
-  useEffect(() => {
-    setYears(new Date().getFullYear() - 1947);
-  }, []);
+  const years = new Date().getFullYear() - 1947;
 
   return (
     <section
       aria-label="Independence Day celebration"
-      className="relative overflow-hidden border-b border-border/60 pt-8 pb-7 md:pt-10 md:pb-9"
+      className="relative overflow-hidden border-b border-border/60 pt-24 pb-7 md:pt-28 md:pb-9"
       style={{
         background:
           "radial-gradient(120% 140% at 50% -20%, rgba(255,153,51,0.16) 0%, transparent 55%), radial-gradient(120% 140% at 50% 120%, rgba(19,136,8,0.16) 0%, transparent 55%)",
