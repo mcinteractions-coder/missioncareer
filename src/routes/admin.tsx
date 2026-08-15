@@ -280,6 +280,8 @@ function AdminPanel() {
           <SeminarDeck />
         ) : tab === "analytics" ? (
           <AnalyticsPanel />
+        ) : tab === "dreamcards" ? (
+          <DreamCardsPanel />
         ) : (
           <PostsPanel kind={tab} />
         )}
