@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 
 function AshokaChakra({ className = "" }: { className?: string }) {
+  const spin = { animation: "chakra-spin 9s linear infinite" } as const;
   const spokes = Array.from({ length: 24 });
   return (
-    <svg viewBox="0 0 100 100" className={className} aria-hidden="true">
+    <svg viewBox="0 0 100 100" className={className} style={spin} aria-hidden="true">
       <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" strokeWidth="4" />
       <circle cx="50" cy="50" r="7" fill="currentColor" />
       {spokes.map((_, i) => (
@@ -99,7 +100,6 @@ export function IndependenceBanner() {
             </span>
             <AshokaChakra
               className="h-4 w-4 text-tricolor-chakra dark:text-primary"
-              // spinning chakra
             />
           </div>
 

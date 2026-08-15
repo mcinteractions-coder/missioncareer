@@ -19,6 +19,7 @@ import { TodaysMeetings } from "@/components/sections/TodaysMeetings";
 import { Footer } from "@/components/sections/Footer";
 import { FestivalPopup } from "@/components/FestivalPopup";
 import { DocumentGrader } from "@/components/sections/DocumentGrader";
+import { IndependenceBanner, IndependenceRibbon } from "@/components/IndependenceTheme";
 
 
 export const Route = createFileRoute("/")({
@@ -37,7 +38,9 @@ function Index() {
   return (
     <main>
       <ScrollReveal />
+      <IndependenceRibbon />
       <Navbar />
+      <IndependenceBanner />
       <Hero />
       <UniversityMarquee />
       <FestivalPopup />
