@@ -291,3 +291,96 @@ export function IndependenceBanner() {
     </section>
   );
 }
+
+/** Site-wide festive ambience: drifting kites + confetti behind every section. */
+export function IndependenceAmbience() {
+  const kites = useMemo(
+    () =>
+      Array.from({ length: 7 }).map((_, i) => ({
+        id: i,
+        top: `${8 + i * 12}%`,
+        side: i % 2 === 0 ? "left" : "right",
+        offset: `${3 + (i % 3) * 5}%`,
+        size: 22 + (i % 4) * 8,
+        color: ["#ff9933", "#138808", "#0a3d91"][i % 3],
+        delay: `${i * 1.1}s`,
+        duration: `${7.5 + (i % 4) * 1.5}s`,
+      })),
+    [],
+  );
+
+  const confetti = useMemo(
+    () =>
+      Array.from({ length: 18 }).map((_, i) => ({
+        id: i,
+        left: `${(i * 5.7 + (i % 4) * 4) % 99}%`,
+        delay: `${(i % 9) * 1.1}s`,
+        duration: `${7 + (i % 6) * 1.6}s`,
+        w: 4 + (i % 3) * 2,
+        h: 9 + (i % 4) * 4,
+        color: ["#ff9933", "#ffffff", "#138808", "#0a3d91"][i % 4],
+      })),
+    [],
+  );
+
+  return (
+    <div className="pointer-events-none fixed inset-0 z-[5] overflow-hidden" aria-hidden="true">
+      {confetti.map((c) => (
+        <span
+          key={`ac-${c.id}`}
+          className="absolute top-0 rounded-[1px] opacity-60"
+          style={{
+            left: c.left,
+            width: c.w,
+            height: c.h,
+            background: c.color,
+            animation: `confetti-fall ${c.duration} linear ${c.delay} infinite`,
+          }}
+        />
+      ))}
+      {kites.map((k) => (
+        <Kite
+          key={`ak-${k.id}`}
+          className={`hidden opacity-40 md:block ${k.side === "left" ? "" : ""}`}
+          color={k.color}
+          delay={k.delay}
+          duration={k.duration}
+          size={k.size}
+          style={{ top: k.top, [k.side]: k.offset } as React.CSSProperties}
+        />
+      ))}
+    </div>
+  );
+}
+
+/** Tricolor divider with a spinning chakra, placed between sections. */
+export function TricolorDivider() {
+  return (
+    <div className="relative my-2 flex items-center justify-center" aria-hidden="true">
+      <div className="h-[2px] flex-1" style={{ background: "linear-gradient(90deg,transparent,#ff9933)" }} />
+      <div className="tricolor-glow mx-3 flex h-8 w-8 items-center justify-center rounded-full bg-card/85 backdrop-blur">
+        <AshokaChakra className="h-5 w-5 text-tricolor-chakra dark:text-primary" speed={7} />
+      </div>
+      <div className="h-[2px] flex-1" style={{ background: "linear-gradient(90deg,#138808,transparent)" }} />
+    </div>
+  );
+}
+
+/** Wraps a section with a festive tricolor edge + corner flag accent. */
+export function FestiveSection({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="relative">
+      <div
+        className="pointer-events-none absolute inset-y-0 left-0 w-[3px] opacity-70"
+        style={{ background: "linear-gradient(180deg,#ff9933,#ffffff,#138808)" }}
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute inset-y-0 right-0 w-[3px] opacity-70"
+        style={{ background: "linear-gradient(180deg,#138808,#ffffff,#ff9933)" }}
+        aria-hidden="true"
+      />
+      {children}
+    </div>
+  );
+}
