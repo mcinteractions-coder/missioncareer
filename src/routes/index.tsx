@@ -19,7 +19,7 @@ import { TodaysMeetings } from "@/components/sections/TodaysMeetings";
 import { Footer } from "@/components/sections/Footer";
 import { FestivalPopup } from "@/components/FestivalPopup";
 import { DocumentGrader } from "@/components/sections/DocumentGrader";
-import { IndependenceBanner, IndependenceRibbon } from "@/components/IndependenceTheme";
+import { IndependenceBanner, IndependenceRibbon, IndependenceAmbience, TricolorDivider, FestiveSection } from "@/components/IndependenceTheme";
 
 
 export const Route = createFileRoute("/")({
