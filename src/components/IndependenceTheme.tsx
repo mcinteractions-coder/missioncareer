@@ -155,7 +155,7 @@ function TricolorParticles() {
 function BurstLines() {
   const lines = Array.from({ length: 14 });
   return (
-    <div className="pointer-events-none absolute inset-0 flex items-center justify-center" aria-hidden="true">
+    <div className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center opacity-50" aria-hidden="true">
       {lines.map((_, i) => (
         <span
           key={i}
@@ -238,7 +238,7 @@ export function IndependenceBanner() {
             </div>
           </div>
 
-          <div className="relative">
+          <div className="relative isolate">
             <BurstLines />
             <h2 className="relative text-4xl font-extrabold leading-[1.05] md:text-6xl">
               <span className="tricolor-text">Freedom to Dream Big</span>
