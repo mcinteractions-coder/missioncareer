@@ -43,17 +43,19 @@ function Kite({
   delay,
   duration,
   size,
+  style,
 }: {
   className: string;
   color: string;
   delay: string;
   duration: string;
   size: number;
+  style?: React.CSSProperties;
 }) {
   return (
     <div
       className={`pointer-events-none absolute ${className}`}
-      style={{ animation: `kite-drift ${duration} ease-in-out ${delay} infinite` }}
+      style={{ animation: `kite-drift ${duration} ease-in-out ${delay} infinite`, ...style }}
       aria-hidden="true"
     >
       <svg width={size} height={size * 1.7} viewBox="0 0 60 102">
