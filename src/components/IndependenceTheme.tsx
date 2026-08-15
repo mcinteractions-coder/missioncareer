@@ -534,10 +534,106 @@ export function TricolorDivider() {
   );
 }
 
+/** Hanging paper lanterns in tricolor. */
+function Lanterns() {
+  const items = useMemo(
+    () =>
+      Array.from({ length: 5 }).map((_, i) => ({
+        id: i,
+        left: `${10 + i * 19}%`,
+        color: ["#ff9933", "#ffffff", "#138808", "#0a3d91", "#ff9933"][i % 5],
+        size: 16 + (i % 3) * 6,
+        delay: `${i * 0.8}s`,
+        duration: `${4 + (i % 3) * 1.2}s`,
+      })),
+    [],
+  );
+  return (
+    <div className="pointer-events-none absolute inset-x-0 top-0 hidden md:block" aria-hidden="true">
+      {items.map((l) => (
+        <span
+          key={l.id}
+          className="absolute top-0 flex flex-col items-center"
+          style={{ left: l.left, animation: `lantern-sway ${l.duration} ease-in-out ${l.delay} infinite`, transformOrigin: "top center" }}
+        >
+          <span className="block h-6 w-[1px]" style={{ background: "rgba(255,153,51,0.5)" }} />
+          <span
+            className="block rounded-full"
+            style={{
+              width: l.size,
+              height: l.size * 1.25,
+              background: `radial-gradient(circle at 35% 30%, ${l.color}, rgba(0,0,0,0.15))`,
+              boxShadow: `0 0 14px ${l.color}66`,
+              opacity: 0.6,
+            }}
+          />
+        </span>
+      ))}
+    </div>
+  );
+}
+
+/** Drifting tricolor stars for extra texture. */
+function DriftStars({ count = 14 }: { count?: number }) {
+  const stars = useMemo(
+    () =>
+      Array.from({ length: count }).map((_, i) => ({
+        id: i,
+        left: `${(i * 7.3 + (i % 5) * 4) % 97}%`,
+        top: `${(i * 13.1 + (i % 4) * 9) % 90}%`,
+        size: 4 + (i % 3) * 3,
+        color: ["#ff9933", "#ffffff", "#138808", "#0a3d91"][i % 4],
+        delay: `${(i % 7) * 0.9}s`,
+        duration: `${5 + (i % 5) * 1.4}s`,
+      })),
+    [count],
+  );
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      {stars.map((s) => (
+        <span
+          key={s.id}
+          className="absolute rounded-full"
+          style={{
+            left: s.left,
+            top: s.top,
+            width: s.size,
+            height: s.size,
+            background: s.color,
+            boxShadow: `0 0 8px ${s.color}`,
+            animation: `star-drift ${s.duration} ease-in-out ${s.delay} infinite`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+/** Corner chakras for section framing. */
+function CornerChakras() {
+  return (
+    <>
+      <AshokaChakra className="pointer-events-none absolute left-4 bottom-4 hidden h-10 w-10 text-tricolor-saffron opacity-25 md:block" speed={14} />
+      <AshokaChakra className="pointer-events-none absolute right-4 bottom-4 hidden h-10 w-10 text-tricolor-green opacity-25 md:block" speed={11} />
+    </>
+  );
+}
+
 /** Wraps a section with a festive tricolor edge + bunting, garlands, sparkles & rangoli. */
 export function FestiveSection({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative overflow-hidden">
+    <div className="festive-section relative overflow-hidden">
+      {/* tricolor colour wash over the whole section */}
+      <div
+        className="pointer-events-none absolute inset-0 mix-blend-soft-light"
+        style={{
+          background:
+            "linear-gradient(120deg, rgba(255,153,51,0.30) 0%, rgba(255,255,255,0.16) 45%, rgba(19,136,8,0.30) 100%)",
+          backgroundSize: "220% 100%",
+          animation: "festive-wash-shift 11s ease-in-out infinite",
+        }}
+        aria-hidden="true"
+      />
       <div
         className="pointer-events-none absolute inset-y-0 left-0 w-[3px] opacity-70"
         style={{ background: "linear-gradient(180deg,#ff9933,#ffffff,#138808)" }}
@@ -548,15 +644,20 @@ export function FestiveSection({ children }: { children: React.ReactNode }) {
         style={{ background: "linear-gradient(180deg,#138808,#ffffff,#ff9933)" }}
         aria-hidden="true"
       />
+      <div className="tricolor-bar pointer-events-none absolute inset-x-0 bottom-0 h-[3px] opacity-60" aria-hidden="true" />
       <Bunting />
+      <Lanterns />
       <MarigoldGarland side="left" />
       <MarigoldGarland side="right" />
       <Sparkles count={12} />
+      <DriftStars count={14} />
       <Fireworks />
+      <CornerChakras />
       <RangoliWatermark side="right" />
       <RangoliWatermark side="left" />
       <div className="relative z-[1]">{children}</div>
     </div>
   );
 }
+
 
