@@ -19,6 +19,7 @@ export function getAiProvider() {
       name: "openai",
       baseURL: "https://api.openai.com/v1",
       headers: { Authorization: `Bearer ${openaiKey}` },
+      supportsStructuredOutputs: true,
     });
     return {
       provider,
@@ -32,6 +33,7 @@ export function getAiProvider() {
       name: "gemini",
       baseURL: "https://generativelanguage.googleapis.com/v1beta/openai",
       headers: { Authorization: `Bearer ${geminiKey}` },
+      supportsStructuredOutputs: true,
     });
     return {
       provider,
@@ -48,10 +50,11 @@ export function getAiProvider() {
         "Lovable-API-Key": lovableKey,
         "X-Lovable-AIG-SDK": "vercel-ai-sdk",
       },
+      supportsStructuredOutputs: true,
     });
     return {
       provider,
-      modelId: process.env.LOVABLE_MODEL ?? "google/gemini-2.5-flash",
+      modelId: process.env.LOVABLE_MODEL ?? "google/gemini-3.6-flash",
     };
   }
 
