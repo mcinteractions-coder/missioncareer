@@ -107,11 +107,20 @@ export function DreamCard() {
     }
   };
 
-  const onDownload = () => {
+  const onDownload = async () => {
     if (!result || !cardRef.current) return;
-    // Simple PNG download via html-to-image would need a package; fallback to copying text
-    onCopy();
+    try {
+      const { toPng } = await import("html-to-image");
+      const dataUrl = await toPng(cardRef.current, { cacheBust: true, pixelRatio: 2 });
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = "my-dream-card.png";
+      a.click();
+    } catch {
+      onCopy();
+    }
   };
+
 
   return (
     <section id="dream-card" className="relative overflow-hidden py-16 md:py-24 bg-background">

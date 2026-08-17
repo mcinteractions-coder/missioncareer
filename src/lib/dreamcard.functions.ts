@@ -51,12 +51,23 @@ Study level: ${data.studyLevel}
 
 Generate a "5 Years From Now" dream card. Return ONLY valid JSON matching the schema.`;
 
-    const { output } = await generateText({
-      model: ai.provider(ai.modelId),
-      system,
-      prompt,
-      output: Output.object({ schema: ResultSchema }),
-    });
+    let output: DreamCardResult;
+    try {
+      const res = await generateText({
+        model: ai.provider(ai.modelId),
+        system,
+        prompt,
+        output: Output.object({ schema: ResultSchema }),
+      });
+      output = res.output;
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (msg.includes("429")) throw new Error("Too many requests right now — please try again in a minute.");
+      if (msg.includes("402")) throw new Error("AI credits exhausted. Please contact us on WhatsApp and we'll do it manually.");
+      console.error("dream card AI error", err);
+      throw new Error("Could not generate your dream card. Please try again.");
+    }
+
 
     // Persist the submission + AI result
     const { error } = await supabaseAdmin.from("dream_cards").insert({
