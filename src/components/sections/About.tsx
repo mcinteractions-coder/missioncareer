@@ -208,28 +208,25 @@ export function About() {
                   <span className="text-amber-500">★</span> 4.9 · {staticReviews.length}
                 </div>
               </div>
-              <div className="grid sm:grid-cols-2 gap-3 max-h-96 overflow-y-auto pr-2 relative">
-                {staticReviews.map((r, i) => (
-                  <div key={`${r.name}-${i}`} className="group relative rounded-2xl bg-card border border-border/60 p-4 hover:shadow-glow hover:border-primary/40 transition-all">
-                    <Quote className="absolute top-2 right-2 h-4 w-4 text-primary/20 group-hover:text-primary/40 transition" />
-                    <div className="flex items-center gap-2.5">
-                      <div className={`h-9 w-9 rounded-full bg-gradient-to-br ${r.gradient} text-white text-sm font-bold flex items-center justify-center shrink-0`}>
+              <div className="relative">
+                <p className="text-sm text-foreground/80 leading-relaxed">
+                  Students rate Mission Career 4.9/5 for shortlisting, applications, IELTS prep and visa filing — with admits across the UK, USA, Canada, Australia and Europe.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {staticReviews.slice(0, 6).map((r, i) => (
+                    <div key={`${r.name}-${i}`} className="flex items-center gap-2 rounded-full bg-card border border-border/60 pl-1 pr-3 py-1">
+                      <div className={`h-7 w-7 rounded-full bg-gradient-to-br ${r.gradient} text-white text-[11px] font-bold flex items-center justify-center shrink-0`}>
                         {r.initials}
                       </div>
-                      <div className="min-w-0">
-                        <p className="font-semibold text-foreground text-sm truncate">{r.name}</p>
-                        <div className="text-amber-500 text-xs leading-none">
-                          {"★".repeat(r.rating)}<span className="text-muted-foreground/40">{"★".repeat(5 - r.rating)}</span>
-                        </div>
-                      </div>
+                      <span className="text-xs font-semibold text-foreground">{r.name}</span>
                     </div>
-                    <p className="mt-2.5 text-sm text-foreground/80 leading-relaxed line-clamp-5">{r.text}</p>
-                    {r.destination && (
-                      <p className="mt-2 text-xs font-semibold text-primary">🎓 {r.destination}</p>
-                    )}
-                  </div>
-                ))}
+                  ))}
+                </div>
+                <a href="#reviews" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline">
+                  Read all student reviews →
+                </a>
               </div>
+
             </div>
 
           </div>
