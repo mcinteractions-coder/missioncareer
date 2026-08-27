@@ -20,7 +20,7 @@ import { Footer } from "@/components/sections/Footer";
 import { FestivalPopup } from "@/components/FestivalPopup";
 import { DocumentGrader } from "@/components/sections/DocumentGrader";
 import { DreamCard } from "@/components/sections/DreamCard";
-import { PromiseCard } from "@/components/sections/PromiseCard";
+import { ProfileEvaluation } from "@/components/sections/ProfileEvaluation";
 import { RakhiScrollThread, RakhiSection, RakhiDivider } from "@/components/RakhiTheme";
 
 
@@ -47,7 +47,7 @@ function Index() {
     reviews: "Bhai-Behen Ke Words",
     process: "Waada · Our Process",
     success: "Success Stories",
-    promise: "Rakhi Promise Card",
+    evaluation: "Free Profile Evaluation",
     grader: "Document Raksha Check",
     deadlines: "Deadlines · Time Ka Dhaaga",
     blog: "Gyaan · Blog",
@@ -65,7 +65,7 @@ function Index() {
     <Reviews key="reviews" />,
     <Process key="process" />,
     <Success key="success" />,
-    <PromiseCard key="promise" />,
+    <ProfileEvaluation key="evaluation" />,
     <DocumentGrader key="grader" />,
     <Deadlines key="deadlines" />,
     <Blog key="blog" />,
