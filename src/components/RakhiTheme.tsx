@@ -142,6 +142,16 @@ export function RakhiSection({
             }}
           />
         ))}
+      <span className="rb-sheen" aria-hidden="true" />
+      {sparkles &&
+        Array.from({ length: 5 }).map((_, i) => (
+          <span
+            key={`pt${i}`}
+            className="rb-petal"
+            aria-hidden="true"
+            style={{ left: `${12 + i * 19}%`, top: 0, animationDelay: `${i * 2.6}s` }}
+          />
+        ))}
       {mandala && <RakhiMandala />}
 
       {hangs && (
