@@ -80,7 +80,7 @@ function Index() {
       <div className="relative z-10">
         <ScrollReveal />
         <Navbar />
-        <RakhiSection motif>
+        <RakhiSection motif tone={3} hangs={false} corners={false}>
           <Hero />
         </RakhiSection>
         <UniversityMarquee />
@@ -88,7 +88,7 @@ function Index() {
         {sections.map((s, i) => (
           <div key={s.key ?? i} data-reveal>
             {i > 0 && <RakhiDivider />}
-            <RakhiSection motif label={labels[String(s.key)] ?? "Raksha Bandhan Special"}>
+            <RakhiSection motif tone={(i % 6) + 1} label={labels[String(s.key)] ?? "Raksha Bandhan Special"}>
               {s}
             </RakhiSection>
           </div>
