@@ -38,6 +38,24 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const labels: Record<string, string> = {
+    about: "Rakhi Special · About Us",
+    services: "Sewa · Our Services",
+    destinations: "Duniya · Destinations",
+    worldmap: "Dhaaga Across The World",
+    globe: "Global Reach",
+    reviews: "Bhai-Behen Ke Words",
+    process: "Waada · Our Process",
+    success: "Success Stories",
+    promise: "Rakhi Promise Card",
+    grader: "Document Raksha Check",
+    deadlines: "Deadlines · Time Ka Dhaaga",
+    blog: "Gyaan · Blog",
+    dreamcard: "AI Dream Card",
+    meetings: "Aaj Ki Meetings",
+    contact: "Rakhi Offer · Talk To Us",
+  };
+
   const sections = [
     <About key="about" />,
     <Services key="services" />,
@@ -70,7 +88,9 @@ function Index() {
         {sections.map((s, i) => (
           <div key={s.key ?? i} data-reveal>
             {i > 0 && <RakhiDivider />}
-            <RakhiSection motif={i % 3 === 0}>{s}</RakhiSection>
+            <RakhiSection motif label={labels[String(s.key)] ?? "Raksha Bandhan Special"}>
+              {s}
+            </RakhiSection>
           </div>
         ))}
         <Footer />
