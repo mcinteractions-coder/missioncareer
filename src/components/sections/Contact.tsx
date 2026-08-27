@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MapPin, Phone, Mail, MessageCircle, Send, CheckCircle2 } from "lucide-react";
+import { RakhiOfferBand } from "@/components/RakhiTheme";
 import { supabase } from "@/integrations/supabase/client";
 
 export function Contact() {
