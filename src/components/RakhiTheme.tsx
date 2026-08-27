@@ -154,23 +154,27 @@ export function RakhiSection({
         ))}
       {mandala && <RakhiMandala />}
 
-      {hangs && (
-        <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-around" aria-hidden="true">
-          {[0, 1, 2, 3, 4].map((i) => (
-            <span key={i} className="flex flex-col items-center" style={{ opacity: 0.7 }}>
-              <span className="rb-hang block w-px" style={{ height: 18 + ((i * 13) % 26) }} />
-              <KundanRakhi size={16 + (i % 3) * 4} className="rb-drift" style={{ animationDelay: `${i * 0.7}s` }} />
-            </span>
-          ))}
-        </div>
-      )}
-
-      {label && (
-        <div className="relative z-[1] flex justify-center pt-8">
-          <span className="rb-ribbon inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] md:text-xs">
-            <KundanRakhi size={16} />
-            {label}
-          </span>
+      {/* festive header strip — takes real space so nothing overlaps content */}
+      {(hangs || label) && (
+        <div className="relative z-[2]">
+          {hangs && (
+            <div className="pointer-events-none flex justify-around" aria-hidden="true">
+              {[0, 1, 2, 3, 4].map((i) => (
+                <span key={i} className="flex flex-col items-center" style={{ opacity: 0.7 }}>
+                  <span className="rb-hang block w-px" style={{ height: 14 + ((i * 9) % 16) }} />
+                  <KundanRakhi size={16 + (i % 3) * 4} className="rb-drift" style={{ animationDelay: `${i * 0.7}s` }} />
+                </span>
+              ))}
+            </div>
+          )}
+          {label && (
+            <div className="flex justify-center pt-4">
+              <span className="rb-ribbon inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] md:text-xs">
+                <KundanRakhi size={16} />
+                {label}
+              </span>
+            </div>
+          )}
         </div>
       )}
 
@@ -178,16 +182,17 @@ export function RakhiSection({
         <>
           <KundanRakhi
             size={64}
-            className="rb-drift pointer-events-none absolute right-3 top-10 opacity-25 md:right-8 md:opacity-40"
+            className="rb-drift pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 opacity-15 md:right-4 md:opacity-25"
           />
           <KundanRakhi
             size={48}
-            className="rb-drift pointer-events-none absolute left-3 bottom-8 opacity-20 md:left-8 md:opacity-35"
+            className="rb-drift pointer-events-none absolute left-2 bottom-6 opacity-10 md:left-4 md:opacity-20"
             style={{ animationDelay: "1.4s" }}
           />
         </>
       )}
       <div className="relative z-[1]">{children}</div>
+
     </div>
   );
 }
