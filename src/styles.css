@@ -1125,3 +1125,69 @@
 @media (prefers-reduced-motion: reduce) {
   .rb-aura, .rb-spark { animation: none !important; }
 }
+
+/* ============ Raksha Bandhan — maximal festive polish ============ */
+/* animated conic gold halo behind section ribbons */
+.rb-ribbon { position: relative; overflow: hidden; }
+.rb-ribbon::before {
+  content: "";
+  position: absolute;
+  inset: -60%;
+  background: conic-gradient(from 0deg, transparent 0 70%, color-mix(in oklab, var(--rb-gold-light) 70%, transparent) 85%, transparent 100%);
+  animation: rb-spin 5s linear infinite;
+  opacity: 0.5;
+}
+.rb-ribbon > * { position: relative; z-index: 1; }
+@keyframes rb-spin { to { transform: rotate(1turn); } }
+
+/* section headings glow in gold */
+.rb-section h2 {
+  text-shadow: 0 0 26px color-mix(in oklab, var(--rb-gold) 30%, transparent);
+}
+
+/* cards inside themed sections lift with a gold rim on hover */
+.rb-section :is(.card, [class*="rounded-2xl"], [class*="rounded-3xl"]) {
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+}
+.rb-section :is(.card, [class*="rounded-2xl"], [class*="rounded-3xl"]):hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in oklab, var(--rb-gold) 70%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--rb-gold) 40%, transparent),
+    0 26px 60px -30px rgba(92, 16, 38, 0.65),
+    0 0 40px -18px color-mix(in oklab, var(--rb-gold) 55%, transparent);
+}
+
+/* silky diagonal sheen crawling across every section */
+.rb-sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 40%, color-mix(in oklab, var(--rb-gold-light) 16%, transparent) 50%, transparent 60%);
+  background-size: 300% 100%;
+  animation: rb-sheen-move 9s linear infinite;
+  opacity: 0.7;
+}
+@keyframes rb-sheen-move {
+  0% { background-position: 140% 0; }
+  100% { background-position: -140% 0; }
+}
+
+/* drifting festive petals */
+.rb-petal {
+  position: absolute;
+  width: 10px; height: 14px;
+  border-radius: 60% 60% 60% 60% / 80% 80% 40% 40%;
+  background: linear-gradient(160deg, var(--rb-gold-light), #7d1734);
+  opacity: 0.5;
+  animation: rb-petal-fall 16s linear infinite;
+}
+@keyframes rb-petal-fall {
+  0% { transform: translate3d(0, -30px, 0) rotate(0deg); opacity: 0; }
+  12% { opacity: 0.6; }
+  100% { transform: translate3d(40px, 340px, 0) rotate(420deg); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rb-sheen, .rb-petal, .rb-ribbon::before { animation: none !important; }
+}
