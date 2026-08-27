@@ -906,97 +906,128 @@
 }
 .festive-section .bg-gradient-primary { background: var(--gradient-primary) !important; }
 
-/* ============ Raksha Bandhan theme ============ */
-@keyframes rakhi-spin { to { transform: rotate(360deg); } }
-@keyframes rakhi-sweep {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 200% 50%; }
-}
-@keyframes thread-sway {
-  0%, 100% { transform: rotate(-5deg); }
-  50% { transform: rotate(5deg); }
-}
-@keyframes rakhi-float {
-  0% { transform: translateY(0) rotate(0deg); opacity: 0.18; }
-  50% { opacity: 0.5; }
-  100% { transform: translateY(-60px) rotate(200deg); opacity: 0.12; }
-}
-@keyframes petal-fall {
-  0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
-  10% { opacity: 0.85; }
-  100% { transform: translateY(110vh) translateX(40px) rotate(320deg); opacity: 0; }
-}
-@keyframes rakhi-glow {
-  0%, 100% { opacity: 0.45; transform: scale(1); }
-  50% { opacity: 0.85; transform: scale(1.08); }
+/* ============ Raksha Bandhan — premium maroon & antique gold ============ */
+:root {
+  --rb-maroon: #5c1026;
+  --rb-maroon-deep: #3d0a19;
+  --rb-gold: #c9a227;
+  --rb-gold-light: #f0d78c;
+  --rb-ivory: #fdf8ee;
 }
 
-.rakhi-section {
-  --rakhi-rose: #e0245e;
-  --rakhi-gold: #f2b933;
-  --rakhi-maroon: #8b1d3f;
-  --gradient-primary: linear-gradient(135deg, #e0245e 0%, #c81e58 45%, #f2b933 100%);
+@keyframes rb-shine {
+  0% { background-position: -150% 0; }
+  100% { background-position: 250% 0; }
+}
+@keyframes rb-draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes rb-knot {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  45% { transform: scale(1.1) rotate(-6deg); }
+  70% { transform: scale(0.98) rotate(3deg); }
+}
+@keyframes rb-drift {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+}
+@keyframes rb-glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.9; }
 }
 
-.rakhi-section h1,
-.rakhi-section h2,
-.rakhi-section h3 {
-  background-image: linear-gradient(100deg, #e0245e 0%, #f2757f 22%, currentColor 50%, #f2b933 78%, #d99a10 100%);
+/* thin gold silk thread that fills as the page scrolls */
+.rb-scroll-thread {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 100%;
+  transform-origin: left center;
+  z-index: 60;
+  background: linear-gradient(90deg, var(--rb-maroon) 0%, var(--rb-gold) 45%, var(--rb-gold-light) 70%, var(--rb-gold) 100%);
+  box-shadow: 0 0 10px rgba(201, 162, 39, 0.55);
+  pointer-events: none;
+}
+
+/* barely-there gold mandala watermark */
+.rb-mandala {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 620px 620px;
+}
+
+/* section chrome: hairline gold thread on top edge */
+.rb-section { position: relative; }
+.rb-section::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 8%; right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--rb-gold) 70%, transparent), transparent);
+  pointer-events: none;
+}
+
+/* antique-gold zari edge for cards */
+.rb-zari {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--rb-gold) 45%, transparent),
+    0 14px 40px -26px rgba(92, 16, 38, 0.55);
+}
+
+/* silk foil shine sweep on hover */
+.rb-foil { position: relative; overflow: hidden; }
+.rb-foil::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(240, 215, 140, 0.35) 50%, transparent 65%);
+  background-size: 250% 100%;
+  background-position: -150% 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.rb-foil:hover::after {
+  opacity: 1;
+  animation: rb-shine 1.1s ease-out;
+}
+
+/* gold text accent used sparingly */
+.rb-gold-text {
+  background-image: linear-gradient(100deg, var(--rb-gold) 0%, var(--rb-gold-light) 45%, var(--rb-gold) 100%);
   background-size: 220% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: rakhi-sweep 8s linear infinite;
+  animation: rb-shine 6s linear infinite;
 }
 
-.rakhi-section svg:not([data-keep-color]) { filter: hue-rotate(-18deg) saturate(1.2); }
+.rb-knot-tie { animation: rb-knot 0.8s ease-out; }
+.rb-drift { animation: rb-drift 7s ease-in-out infinite; }
+.rb-glow { animation: rb-glow 4s ease-in-out infinite; }
 
-.rakhi-section [class*="text-primary"]:not([class*="text-primary-foreground"]) { color: #e0245e !important; }
-.rakhi-section [class*="bg-primary/"],
-.rakhi-section [class*="bg-primary-soft"] { background-color: rgba(224, 36, 94, 0.14) !important; }
-.rakhi-section [class*="bg-primary"]:not([class*="bg-primary/"]) {
-  background-image: linear-gradient(135deg, #e0245e 0%, #c81e58 50%, #f2b933 100%) !important;
-  background-color: transparent !important;
-  color: #fff !important;
+/* thread underline that "ties" itself under a word */
+.rb-thread-underline path {
+  stroke-dasharray: 320;
+  stroke-dashoffset: 320;
+  animation: rb-draw 1.6s ease-out 0.4s forwards;
 }
-.rakhi-section [class*="from-primary"],
-.rakhi-section [class*="to-primary"] {
-  --tw-gradient-from: #e0245e;
-  --tw-gradient-to: #f2b933;
+
+/* process connector: braided thread revealed by scroll progress */
+.rb-thread-track {
+  background: color-mix(in oklab, var(--rb-gold) 18%, transparent);
 }
-.rakhi-section [class*="gradient-primary"],
-.rakhi-section .bg-gradient-primary { background-image: var(--gradient-primary) !important; }
-.rakhi-section [class*="border"] { border-color: color-mix(in oklab, var(--rakhi-rose) 30%, transparent); }
-.rakhi-section [class*="rounded"][class*="bg-card"],
-.rakhi-section [class*="rounded"][class*="bg-background"] {
-  box-shadow: 0 10px 34px -20px rgba(224, 36, 94, 0.6);
+.rb-thread-fill {
+  background: linear-gradient(90deg, var(--rb-maroon) 0%, var(--rb-gold) 55%, var(--rb-gold-light) 100%);
+  box-shadow: 0 0 12px rgba(201, 162, 39, 0.5);
+  transition: width 0.4s ease-out, height 0.4s ease-out;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rakhi-section h1, .rakhi-section h2, .rakhi-section h3,
-  [style*="rakhi-"], [style*="thread-sway"], [style*="petal-fall"] { animation: none !important; }
-}
-
-/* --- Raksha Bandhan: bhai-behen scene motion --- */
-@keyframes bb-sway {
-  0%, 100% { transform: rotate(-1.2deg) translateY(0); }
-  50% { transform: rotate(1.2deg) translateY(-3px); }
-}
-@keyframes bb-arm {
-  0%, 100% { transform: rotate(0deg); }
-  35% { transform: rotate(-7deg); }
-  65% { transform: rotate(3deg); }
-}
-@keyframes bb-tie {
-  0%, 100% { transform: scale(1) rotate(0deg); }
-  30% { transform: scale(1.16) rotate(-8deg); }
-  60% { transform: scale(0.96) rotate(6deg); }
-}
-@keyframes bb-bless {
-  0% { transform: translateY(-20px); opacity: 0; }
-  20% { opacity: 1; }
-  100% { transform: translateY(190px); opacity: 0; }
-}
-@media (prefers-reduced-motion: reduce) {
-  [style*="bb-"] { animation: none !important; }
+  .rb-gold-text, .rb-drift, .rb-glow, .rb-knot-tie,
+  .rb-thread-underline path, .rb-foil:hover::after { animation: none !important; }
 }
