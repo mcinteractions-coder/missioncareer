@@ -905,3 +905,74 @@
   --gradient-primary: linear-gradient(135deg, #ff9933 0%, #e8730f 52%, #138808 100%);
 }
 .festive-section .bg-gradient-primary { background: var(--gradient-primary) !important; }
+
+/* ============ Raksha Bandhan theme ============ */
+@keyframes rakhi-spin { to { transform: rotate(360deg); } }
+@keyframes rakhi-sweep {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+@keyframes thread-sway {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+@keyframes rakhi-float {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0.18; }
+  50% { opacity: 0.5; }
+  100% { transform: translateY(-60px) rotate(200deg); opacity: 0.12; }
+}
+@keyframes petal-fall {
+  0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.85; }
+  100% { transform: translateY(110vh) translateX(40px) rotate(320deg); opacity: 0; }
+}
+@keyframes rakhi-glow {
+  0%, 100% { opacity: 0.45; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.08); }
+}
+
+.rakhi-section {
+  --rakhi-rose: #e0245e;
+  --rakhi-gold: #f2b933;
+  --rakhi-maroon: #8b1d3f;
+  --gradient-primary: linear-gradient(135deg, #e0245e 0%, #c81e58 45%, #f2b933 100%);
+}
+
+.rakhi-section h1,
+.rakhi-section h2,
+.rakhi-section h3 {
+  background-image: linear-gradient(100deg, #e0245e 0%, #f2757f 22%, currentColor 50%, #f2b933 78%, #d99a10 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rakhi-sweep 8s linear infinite;
+}
+
+.rakhi-section svg:not([data-keep-color]) { filter: hue-rotate(-18deg) saturate(1.2); }
+
+.rakhi-section [class*="text-primary"]:not([class*="text-primary-foreground"]) { color: #e0245e !important; }
+.rakhi-section [class*="bg-primary/"],
+.rakhi-section [class*="bg-primary-soft"] { background-color: rgba(224, 36, 94, 0.14) !important; }
+.rakhi-section [class*="bg-primary"]:not([class*="bg-primary/"]) {
+  background-image: linear-gradient(135deg, #e0245e 0%, #c81e58 50%, #f2b933 100%) !important;
+  background-color: transparent !important;
+  color: #fff !important;
+}
+.rakhi-section [class*="from-primary"],
+.rakhi-section [class*="to-primary"] {
+  --tw-gradient-from: #e0245e;
+  --tw-gradient-to: #f2b933;
+}
+.rakhi-section [class*="gradient-primary"],
+.rakhi-section .bg-gradient-primary { background-image: var(--gradient-primary) !important; }
+.rakhi-section [class*="border"] { border-color: color-mix(in oklab, var(--rakhi-rose) 30%, transparent); }
+.rakhi-section [class*="rounded"][class*="bg-card"],
+.rakhi-section [class*="rounded"][class*="bg-background"] {
+  box-shadow: 0 10px 34px -20px rgba(224, 36, 94, 0.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rakhi-section h1, .rakhi-section h2, .rakhi-section h3,
+  [style*="rakhi-"], [style*="thread-sway"], [style*="petal-fall"] { animation: none !important; }
+}
