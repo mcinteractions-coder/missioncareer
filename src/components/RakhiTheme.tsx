@@ -99,6 +99,8 @@ export function RakhiSection({
   mandala = true,
   corners = true,
   hangs = true,
+  tone = 1,
+  sparkles = true,
 }: {
   children: ReactNode;
   motif?: boolean;
@@ -106,9 +108,40 @@ export function RakhiSection({
   mandala?: boolean;
   corners?: boolean;
   hangs?: boolean;
+  tone?: number;
+  sparkles?: boolean;
 }) {
+  const t = ((tone - 1) % 6) + 1;
   return (
-    <div className={`rb-section overflow-hidden ${corners ? "rb-corners" : ""}`}>
+    <div className={`rb-section rb-tone rb-tone-${t} overflow-hidden ${corners ? "rb-corners" : ""}`}>
+      <span className="rb-wash" aria-hidden="true" />
+      <span
+        className="rb-aura"
+        aria-hidden="true"
+        style={{
+          width: 260,
+          height: 260,
+          top: t % 2 === 0 ? "auto" : -70,
+          bottom: t % 2 === 0 ? -80 : "auto",
+          left: t % 3 === 0 ? "8%" : "auto",
+          right: t % 3 === 0 ? "auto" : "6%",
+          background: t % 2 === 0 ? "var(--rb-gold)" : "var(--rb-maroon)",
+          animationDelay: `${t * 1.3}s`,
+        }}
+      />
+      {sparkles &&
+        Array.from({ length: 7 }).map((_, i) => (
+          <span
+            key={`sp${i}`}
+            className="rb-spark"
+            aria-hidden="true"
+            style={{
+              left: `${8 + i * 13}%`,
+              bottom: `${6 + ((i * 17) % 40)}%`,
+              animationDelay: `${i * 1.5}s`,
+            }}
+          />
+        ))}
       {mandala && <RakhiMandala />}
 
       {hangs && (
