@@ -92,16 +92,59 @@ export function RakhiMandala({ className = "" }: { className?: string }) {
 }
 
 /* ---------------- Section wrapper: hairline thread + corner motif ---------------- */
-export function RakhiSection({ children, motif = false }: { children: ReactNode; motif?: boolean }) {
+export function RakhiSection({
+  children,
+  motif = false,
+  label,
+  mandala = true,
+  corners = true,
+  hangs = true,
+}: {
+  children: ReactNode;
+  motif?: boolean;
+  label?: string;
+  mandala?: boolean;
+  corners?: boolean;
+  hangs?: boolean;
+}) {
   return (
-    <div className="rb-section">
-      {motif && (
-        <KundanRakhi
-          size={64}
-          className="rb-drift pointer-events-none absolute right-3 top-4 opacity-25 md:right-8 md:opacity-40"
-        />
+    <div className={`rb-section overflow-hidden ${corners ? "rb-corners" : ""}`}>
+      {mandala && <RakhiMandala />}
+
+      {hangs && (
+        <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-around" aria-hidden="true">
+          {[0, 1, 2, 3, 4].map((i) => (
+            <span key={i} className="flex flex-col items-center" style={{ opacity: 0.7 }}>
+              <span className="rb-hang block w-px" style={{ height: 18 + ((i * 13) % 26) }} />
+              <KundanRakhi size={16 + (i % 3) * 4} className="rb-drift" style={{ animationDelay: `${i * 0.7}s` }} />
+            </span>
+          ))}
+        </div>
       )}
-      {children}
+
+      {label && (
+        <div className="relative z-[1] flex justify-center pt-8">
+          <span className="rb-ribbon inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] md:text-xs">
+            <KundanRakhi size={16} />
+            {label}
+          </span>
+        </div>
+      )}
+
+      {motif && (
+        <>
+          <KundanRakhi
+            size={64}
+            className="rb-drift pointer-events-none absolute right-3 top-10 opacity-25 md:right-8 md:opacity-40"
+          />
+          <KundanRakhi
+            size={48}
+            className="rb-drift pointer-events-none absolute left-3 bottom-8 opacity-20 md:left-8 md:opacity-35"
+            style={{ animationDelay: "1.4s" }}
+          />
+        </>
+      )}
+      <div className="relative z-[1]">{children}</div>
     </div>
   );
 }
