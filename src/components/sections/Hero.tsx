@@ -106,10 +106,25 @@ export function Hero() {
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-[1.05] text-foreground">
               Study Abroad<br />
               <span className="text-gradient">Without the</span><br />
-              <span className="text-gradient">Confusion</span>
+              <span className="relative inline-block">
+                <span className="text-gradient">Confusion</span>
+                <svg
+                  className="rb-thread-underline absolute -bottom-2 left-0 w-full"
+                  height="12" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"
+                >
+                  <path
+                    d="M2 8 C 60 2, 110 11, 150 6 C 195 1, 245 10, 298 4"
+                    fill="none" stroke="#c9a227" strokeWidth="3" strokeLinecap="round"
+                  />
+                </svg>
+              </span>
             </h1>
 
-            <p className="mt-4 md:mt-6 text-base md:text-lg text-muted-foreground max-w-xl">
+            <p className="mt-5 md:mt-7 text-sm md:text-base font-semibold rb-gold-text">
+              Ek waada — aapke future ki raksha ka.
+            </p>
+
+            <p className="mt-3 md:mt-4 text-base md:text-lg text-muted-foreground max-w-xl">
               Study abroad without the confusion — we make it simple to find the right country, university, and scholarship.
               Get expert guidance at every step so you can focus on your future, not the paperwork.
             </p>
