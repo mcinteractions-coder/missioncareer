@@ -1031,3 +1031,48 @@
   .rb-gold-text, .rb-drift, .rb-glow, .rb-knot-tie,
   .rb-thread-underline path, .rb-foil:hover::after { animation: none !important; }
 }
+
+/* ============ Raksha Bandhan — per-section chrome ============ */
+/* every themed section: heading gets a subtle gold thread + card edges go zari */
+.rb-section h2 {
+  position: relative;
+}
+.rb-section h2::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -8px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--rb-gold) 85%, transparent), transparent);
+  opacity: 0.75;
+  pointer-events: none;
+}
+.rb-section :is(.card, [class*="rounded-2xl"], [class*="rounded-3xl"]) {
+  border-color: color-mix(in oklab, var(--rb-gold) 32%, transparent);
+}
+
+/* festive corner brackets around a section */
+.rb-corners::after,
+.rb-corners::before {
+  content: "";
+  position: absolute;
+  width: 46px; height: 46px;
+  pointer-events: none;
+  opacity: 0.5;
+  border-color: color-mix(in oklab, var(--rb-gold) 75%, transparent);
+}
+.rb-corners::before { top: 14px; left: 14px; border-top: 2px solid; border-left: 2px solid; border-top-left-radius: 14px; }
+.rb-corners::after { bottom: 14px; right: 14px; border-bottom: 2px solid; border-right: 2px solid; border-bottom-right-radius: 14px; }
+
+/* small hanging thread ribbon label */
+.rb-ribbon {
+  background: linear-gradient(135deg, var(--rb-maroon-deep), var(--rb-maroon) 60%, #7d1734);
+  color: var(--rb-gold-light);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--rb-gold) 55%, transparent),
+    0 10px 28px -18px rgba(92, 16, 38, 0.8);
+}
+
+/* hanging silk threads at the top of a section */
+.rb-hang {
+  background: linear-gradient(180deg, color-mix(in oklab, var(--rb-gold) 70%, transparent), transparent);
+}
