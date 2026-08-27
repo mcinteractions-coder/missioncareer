@@ -45,6 +45,7 @@ function Index() {
     <Reviews key="reviews" />,
     <Process key="process" />,
     <Success key="success" />,
+    <PromiseCard key="promise" />,
     <DocumentGrader key="grader" />,
     <Deadlines key="deadlines" />,
     <Blog key="blog" />,
@@ -55,15 +56,19 @@ function Index() {
 
   return (
     <main className="relative">
+      <RakhiScrollThread />
       <div className="relative z-10">
         <ScrollReveal />
         <Navbar />
-        <Hero />
+        <RakhiSection motif>
+          <Hero />
+        </RakhiSection>
         <UniversityMarquee />
         <FestivalPopup />
         {sections.map((s, i) => (
           <div key={s.key ?? i} data-reveal>
-            {s}
+            {i > 0 && <RakhiDivider />}
+            <RakhiSection motif={i % 3 === 0}>{s}</RakhiSection>
           </div>
         ))}
         <Footer />
