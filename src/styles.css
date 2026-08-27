@@ -976,3 +976,27 @@
   .rakhi-section h1, .rakhi-section h2, .rakhi-section h3,
   [style*="rakhi-"], [style*="thread-sway"], [style*="petal-fall"] { animation: none !important; }
 }
+
+/* --- Raksha Bandhan: bhai-behen scene motion --- */
+@keyframes bb-sway {
+  0%, 100% { transform: rotate(-1.2deg) translateY(0); }
+  50% { transform: rotate(1.2deg) translateY(-3px); }
+}
+@keyframes bb-arm {
+  0%, 100% { transform: rotate(0deg); }
+  35% { transform: rotate(-7deg); }
+  65% { transform: rotate(3deg); }
+}
+@keyframes bb-tie {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  30% { transform: scale(1.16) rotate(-8deg); }
+  60% { transform: scale(0.96) rotate(6deg); }
+}
+@keyframes bb-bless {
+  0% { transform: translateY(-20px); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(190px); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  [style*="bb-"] { animation: none !important; }
+}
