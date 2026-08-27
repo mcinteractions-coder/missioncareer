@@ -1076,3 +1076,52 @@
 .rb-hang {
   background: linear-gradient(180deg, color-mix(in oklab, var(--rb-gold) 70%, transparent), transparent);
 }
+
+/* ============ Raksha Bandhan — per-section colour washes ============ */
+.rb-tone { position: relative; }
+.rb-tone > .rb-wash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.rb-tone-1 > .rb-wash { background: radial-gradient(120% 80% at 15% 0%, color-mix(in oklab, var(--rb-maroon) 16%, transparent), transparent 70%); }
+.rb-tone-2 > .rb-wash { background: radial-gradient(120% 80% at 85% 0%, color-mix(in oklab, var(--rb-gold) 18%, transparent), transparent 70%); }
+.rb-tone-3 > .rb-wash { background: linear-gradient(160deg, color-mix(in oklab, #7d1734 14%, transparent), transparent 55%, color-mix(in oklab, var(--rb-gold) 14%, transparent)); }
+.rb-tone-4 > .rb-wash { background: radial-gradient(100% 90% at 50% 100%, color-mix(in oklab, #b8860b 16%, transparent), transparent 72%); }
+.rb-tone-5 > .rb-wash { background: linear-gradient(200deg, color-mix(in oklab, var(--rb-gold-light) 14%, transparent), transparent 50%, color-mix(in oklab, var(--rb-maroon-deep) 18%, transparent)); }
+.rb-tone-6 > .rb-wash { background: radial-gradient(110% 85% at 0% 100%, color-mix(in oklab, #d94f70 12%, transparent), transparent 68%); }
+
+/* soft moving festive glow */
+.rb-aura {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(60px);
+  opacity: 0.28;
+  pointer-events: none;
+  animation: rb-float 14s ease-in-out infinite;
+}
+@keyframes rb-float {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(18px, -22px, 0) scale(1.12); }
+}
+
+/* floating gold sparkles */
+.rb-spark {
+  position: absolute;
+  width: 5px; height: 5px;
+  border-radius: 999px;
+  background: var(--rb-gold-light);
+  box-shadow: 0 0 10px 2px color-mix(in oklab, var(--rb-gold) 70%, transparent);
+  opacity: 0.55;
+  animation: rb-rise 11s linear infinite;
+}
+@keyframes rb-rise {
+  0% { transform: translateY(20px) scale(0.6); opacity: 0; }
+  20% { opacity: 0.7; }
+  100% { transform: translateY(-160px) scale(1.1); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rb-aura, .rb-spark { animation: none !important; }
+}
