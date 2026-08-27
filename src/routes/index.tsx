@@ -20,7 +20,6 @@ import { Footer } from "@/components/sections/Footer";
 import { FestivalPopup } from "@/components/FestivalPopup";
 import { DocumentGrader } from "@/components/sections/DocumentGrader";
 import { DreamCard } from "@/components/sections/DreamCard";
-import { RakhiAmbience, RakhiBanner, RakhiDivider, RakhiSection } from "@/components/RakhiTheme";
 
 
 
@@ -56,25 +55,20 @@ function Index() {
 
   return (
     <main className="relative">
-      <RakhiAmbience />
       <div className="relative z-10">
         <ScrollReveal />
-        <RakhiBanner />
-        <RakhiSection><Navbar /></RakhiSection>
-        <RakhiSection><Hero /></RakhiSection>
-        <RakhiSection><UniversityMarquee /></RakhiSection>
+        <Navbar />
+        <Hero />
+        <UniversityMarquee />
         <FestivalPopup />
         {sections.map((s, i) => (
-          <div key={s.key ?? i}>
-            <RakhiDivider />
-            <div data-reveal>
-              <RakhiSection>{s}</RakhiSection>
-            </div>
+          <div key={s.key ?? i} data-reveal>
+            {s}
           </div>
         ))}
-        <RakhiDivider />
-        <RakhiSection><Footer /></RakhiSection>
+        <Footer />
       </div>
     </main>
   );
+
 }
