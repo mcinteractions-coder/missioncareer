@@ -36,29 +36,44 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  return (
-    <main>
-      <ScrollReveal />
-      <Navbar />
-      <Hero />
-      <UniversityMarquee />
-      <FestivalPopup />
-      <div data-reveal><About /></div>
-      <div data-reveal><Services /></div>
-      <div data-reveal><Destinations /></div>
-      <div data-reveal><WorldMap /></div>
-      <div data-reveal><Globe3D /></div>
-      <div data-reveal><Reviews /></div>
-      <div data-reveal><Process /></div>
-      <div data-reveal><Success /></div>
-      <div data-reveal><DocumentGrader /></div>
-      <div data-reveal><Deadlines /></div>
-      <div data-reveal><Blog /></div>
-      <div data-reveal><DreamCard /></div>
-      <div data-reveal><TodaysMeetings /></div>
-      <div data-reveal><Contact /></div>
-      <Footer />
-    </main>
+  const sections = [
+    <About key="about" />,
+    <Services key="services" />,
+    <Destinations key="destinations" />,
+    <WorldMap key="worldmap" />,
+    <Globe3D key="globe" />,
+    <Reviews key="reviews" />,
+    <Process key="process" />,
+    <Success key="success" />,
+    <DocumentGrader key="grader" />,
+    <Deadlines key="deadlines" />,
+    <Blog key="blog" />,
+    <DreamCard key="dreamcard" />,
+    <TodaysMeetings key="meetings" />,
+    <Contact key="contact" />,
+  ];
 
+  return (
+    <main className="relative">
+      <RakhiAmbience />
+      <div className="relative z-10">
+        <ScrollReveal />
+        <RakhiBanner />
+        <RakhiSection><Navbar /></RakhiSection>
+        <RakhiSection><Hero /></RakhiSection>
+        <RakhiSection><UniversityMarquee /></RakhiSection>
+        <FestivalPopup />
+        {sections.map((s, i) => (
+          <div key={s.key ?? i}>
+            <RakhiDivider />
+            <div data-reveal>
+              <RakhiSection>{s}</RakhiSection>
+            </div>
+          </div>
+        ))}
+        <RakhiDivider />
+        <RakhiSection><Footer /></RakhiSection>
+      </div>
+    </main>
   );
 }
