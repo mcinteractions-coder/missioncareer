@@ -20,6 +20,7 @@ import { Footer } from "@/components/sections/Footer";
 import { FestivalPopup } from "@/components/FestivalPopup";
 import { DocumentGrader } from "@/components/sections/DocumentGrader";
 import { DreamCard } from "@/components/sections/DreamCard";
+import { RakhiAmbience, RakhiBanner, RakhiDivider, RakhiSection } from "@/components/RakhiTheme";
 
 
 
