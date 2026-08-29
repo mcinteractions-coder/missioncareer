@@ -64,7 +64,7 @@ export function ProfileEvaluation() {
         </div>
 
         <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-2">
-          <Card className="rb-zari p-6">
+          <Card className="p-6 shadow-card">
             <div className="space-y-6">
               <div>
                 <label className="mb-2 flex items-center gap-2 text-sm font-semibold">
@@ -139,7 +139,7 @@ export function ProfileEvaluation() {
             </div>
           </Card>
 
-          <Card className="rb-zari rb-foil flex flex-col justify-center p-6">
+          <Card className="flex flex-col justify-center p-6 shadow-card">
             {!submitted ? (
               <div className="text-center text-muted-foreground">
                 <ShieldCheck className="mx-auto mb-3 h-10 w-10 text-primary" />
