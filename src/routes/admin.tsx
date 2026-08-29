@@ -360,14 +360,14 @@ function PostsPanel({ kind }: { kind: PostKind }) {
               {isSuccess ? (
                 <img
                   src={`https://flagcdn.com/w80/${(p.flag_code || "un").toLowerCase()}.png`}
-                  alt=""
+                  alt={`${p.destination || p.title || "Destination"} flag`}
                   className="h-10 w-14 rounded object-cover flex-shrink-0 ring-1 ring-black/10"
                 />
               ) : isReview || isAdmit ? (
                 p.image ? (
                   <img
                     src={p.image}
-                    alt=""
+                    alt={p.title || "Student photo"}
                     className="h-12 w-12 rounded-full object-cover flex-shrink-0 ring-2 ring-primary/20"
                   />
                 ) : (
@@ -378,7 +378,7 @@ function PostsPanel({ kind }: { kind: PostKind }) {
               ) : p.image ? (
                 <img
                   src={p.image}
-                  alt=""
+                  alt={p.title || "Content image"}
                   className="h-20 w-20 rounded-xl object-cover flex-shrink-0"
                 />
               ) : null}
@@ -688,7 +688,7 @@ function EditModal({
         <Field label="Photo">
           <label className="flex items-center gap-3 rounded-xl border-2 border-dashed border-border p-3 cursor-pointer hover:border-primary">
             {image ? (
-              <img src={image} alt="" className="h-12 w-12 rounded-lg object-cover" />
+              <img src={image} alt="Selected preview" className="h-12 w-12 rounded-lg object-cover" />
             ) : (
               <Upload className="h-5 w-5 text-muted-foreground" />
             )}
@@ -1014,7 +1014,7 @@ function PostForm({
         </label>
         <label className="mt-1 flex items-center gap-3 rounded-xl border-2 border-dashed border-border p-4 cursor-pointer hover:border-primary transition">
           {image ? (
-            <img src={image} alt="" className="h-16 w-16 rounded-lg object-cover" />
+            <img src={image} alt="Selected preview" className="h-16 w-16 rounded-lg object-cover" />
           ) : (
             <Upload className="h-6 w-6 text-muted-foreground" />
           )}

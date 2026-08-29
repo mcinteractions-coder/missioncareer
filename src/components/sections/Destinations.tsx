@@ -91,7 +91,7 @@ function CountryCard({ c }: { c: Country }) {
           <div className="flex items-center gap-2 pb-2 mb-2 border-b border-white/30">
             <img
               src={`https://flagcdn.com/w80/${c.code}.png`}
-              alt=""
+              alt={`${c.name} flag`}
               className="w-6 h-4 rounded-sm object-cover"
               loading="lazy"
             />
