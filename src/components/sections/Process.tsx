@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { Phone, ClipboardList, Building2, FileText, Stamp, Plane, ArrowRight } from "lucide-react";
-import { KundanRakhi } from "@/components/RakhiTheme";
 
 const STEPS = [
   { n: "01", icon: Phone, title: "Free Counseling", desc: "Book a free session with our expert counselors to discuss your goals, preferences, and budget." },
@@ -46,28 +45,29 @@ export function Process() {
           <p className="mt-3 md:mt-4 text-sm md:text-base text-muted-foreground">A simple 6-step journey to your dream university abroad</p>
         </div>
 
-        {/* braided gold thread that ties knot-by-knot as you scroll */}
+        {/* progress line that fills step-by-step as you scroll */}
         <div className="relative mx-auto mb-8 h-6 max-w-4xl" aria-hidden="true">
-          <div className="rb-thread-track absolute left-0 right-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full" />
-          <div className="rb-thread-fill absolute left-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full" style={{ width: `${progress * 100}%` }} />
+          <div className="absolute left-0 right-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-primary/15" />
+          <div className="absolute left-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-gradient-primary" style={{ width: `${progress * 100}%` }} />
           {STEPS.map((s, i) => (
             <span
               key={s.n}
-              className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-500"
+              className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-primary transition-all duration-500"
               style={{
                 left: `${(i / (STEPS.length - 1)) * 100}%`,
+                width: 14,
+                height: 14,
                 opacity: i < knots ? 1 : 0.25,
                 transform: `translate(-50%, -50%) scale(${i < knots ? 1 : 0.7})`,
               }}
-            >
-              <KundanRakhi size={22} />
-            </span>
+            />
           ))}
         </div>
 
+
         <div ref={wrapRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {STEPS.map((s, i) => (
-            <div key={s.n} className="rb-zari rb-foil relative bg-card rounded-2xl p-5 md:p-6 shadow-card hover:shadow-soft transition-all hover:-translate-y-1">
+            <div key={s.n} className="relative bg-card rounded-2xl p-5 md:p-6 shadow-card hover:shadow-soft transition-all hover:-translate-y-1">
               <div className="flex items-center justify-between mb-3 md:mb-4">
                 <span className="text-4xl md:text-5xl font-extrabold text-gradient">{s.n}</span>
                 <div className="inline-flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-xl bg-gradient-primary text-primary-foreground shadow-soft">

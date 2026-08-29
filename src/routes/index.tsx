@@ -21,7 +21,6 @@ import { FestivalPopup } from "@/components/FestivalPopup";
 import { DocumentGrader } from "@/components/sections/DocumentGrader";
 import { DreamCard } from "@/components/sections/DreamCard";
 import { ProfileEvaluation } from "@/components/sections/ProfileEvaluation";
-import { RakhiScrollThread, RakhiSection, RakhiDivider } from "@/components/RakhiTheme";
 
 
 
@@ -38,24 +37,6 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const labels: Record<string, string> = {
-    about: "Rakhi Special · About Us",
-    services: "Sewa · Our Services",
-    destinations: "Duniya · Destinations",
-    worldmap: "Dhaaga Across The World",
-    globe: "Global Reach",
-    reviews: "Bhai-Behen Ke Words",
-    process: "Waada · Our Process",
-    success: "Success Stories",
-    evaluation: "Free Profile Evaluation",
-    grader: "Document Raksha Check",
-    deadlines: "Deadlines · Time Ka Dhaaga",
-    blog: "Gyaan · Blog",
-    dreamcard: "AI Dream Card",
-    meetings: "Aaj Ki Meetings",
-    contact: "Rakhi Offer · Talk To Us",
-  };
-
   const sections = [
     <About key="about" />,
     <Services key="services" />,
@@ -76,26 +57,19 @@ function Index() {
 
   return (
     <main className="relative">
-      <RakhiScrollThread />
       <div className="relative z-10">
         <ScrollReveal />
         <Navbar />
-        <RakhiSection motif tone={3} hangs={false} corners={false}>
-          <Hero />
-        </RakhiSection>
+        <Hero />
         <UniversityMarquee />
         <FestivalPopup />
         {sections.map((s, i) => (
           <div key={s.key ?? i} data-reveal>
-            {i > 0 && <RakhiDivider />}
-            <RakhiSection motif tone={(i % 6) + 1} label={labels[String(s.key)] ?? "Raksha Bandhan Special"}>
-              {s}
-            </RakhiSection>
+            {s}
           </div>
         ))}
         <Footer />
       </div>
     </main>
   );
-
 }
