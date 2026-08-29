@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { Phone, ClipboardList, Building2, FileText, Stamp, Plane, ArrowRight } from "lucide-react";
-import { KundanRakhi } from "@/components/RakhiTheme";
 
 const STEPS = [
   { n: "01", icon: Phone, title: "Free Counseling", desc: "Book a free session with our expert counselors to discuss your goals, preferences, and budget." },
