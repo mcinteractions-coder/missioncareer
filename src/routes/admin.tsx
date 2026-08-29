@@ -367,7 +367,7 @@ function PostsPanel({ kind }: { kind: PostKind }) {
                 p.image ? (
                   <img
                     src={p.image}
-                    alt={p.name || p.title || "Student photo"}
+                    alt={p.title || "Student photo"}
                     className="h-12 w-12 rounded-full object-cover flex-shrink-0 ring-2 ring-primary/20"
                   />
                 ) : (
