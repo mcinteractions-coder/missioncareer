@@ -215,7 +215,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
             height="1"
             width="1"
             style={{ display: "none" }}
-            alt=""
+            alt="Meta Pixel tracking"
             src="https://www.facebook.com/tr?id=1373152477515436&ev=PageView&noscript=1"
           />
         </noscript>
