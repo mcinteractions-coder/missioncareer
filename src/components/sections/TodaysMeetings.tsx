@@ -98,7 +98,7 @@ export function TodaysMeetings() {
           </div>
           <h2 className="text-3xl md:text-5xl font-bold mb-3">Today's Meetings</h2>
           <p className="text-muted-foreground">
-            {formatToday()} · {rows.length} {rows.length === 1 ? "student" : "students"} booked
+            {todayLabel} · {rows.length} {rows.length === 1 ? "student" : "students"} booked
           </p>
         </div>
 
