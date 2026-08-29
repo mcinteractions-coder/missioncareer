@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { MapPin, Phone, Mail, MessageCircle, Send, CheckCircle2 } from "lucide-react";
-import { RakhiOfferBand } from "@/components/RakhiTheme";
+
 import { supabase } from "@/integrations/supabase/client";
 
 export function Contact() {
@@ -40,7 +40,6 @@ export function Contact() {
   return (
     <section id="contact" className="py-12 md:py-24 bg-background">
       <div className="container mx-auto px-4 md:px-8">
-        <RakhiOfferBand />
         <div className="text-center max-w-2xl mx-auto mb-10 md:mb-14">
           <span className="inline-block rounded-full bg-primary-soft px-4 py-1.5 text-xs md:text-sm font-semibold text-primary mb-3">Get In Touch</span>
           <h2 className="text-3xl md:text-5xl font-extrabold">
