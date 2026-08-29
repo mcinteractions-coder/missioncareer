@@ -47,6 +47,11 @@ const initials = (name: string) =>
 export function TodaysMeetings() {
   const [rows, setRows] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  const [todayLabel, setTodayLabel] = useState("");
+
+  useEffect(() => {
+    setTodayLabel(formatToday());
+  }, []);
 
   useEffect(() => {
     const load = async () => {
