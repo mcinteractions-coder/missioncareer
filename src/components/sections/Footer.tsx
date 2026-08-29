@@ -31,7 +31,7 @@ export function Footer() {
           <div>
             <p className="font-bold text-lg mb-6">Quick Links</p>
             <ul className="space-y-3 text-sm text-background/70">
-              {[["Home","#home"],["About","#about"],["Services","#services"],["Destinations","#destinations"],["Process","#process"],["Contact Us","#contact"]].map(([l,h]) => (
+              {[["Mission Career Home","#home"],["About Our Consultancy","#about"],["Counseling Services","#services"],["Study Destinations","#destinations"],["Admission Process","#process"],["Book a Free Session","#contact"]].map(([l,h]) => (
                 <li key={l}><a href={h} className="hover:text-primary transition-colors">{l}</a></li>
               ))}
             </ul>
