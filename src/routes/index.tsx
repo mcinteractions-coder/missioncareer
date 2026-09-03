@@ -21,6 +21,12 @@ import { FestivalPopup } from "@/components/FestivalPopup";
 import { DocumentGrader } from "@/components/sections/DocumentGrader";
 import { DreamCard } from "@/components/sections/DreamCard";
 import { ProfileEvaluation } from "@/components/sections/ProfileEvaluation";
+import {
+  DahiHandiAmbience,
+  DahiHandiBanner,
+  DahiHandiDivider,
+  DahiHandiPyramid,
+} from "@/components/DahiHandiTheme";
 
 
 
@@ -57,17 +63,24 @@ function Index() {
 
   return (
     <main className="relative">
+      <DahiHandiAmbience />
       <div className="relative z-10">
         <ScrollReveal />
         <Navbar />
+        <div className="pt-16 md:pt-20">
+          <DahiHandiBanner />
+        </div>
         <Hero />
         <UniversityMarquee />
         <FestivalPopup />
         {sections.map((s, i) => (
-          <div key={s.key ?? i} data-reveal>
-            {s}
+          <div key={s.key ?? i}>
+            <div data-reveal>{s}</div>
+            {i === 3 && <DahiHandiPyramid />}
+            {i % 3 === 2 && i !== sections.length - 1 && <DahiHandiDivider />}
           </div>
         ))}
+        <DahiHandiDivider />
         <Footer />
       </div>
     </main>
