@@ -751,7 +751,23 @@
   100% { box-shadow: 0 0 0 60px oklch(0.9 0.16 95 / 0), 0 0 0 34px oklch(0.75 0.18 30 / 0); }
 }
 
+/* curd splash particles for the Dahi Handi game */
+.dahi-splash {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: oklch(0.98 0.02 95);
+  box-shadow: 0 0 6px oklch(0.95 0.05 95 / 0.8);
+  animation: dahi-splash 0.7s ease-out forwards;
+}
+@keyframes dahi-splash {
+  0% { transform: rotate(var(--a)) translateY(0) scale(1); opacity: 1; }
+  100% { transform: rotate(var(--a)) translateY(90px) scale(0.3); opacity: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .dahi-flag, .dahi-hang, .dahi-drop, .dahi-banner, .dahi-bob,
-  .dahi-target, .dahi-govinda, .dahi-burst { animation: none !important; }
+  .dahi-target, .dahi-govinda, .dahi-burst, .dahi-splash { animation: none !important; }
 }
+

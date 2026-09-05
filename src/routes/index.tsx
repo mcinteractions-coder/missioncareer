@@ -27,6 +27,7 @@ import {
   DahiHandiDivider,
   DahiHandiPyramid,
 } from "@/components/DahiHandiTheme";
+import { DahiHandiGame } from "@/components/sections/DahiHandiGame";
 
 
 
@@ -52,6 +53,7 @@ function Index() {
     <Reviews key="reviews" />,
     <Process key="process" />,
     <Success key="success" />,
+    <DahiHandiGame key="handigame" />,
     <ProfileEvaluation key="evaluation" />,
     <DocumentGrader key="grader" />,
     <Deadlines key="deadlines" />,
