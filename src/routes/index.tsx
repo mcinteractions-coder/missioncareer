@@ -27,6 +27,7 @@ import {
   DahiHandiDivider,
   DahiHandiPyramid,
 } from "@/components/DahiHandiTheme";
+import { DahiHandiGame } from "@/components/sections/DahiHandiGame";
 
 
 
