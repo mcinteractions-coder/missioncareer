@@ -149,7 +149,14 @@ export function DahiHandiBanner() {
   return (
     <div className="relative z-20 w-full overflow-hidden dahi-banner">
       <div className="container mx-auto flex flex-col items-center gap-2 px-4 py-4 text-center md:flex-row md:justify-center md:gap-5 md:py-5">
-        <MatkiSVG className="h-12 w-11 shrink-0 dahi-bob" />
+        <img
+          src={krishnaBaby}
+          alt="Bal Gopal Krishna with butter pot"
+          loading="lazy"
+          width={1024}
+          height={1024}
+          className="h-14 w-auto shrink-0 dahi-bob drop-shadow"
+        />
         <div>
           <p className="text-sm font-extrabold tracking-wide text-primary-foreground md:text-base">
             Govinda Aala Re! Happy Janmashtami from Mission Career
@@ -158,7 +165,16 @@ export function DahiHandiBanner() {
             Aim high, break the handi — free counseling all festive week
           </p>
         </div>
-        <FlutePeacock className="hidden h-9 w-20 shrink-0 dahi-bob md:block" />
+        <img
+          src={krishnaFlute}
+          alt="Lord Krishna with his flute"
+          loading="lazy"
+          width={1024}
+          height={1024}
+          className="hidden h-16 w-auto shrink-0 dahi-bob drop-shadow md:block"
+          style={{ animationDelay: "0.8s" }}
+        />
+
       </div>
     </div>
   );
