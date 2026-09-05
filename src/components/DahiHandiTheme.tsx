@@ -185,9 +185,18 @@ export function DahiHandiDivider() {
   return (
     <div className="relative z-10 flex items-center justify-center gap-3 py-5" aria-hidden="true">
       <span className="h-[2px] w-16 rounded-full bg-gradient-to-r from-transparent to-primary/50 md:w-28" />
-      <MatkiSVG className="h-8 w-7 dahi-bob" />
+      <FlutePeacock className="hidden h-7 w-16 dahi-bob md:block" />
+      <img
+        src={krishnaBaby}
+        alt=""
+        loading="lazy"
+        width={1024}
+        height={1024}
+        className="h-12 w-auto dahi-bob"
+      />
       <span className="text-xs font-bold uppercase tracking-[0.25em] text-primary/70">Govinda</span>
       <MatkiSVG className="h-8 w-7 dahi-bob" style={{ animationDelay: "0.6s" }} />
+
       <span className="h-[2px] w-16 rounded-full bg-gradient-to-l from-transparent to-primary/50 md:w-28" />
     </div>
   );
