@@ -222,12 +222,21 @@ export function DahiHandiPyramid() {
     <section className="relative z-10 overflow-hidden py-10 md:py-14" aria-label="Dahi Handi celebration">
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-3xl rounded-3xl bg-card/80 p-6 shadow-card backdrop-blur md:p-8">
+          <img
+            src={krishnaFlute}
+            alt="Lord Krishna playing his flute on Janmashtami"
+            loading="lazy"
+            width={1024}
+            height={1024}
+            className="mx-auto mb-4 h-40 w-auto dahi-bob md:h-52"
+          />
           <h2 className="text-center text-2xl font-extrabold md:text-3xl">
             Reach Higher — <span className="text-gradient">Break Your Handi</span>
           </h2>
           <p className="mt-2 text-center text-sm text-muted-foreground md:text-base">
             Just like the govindas, one strong team lifts you to your goal. We are your base — you take the leap.
           </p>
+
 
           <div className="relative mx-auto mt-8 h-64 w-full max-w-xl md:h-80">
             {/* hanging handi target */}
