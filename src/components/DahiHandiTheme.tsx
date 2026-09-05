@@ -111,7 +111,36 @@ export function DahiHandiAmbience() {
           }}
         />
       ))}
+
+      {/* Lord Krishna presence — corner murals */}
+      <img
+        src={krishnaFlute}
+        alt="Lord Krishna playing the flute"
+        loading="lazy"
+        width={1024}
+        height={1024}
+        className="dahi-bob absolute bottom-0 left-2 h-56 w-auto opacity-25 md:h-80"
+      />
+      <img
+        src={krishnaBaby}
+        alt="Bal Gopal Krishna with a pot of butter"
+        loading="lazy"
+        width={1024}
+        height={1024}
+        className="dahi-bob absolute bottom-0 right-2 h-48 w-auto opacity-25 md:h-72"
+        style={{ animationDelay: "1.2s" }}
+      />
+      <img
+        src={krishnaBaby}
+        alt="Bal Gopal Krishna celebrating Janmashtami"
+        loading="lazy"
+        width={1024}
+        height={1024}
+        className="dahi-bob absolute left-1/2 top-1/3 h-32 w-auto -translate-x-1/2 opacity-15 md:h-44"
+        style={{ animationDelay: "0.6s" }}
+      />
     </div>
+
   );
 }
 
