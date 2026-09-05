@@ -3,6 +3,10 @@
  * Purely presentational: banners, hanging handis, floating matkis,
  * a govinda human-pyramid animation and festive dividers.
  */
+import krishnaBaby from "@/assets/krishna.png";
+import krishnaFlute from "@/assets/krishna-flute.png";
+
+
 
 function MatkiSVG({ className = "", style }: { className?: string; style?: React.CSSProperties }) {
   return (
@@ -107,7 +111,36 @@ export function DahiHandiAmbience() {
           }}
         />
       ))}
+
+      {/* Lord Krishna presence — corner murals */}
+      <img
+        src={krishnaFlute}
+        alt="Lord Krishna playing the flute"
+        loading="lazy"
+        width={1024}
+        height={1024}
+        className="dahi-bob absolute bottom-0 left-2 h-56 w-auto opacity-25 md:h-80"
+      />
+      <img
+        src={krishnaBaby}
+        alt="Bal Gopal Krishna with a pot of butter"
+        loading="lazy"
+        width={1024}
+        height={1024}
+        className="dahi-bob absolute bottom-0 right-2 h-48 w-auto opacity-25 md:h-72"
+        style={{ animationDelay: "1.2s" }}
+      />
+      <img
+        src={krishnaBaby}
+        alt="Bal Gopal Krishna celebrating Janmashtami"
+        loading="lazy"
+        width={1024}
+        height={1024}
+        className="dahi-bob absolute left-1/2 top-1/3 h-32 w-auto -translate-x-1/2 opacity-15 md:h-44"
+        style={{ animationDelay: "0.6s" }}
+      />
     </div>
+
   );
 }
 
@@ -116,7 +149,14 @@ export function DahiHandiBanner() {
   return (
     <div className="relative z-20 w-full overflow-hidden dahi-banner">
       <div className="container mx-auto flex flex-col items-center gap-2 px-4 py-4 text-center md:flex-row md:justify-center md:gap-5 md:py-5">
-        <MatkiSVG className="h-12 w-11 shrink-0 dahi-bob" />
+        <img
+          src={krishnaBaby}
+          alt="Bal Gopal Krishna with butter pot"
+          loading="lazy"
+          width={1024}
+          height={1024}
+          className="h-14 w-auto shrink-0 dahi-bob drop-shadow"
+        />
         <div>
           <p className="text-sm font-extrabold tracking-wide text-primary-foreground md:text-base">
             Govinda Aala Re! Happy Janmashtami from Mission Career
@@ -125,7 +165,16 @@ export function DahiHandiBanner() {
             Aim high, break the handi — free counseling all festive week
           </p>
         </div>
-        <FlutePeacock className="hidden h-9 w-20 shrink-0 dahi-bob md:block" />
+        <img
+          src={krishnaFlute}
+          alt="Lord Krishna with his flute"
+          loading="lazy"
+          width={1024}
+          height={1024}
+          className="hidden h-16 w-auto shrink-0 dahi-bob drop-shadow md:block"
+          style={{ animationDelay: "0.8s" }}
+        />
+
       </div>
     </div>
   );
@@ -136,9 +185,18 @@ export function DahiHandiDivider() {
   return (
     <div className="relative z-10 flex items-center justify-center gap-3 py-5" aria-hidden="true">
       <span className="h-[2px] w-16 rounded-full bg-gradient-to-r from-transparent to-primary/50 md:w-28" />
-      <MatkiSVG className="h-8 w-7 dahi-bob" />
+      <FlutePeacock className="hidden h-7 w-16 dahi-bob md:block" />
+      <img
+        src={krishnaBaby}
+        alt=""
+        loading="lazy"
+        width={1024}
+        height={1024}
+        className="h-12 w-auto dahi-bob"
+      />
       <span className="text-xs font-bold uppercase tracking-[0.25em] text-primary/70">Govinda</span>
       <MatkiSVG className="h-8 w-7 dahi-bob" style={{ animationDelay: "0.6s" }} />
+
       <span className="h-[2px] w-16 rounded-full bg-gradient-to-l from-transparent to-primary/50 md:w-28" />
     </div>
   );
@@ -164,12 +222,21 @@ export function DahiHandiPyramid() {
     <section className="relative z-10 overflow-hidden py-10 md:py-14" aria-label="Dahi Handi celebration">
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-3xl rounded-3xl bg-card/80 p-6 shadow-card backdrop-blur md:p-8">
+          <img
+            src={krishnaFlute}
+            alt="Lord Krishna playing his flute on Janmashtami"
+            loading="lazy"
+            width={1024}
+            height={1024}
+            className="mx-auto mb-4 h-40 w-auto dahi-bob md:h-52"
+          />
           <h2 className="text-center text-2xl font-extrabold md:text-3xl">
             Reach Higher — <span className="text-gradient">Break Your Handi</span>
           </h2>
           <p className="mt-2 text-center text-sm text-muted-foreground md:text-base">
             Just like the govindas, one strong team lifts you to your goal. We are your base — you take the leap.
           </p>
+
 
           <div className="relative mx-auto mt-8 h-64 w-full max-w-xl md:h-80">
             {/* hanging handi target */}
