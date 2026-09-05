@@ -3,6 +3,10 @@
  * Purely presentational: banners, hanging handis, floating matkis,
  * a govinda human-pyramid animation and festive dividers.
  */
+import krishnaBaby from "@/assets/krishna.png";
+import krishnaFlute from "@/assets/krishna-flute.png";
+
+
 
 function MatkiSVG({ className = "", style }: { className?: string; style?: React.CSSProperties }) {
   return (
