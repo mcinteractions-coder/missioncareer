@@ -21,6 +21,7 @@ import { FestivalPopup } from "@/components/FestivalPopup";
 import { DocumentGrader } from "@/components/sections/DocumentGrader";
 import { DreamCard } from "@/components/sections/DreamCard";
 import { ProfileEvaluation } from "@/components/sections/ProfileEvaluation";
+import { GanpatiDivider, GanpatiTheme } from "@/components/GanpatiTheme";
 
 
 
@@ -58,17 +59,20 @@ function Index() {
   ];
 
   return (
-    <main className="relative">
+    <main className="ganpati-theme relative">
+      <GanpatiTheme />
       <div className="relative z-10">
         <ScrollReveal />
         <Navbar />
         <div className="pt-16 md:pt-20" />
         <Hero />
+        <GanpatiDivider />
         <UniversityMarquee />
         <FestivalPopup />
         {sections.map((s, i) => (
           <div key={s.key ?? i}>
             <div data-reveal>{s}</div>
+            {(i + 1) % 3 === 0 && i < sections.length - 1 ? <GanpatiDivider /> : null}
           </div>
         ))}
         <Footer />

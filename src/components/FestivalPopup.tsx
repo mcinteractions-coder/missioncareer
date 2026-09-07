@@ -38,7 +38,7 @@ export function FestivalPopup() {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 md:p-8 animate-in fade-in duration-300">
-      <div className="relative bg-card rounded-3xl shadow-2xl w-full max-w-4xl h-[85vh] md:h-[80vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-300">
+      <div className="ganpati-overlay-surface relative bg-card rounded-3xl shadow-2xl w-full max-w-4xl h-[85vh] md:h-[80vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-300">
         <button
           onClick={() => setOpen(false)}
           aria-label="Close"

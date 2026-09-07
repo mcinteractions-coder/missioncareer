@@ -29,7 +29,7 @@ export function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+      className={`ganpati-overlay-surface fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
         scrolled ? "glass shadow-card py-2" : "bg-transparent py-4"
       }`}
     >
