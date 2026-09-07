@@ -21,13 +21,8 @@ import { FestivalPopup } from "@/components/FestivalPopup";
 import { DocumentGrader } from "@/components/sections/DocumentGrader";
 import { DreamCard } from "@/components/sections/DreamCard";
 import { ProfileEvaluation } from "@/components/sections/ProfileEvaluation";
-import {
-  DahiHandiAmbience,
-  DahiHandiBanner,
-  DahiHandiDivider,
-  DahiHandiPyramid,
-} from "@/components/DahiHandiTheme";
-import { DahiHandiGame } from "@/components/sections/DahiHandiGame";
+
+
 
 
 
