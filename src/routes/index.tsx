@@ -21,13 +21,8 @@ import { FestivalPopup } from "@/components/FestivalPopup";
 import { DocumentGrader } from "@/components/sections/DocumentGrader";
 import { DreamCard } from "@/components/sections/DreamCard";
 import { ProfileEvaluation } from "@/components/sections/ProfileEvaluation";
-import {
-  DahiHandiAmbience,
-  DahiHandiBanner,
-  DahiHandiDivider,
-  DahiHandiPyramid,
-} from "@/components/DahiHandiTheme";
-import { DahiHandiGame } from "@/components/sections/DahiHandiGame";
+
+
 
 
 
@@ -53,7 +48,6 @@ function Index() {
     <Reviews key="reviews" />,
     <Process key="process" />,
     <Success key="success" />,
-    <DahiHandiGame key="handigame" />,
     <ProfileEvaluation key="evaluation" />,
     <DocumentGrader key="grader" />,
     <Deadlines key="deadlines" />,
@@ -65,26 +59,21 @@ function Index() {
 
   return (
     <main className="relative">
-      <DahiHandiAmbience />
       <div className="relative z-10">
         <ScrollReveal />
         <Navbar />
-        <div className="pt-16 md:pt-20">
-          <DahiHandiBanner />
-        </div>
+        <div className="pt-16 md:pt-20" />
         <Hero />
         <UniversityMarquee />
         <FestivalPopup />
         {sections.map((s, i) => (
           <div key={s.key ?? i}>
             <div data-reveal>{s}</div>
-            {i === 3 && <DahiHandiPyramid />}
-            {i % 3 === 2 && i !== sections.length - 1 && <DahiHandiDivider />}
           </div>
         ))}
-        <DahiHandiDivider />
         <Footer />
       </div>
     </main>
   );
 }
+
