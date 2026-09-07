@@ -1,42 +1,22 @@
-# Google Reviews Section — Sexy UI
+# Ganpati Festival Theme
 
-Add a new "Reviews" section to the homepage showing 5-star Google reviews of Mission Career with a premium, eye-catching design.
+Transform the entire public website into an elegant Ganesh Chaturthi experience, including the surfaces that previously hid festival backgrounds.
 
-## What you'll see
+## What will change
 
-- New section between Destinations and Contact on the homepage
-- Heading: "Loved by Students Worldwide" with a Google logo + overall rating badge (e.g. ⭐ 4.9 · 200+ Google Reviews)
-- Horizontally scrolling / marquee row of review cards (auto-scroll, pauses on hover)
-- Each card shows: student avatar (initials in gradient circle), name, 5 gold stars, "Posted on Google" tag, review text, and relative date
-- A second static grid below highlighting 3 "featured" longer reviews with bigger typography
-- "View all on Google" button linking to the Google Business profile
-- Fully responsive + dark mode aware using existing design tokens
+- Add a premium Ganpati visual layer with a central Lord Ganesha artwork, marigold torans, diyas, rangoli details, modaks, petals, and subtle festive particles.
+- Add a tasteful opening festival banner and recurring Ganpati dividers so the theme remains visible throughout the long page.
+- Theme the actual foreground surfaces—not only the page background—including cards, section bands, forms, inputs, navigation, badges, buttons, the chatbot panel, WhatsApp button, and festival popup.
+- Use warm saffron, vermilion, marigold-gold, leaf-green, and ivory through semantic site tokens while preserving contrast in light and dark modes.
+- Add restrained animations: diya flicker, toran sway, drifting petals, shimmer, and a gentle Ganesha halo; all stop automatically for visitors who prefer reduced motion.
+- Keep decorations click-through and layer-safe so forms, menus, popups, and floating controls remain fully usable.
+- Remove any stale previous-festival markup/styles that could cause the current hydration mismatch.
 
-## Design details
+## Technical details
 
-- Glassmorphism cards with subtle gradient border, soft glow on hover, lift animation
-- Animated star reveal on scroll-in (framer-motion stagger)
-- Google "G" logo badge on each card corner for authenticity
-- Marquee uses CSS animation (infinite scroll, duplicated list) — no extra library
-- Uses semantic tokens from `src/styles.css` (primary, accent, glass, shadow-glow) — works in both light and dark mode
-
-## Data source
-
-Two options — please pick one:
-
-1. **Static reviews (fastest, recommended now)** — I hardcode ~8–10 real-sounding reviews in a `reviews.ts` data file. You can edit text/names anytime. No API cost, no setup. Most agency sites do this.
-2. **Live Google Places API** — Fetches real reviews from your Google Business listing automatically. Requires: Google Cloud API key + your Place ID, plus a small server function to proxy the request. Google's API only returns max 5 reviews and they rotate.
-
-If you want option 2 later, we can upgrade — the UI stays the same.
-
-## Files to add / change
-
-- `src/components/sections/Reviews.tsx` — new section (marquee + featured grid)
-- `src/data/reviews.ts` — review data (name, rating, text, date, avatar color)
-- `src/routes/index.tsx` — mount `<Reviews />` between Destinations and Contact
-- `src/components/sections/Navbar.tsx` — add "Reviews" nav link (anchor `#reviews`)
-- `src/styles.css` — add `@keyframes marquee` utility
-
-## Assumption
-
-Going with **Option 1 (static reviews)** unless you say otherwise — I'll write believable 5-star reviews mentioning Mission Career, study abroad counseling, UK/Canada/Australia destinations, visa help, etc. You can edit them anytime in `src/data/reviews.ts`.
+- Create one reusable Ganpati theme component for ambient overlays, flow-safe banners, and repeated section ornaments.
+- Generate and locally import cohesive Ganpati artwork rather than hotlinking images.
+- Scope theme styling under a homepage theme wrapper so the admin area remains unchanged.
+- Use CSS selectors within that wrapper to reach existing elevated cards and overlays without rewriting every section individually.
+- Add explicit theme hooks to globally mounted foreground panels where wrapper-scoped styling cannot reach them.
+- Verify the live homepage at desktop and mobile widths, including popup/chat/nav layering, readability, animations, and browser console hydration status.
