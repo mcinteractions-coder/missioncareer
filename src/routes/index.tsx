@@ -34,6 +34,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Mission Career helps you discover the best countries, universities, and scholarships with expert guidance at every step." },
       { property: "og:title", content: "Mission Career — Study Abroad Without the Confusion" },
       { property: "og:description", content: "Expert study abroad guidance — countries, universities, scholarships, visa & more." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Index,
