@@ -84,6 +84,274 @@
 
 
 
+/* =========================================================
+   Ganesh Chaturthi — full-surface festival theme
+   Applied only while the public homepage is mounted.
+   ========================================================= */
+body.ganpati-active {
+  --background: oklch(0.975 0.025 83);
+  --foreground: oklch(0.25 0.055 45);
+  --card: oklch(0.995 0.012 85);
+  --card-foreground: oklch(0.25 0.055 45);
+  --popover: oklch(0.995 0.012 85);
+  --popover-foreground: oklch(0.25 0.055 45);
+  --primary: oklch(0.58 0.205 37);
+  --primary-foreground: oklch(0.99 0.012 85);
+  --primary-soft: oklch(0.91 0.08 76);
+  --primary-glow: oklch(0.76 0.17 68);
+  --secondary: oklch(0.94 0.045 87);
+  --secondary-foreground: oklch(0.3 0.07 48);
+  --muted: oklch(0.95 0.03 83);
+  --muted-foreground: oklch(0.47 0.045 52);
+  --accent: oklch(0.88 0.105 78);
+  --accent-foreground: oklch(0.34 0.11 43);
+  --border: oklch(0.81 0.09 73);
+  --input: oklch(0.93 0.045 82);
+  --ring: oklch(0.65 0.19 48);
+  --sky-soft: oklch(0.96 0.035 91);
+  --sky-tint: oklch(0.9 0.075 78);
+  --gradient-hero: linear-gradient(135deg, oklch(0.98 0.03 88), oklch(0.92 0.085 76));
+  --gradient-primary: linear-gradient(135deg, oklch(0.6 0.22 37), oklch(0.73 0.18 65));
+  --gradient-text: linear-gradient(135deg, oklch(0.55 0.21 35), oklch(0.69 0.18 63));
+  --shadow-soft: 0 16px 42px -16px oklch(0.52 0.17 43 / 0.34);
+  --shadow-card: 0 10px 28px -18px oklch(0.45 0.12 45 / 0.3);
+  --shadow-glow: 0 0 42px oklch(0.73 0.18 65 / 0.38);
+  background-color: var(--background);
+}
+
+body.ganpati-active.dark {
+  --background: oklch(0.19 0.045 35);
+  --foreground: oklch(0.94 0.04 82);
+  --card: oklch(0.235 0.048 37);
+  --card-foreground: oklch(0.95 0.035 82);
+  --popover: oklch(0.235 0.048 37);
+  --popover-foreground: oklch(0.95 0.035 82);
+  --primary: oklch(0.72 0.19 53);
+  --primary-foreground: oklch(0.17 0.045 35);
+  --primary-soft: oklch(0.31 0.085 43);
+  --primary-glow: oklch(0.78 0.17 70);
+  --secondary: oklch(0.27 0.055 39);
+  --secondary-foreground: oklch(0.95 0.035 82);
+  --muted: oklch(0.255 0.043 38);
+  --muted-foreground: oklch(0.75 0.045 73);
+  --accent: oklch(0.35 0.1 48);
+  --accent-foreground: oklch(0.96 0.05 82);
+  --border: oklch(0.4 0.09 48);
+  --input: oklch(0.29 0.055 40);
+  --ring: oklch(0.72 0.19 53);
+  --sky-soft: oklch(0.24 0.05 38);
+  --sky-tint: oklch(0.31 0.075 45);
+  --gradient-hero: linear-gradient(135deg, oklch(0.2 0.05 34), oklch(0.29 0.08 43));
+  --gradient-primary: linear-gradient(135deg, oklch(0.68 0.2 44), oklch(0.78 0.17 70));
+  --gradient-text: linear-gradient(135deg, oklch(0.79 0.17 63), oklch(0.88 0.13 84));
+}
+
+.ganpati-theme {
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 10% 8%, color-mix(in oklab, var(--primary-glow) 18%, transparent), transparent 24rem),
+    radial-gradient(circle at 90% 32%, color-mix(in oklab, var(--primary) 10%, transparent), transparent 28rem),
+    var(--background);
+}
+
+.ganpati-theme section:not(.ganpati-welcome) {
+  position: relative;
+  background-color: color-mix(in oklab, var(--background) 87%, transparent);
+  background-image:
+    radial-gradient(circle at 12px 12px, color-mix(in oklab, var(--primary) 8%, transparent) 1.2px, transparent 1.4px);
+  background-size: 32px 32px;
+}
+
+.ganpati-theme :is(.bg-card, .bg-card\/50, .bg-card\/60, .bg-card\/70, .bg-card\/80),
+.ganpati-overlay-surface {
+  border-color: color-mix(in oklab, var(--primary-glow) 38%, var(--border)) !important;
+  background-color: color-mix(in oklab, var(--card) 91%, var(--primary-soft)) !important;
+  box-shadow: var(--shadow-card), inset 0 1px color-mix(in oklab, var(--primary-glow) 24%, transparent) !important;
+}
+
+.ganpati-theme :is(input, textarea, select) {
+  border-color: color-mix(in oklab, var(--primary) 28%, var(--border));
+  background-color: color-mix(in oklab, var(--secondary) 90%, var(--card));
+}
+
+.ganpati-theme :is(.rounded-2xl, .rounded-3xl):not(img):not(.ganpati-rangoli) {
+  background-image: linear-gradient(145deg, color-mix(in oklab, var(--primary-glow) 5%, transparent), transparent 38%);
+}
+
+.ganpati-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 6;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ganpati-pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.055;
+  background-image:
+    repeating-conic-gradient(from 45deg at 50% 50%, var(--primary) 0 8deg, transparent 8deg 22deg);
+  background-size: 160px 160px;
+  mask-image: linear-gradient(to bottom, black, transparent 34%, transparent 68%, black);
+}
+
+.ganpati-toran {
+  position: absolute;
+  top: 0;
+  inset-inline: 0;
+  display: flex;
+  justify-content: space-around;
+  filter: drop-shadow(0 4px 4px color-mix(in oklab, var(--foreground) 20%, transparent));
+}
+
+.ganpati-toran::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 7px;
+  background: repeating-linear-gradient(90deg, var(--primary), var(--primary) 18px, var(--primary-glow) 18px, var(--primary-glow) 36px);
+}
+
+.ganpati-toran span {
+  width: clamp(18px, 2.5vw, 32px);
+  height: clamp(42px, 5vw, 62px);
+  transform-origin: top center;
+  border-radius: 65% 20% 65% 20%;
+  background: linear-gradient(145deg, oklch(0.55 0.15 145), oklch(0.75 0.16 115));
+  animation: ganpati-sway 3.8s ease-in-out infinite alternate;
+}
+
+.ganpati-toran span:nth-child(even) { animation-delay: -1.8s; transform: scale(.82) rotate(22deg); }
+
+.ganpati-corner {
+  position: absolute;
+  bottom: -4rem;
+  width: clamp(120px, 16vw, 230px);
+  opacity: 0.12;
+  mix-blend-mode: multiply;
+  filter: saturate(.85);
+}
+
+.dark .ganpati-corner { mix-blend-mode: screen; opacity: 0.08; }
+.ganpati-corner-left { left: -2.5rem; }
+.ganpati-corner-right { right: -2.5rem; transform: scaleX(-1); }
+
+.ganpati-petals span {
+  position: absolute;
+  top: -8vh;
+  left: calc((var(--petal-index, 1) * 8%) + 1%);
+  width: 9px;
+  height: 15px;
+  border-radius: 80% 15% 80% 15%;
+  background: var(--primary-glow);
+  opacity: .5;
+  animation: ganpati-petal 14s linear infinite;
+}
+
+.ganpati-petals span:nth-child(1) { --petal-index: 1; animation-delay: -2s; }
+.ganpati-petals span:nth-child(2) { --petal-index: 2; animation-delay: -7s; }
+.ganpati-petals span:nth-child(3) { --petal-index: 3; animation-delay: -11s; }
+.ganpati-petals span:nth-child(4) { --petal-index: 4; animation-delay: -5s; }
+.ganpati-petals span:nth-child(5) { --petal-index: 5; animation-delay: -13s; }
+.ganpati-petals span:nth-child(6) { --petal-index: 6; animation-delay: -3s; }
+.ganpati-petals span:nth-child(7) { --petal-index: 7; animation-delay: -9s; }
+.ganpati-petals span:nth-child(8) { --petal-index: 8; animation-delay: -1s; }
+.ganpati-petals span:nth-child(9) { --petal-index: 9; animation-delay: -10s; }
+.ganpati-petals span:nth-child(10) { --petal-index: 10; animation-delay: -6s; }
+.ganpati-petals span:nth-child(11) { --petal-index: 11; animation-delay: -12s; }
+.ganpati-petals span:nth-child(12) { --petal-index: 12; animation-delay: -4s; }
+
+.ganpati-welcome {
+  position: relative;
+  z-index: 8;
+  min-height: 310px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(210px, 340px) auto;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 3rem);
+  margin: 0 auto 1rem;
+  padding: 2rem clamp(1rem, 5vw, 5rem);
+  overflow: hidden;
+  border-block: 1px solid color-mix(in oklab, var(--primary-glow) 55%, var(--border));
+  background:
+    linear-gradient(90deg, color-mix(in oklab, var(--primary-soft) 72%, var(--card)), color-mix(in oklab, var(--card) 93%, transparent), color-mix(in oklab, var(--primary-soft) 72%, var(--card)));
+}
+
+.ganpati-welcome::before,
+.ganpati-welcome::after {
+  content: "";
+  position: absolute;
+  width: 190px;
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in oklab, var(--primary) 25%, transparent);
+  transform: rotate(45deg);
+}
+.ganpati-welcome::before { left: -120px; top: -90px; }
+.ganpati-welcome::after { right: -120px; bottom: -90px; }
+
+.ganpati-welcome-copy { max-width: 650px; }
+.ganpati-kalash-line { display: flex; align-items: center; gap: .8rem; color: var(--primary); font-size: .72rem; font-weight: 800; text-transform: uppercase; }
+.ganpati-kalash-line i { width: 30px; height: 1px; background: var(--primary-glow); }
+.ganpati-eyebrow { display: flex; align-items: center; gap: .5rem; margin-top: 1rem; color: var(--primary); font-weight: 800; text-transform: uppercase; font-size: .75rem; }
+.ganpati-welcome h2 { margin-top: .4rem; color: var(--foreground); font-family: Georgia, serif; font-size: clamp(2rem, 5vw, 4.75rem); line-height: 1; letter-spacing: 0; }
+.ganpati-welcome-copy > p:last-child { margin-top: .8rem; max-width: 580px; color: var(--muted-foreground); }
+
+.ganpati-idol-stage { position: relative; align-self: stretch; min-height: 260px; display: grid; place-items: end center; }
+.ganpati-idol { position: relative; z-index: 2; width: min(100%, 270px); height: 280px; object-fit: cover; object-position: center 20%; border-radius: 48% 48% 10% 10%; filter: drop-shadow(0 14px 22px color-mix(in oklab, var(--primary) 25%, transparent)); }
+.ganpati-halo { position: absolute; z-index: 1; width: 230px; aspect-ratio: 1; border-radius: 50%; border: 2px solid color-mix(in oklab, var(--primary-glow) 55%, transparent); box-shadow: 0 0 45px color-mix(in oklab, var(--primary-glow) 32%, transparent), inset 0 0 45px color-mix(in oklab, var(--primary-glow) 20%, transparent); animation: ganpati-halo 4s ease-in-out infinite; }
+.ganpati-rangoli { position: absolute; z-index: 3; bottom: -7px; width: 230px; height: 24px; border-radius: 50%; background: repeating-radial-gradient(circle, var(--primary) 0 5px, var(--primary-glow) 6px 10px, transparent 11px 15px); transform: perspective(120px) rotateX(65deg); opacity: .75; }
+
+.ganpati-diya { position: relative; align-self: end; width: 64px; height: 25px; margin-bottom: 1.25rem; border-radius: 10% 10% 55% 55%; background: linear-gradient(180deg, var(--primary-glow), var(--primary)); box-shadow: 0 7px 18px color-mix(in oklab, var(--primary) 30%, transparent); }
+.ganpati-diya span { position: absolute; left: 50%; bottom: 18px; width: 16px; height: 32px; border-radius: 80% 15% 65% 35%; background: linear-gradient(var(--primary-foreground), var(--primary-glow) 40%, var(--primary)); transform: translateX(-50%) rotate(7deg); transform-origin: bottom; filter: drop-shadow(0 0 8px var(--primary-glow)); animation: ganpati-flame 1.3s ease-in-out infinite alternate; }
+
+.ganpati-divider { position: relative; z-index: 9; display: flex; align-items: center; justify-content: center; gap: .85rem; min-height: 54px; padding-inline: 1rem; color: var(--primary); background: color-mix(in oklab, var(--card) 88%, var(--primary-soft)); border-block: 1px solid color-mix(in oklab, var(--primary-glow) 35%, var(--border)); }
+.ganpati-divider-line { width: min(18vw, 180px); height: 1px; background: linear-gradient(90deg, transparent, var(--primary-glow)); }
+.ganpati-divider-line:last-child { transform: scaleX(-1); }
+.ganpati-divider-mark { font-family: Georgia, serif; font-size: .82rem; font-weight: 700; white-space: nowrap; }
+.ganpati-modak { font-size: .7rem; color: var(--primary-glow); animation: ganpati-shimmer 2s ease-in-out infinite; }
+
+.ganpati-floating-control,
+body.ganpati-active .ganpati-overlay-surface {
+  border: 1px solid color-mix(in oklab, var(--primary-glow) 58%, var(--border));
+  box-shadow: var(--shadow-soft), 0 0 0 4px color-mix(in oklab, var(--primary-soft) 52%, transparent) !important;
+}
+
+body.ganpati-active .ganpati-overlay-surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(125deg, color-mix(in oklab, var(--primary-glow) 11%, transparent), transparent 35%);
+}
+
+@keyframes ganpati-sway { from { transform: rotate(-8deg); } to { transform: rotate(8deg); } }
+@keyframes ganpati-petal { to { transform: translate(8vw, 116vh) rotate(540deg); } }
+@keyframes ganpati-flame { from { transform: translateX(-50%) rotate(-6deg) scale(.9); } to { transform: translateX(-50%) rotate(8deg) scale(1.08); } }
+@keyframes ganpati-halo { 50% { transform: scale(1.06) rotate(4deg); opacity: .7; } }
+@keyframes ganpati-shimmer { 50% { transform: scale(1.35) rotate(45deg); filter: brightness(1.4); } }
+
+@media (max-width: 760px) {
+  .ganpati-welcome { min-height: 490px; grid-template-columns: 36px minmax(0, 1fr) 36px; text-align: center; padding: 2rem .8rem 0; }
+  .ganpati-welcome-copy { grid-column: 1 / -1; align-self: end; }
+  .ganpati-kalash-line, .ganpati-eyebrow { justify-content: center; }
+  .ganpati-idol-stage { grid-column: 2; min-height: 250px; }
+  .ganpati-idol { height: 245px; }
+  .ganpati-diya { width: 42px; height: 18px; margin-bottom: 1.5rem; }
+  .ganpati-diya span { width: 12px; height: 25px; bottom: 13px; }
+  .ganpati-divider { gap: .45rem; }
+  .ganpati-divider-mark { font-size: .68rem; }
+  .ganpati-corner { width: 120px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ganpati-theme *, .ganpati-theme *::before, .ganpati-theme *::after,
+  .ganpati-floating-control { animation: none !important; }
+}
+
 @theme inline {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);

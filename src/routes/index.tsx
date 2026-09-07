@@ -21,6 +21,7 @@ import { FestivalPopup } from "@/components/FestivalPopup";
 import { DocumentGrader } from "@/components/sections/DocumentGrader";
 import { DreamCard } from "@/components/sections/DreamCard";
 import { ProfileEvaluation } from "@/components/sections/ProfileEvaluation";
+import { GanpatiDivider, GanpatiTheme } from "@/components/GanpatiTheme";
 
 
 
@@ -33,6 +34,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Mission Career helps you discover the best countries, universities, and scholarships with expert guidance at every step." },
       { property: "og:title", content: "Mission Career — Study Abroad Without the Confusion" },
       { property: "og:description", content: "Expert study abroad guidance — countries, universities, scholarships, visa & more." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Index,
@@ -58,17 +61,20 @@ function Index() {
   ];
 
   return (
-    <main className="relative">
+    <main className="ganpati-theme relative">
+      <GanpatiTheme />
       <div className="relative z-10">
         <ScrollReveal />
         <Navbar />
         <div className="pt-16 md:pt-20" />
         <Hero />
+        <GanpatiDivider />
         <UniversityMarquee />
         <FestivalPopup />
         {sections.map((s, i) => (
           <div key={s.key ?? i}>
             <div data-reveal>{s}</div>
+            {(i + 1) % 3 === 0 && i < sections.length - 1 ? <GanpatiDivider /> : null}
           </div>
         ))}
         <Footer />
