@@ -314,8 +314,8 @@
 .ganpati-welcome h2 { margin-top: .4rem; color: var(--foreground); font-family: Georgia, serif; font-size: clamp(2rem, 5vw, 4.75rem); line-height: 1; letter-spacing: 0; }
 .ganpati-welcome-copy > p:last-child { margin-top: .8rem; max-width: 580px; color: var(--muted-foreground); }
 
-.ganpati-idol-stage { position: relative; align-self: stretch; min-height: 260px; display: grid; place-items: end center; }
-.ganpati-idol { position: relative; z-index: 2; width: min(100%, 270px); height: 280px; object-fit: cover; object-position: center 20%; border-radius: 48% 48% 10% 10%; filter: drop-shadow(0 14px 22px color-mix(in oklab, var(--primary) 25%, transparent)); }
+.ganpati-idol-stage { position: relative; align-self: stretch; min-height: 300px; display: grid; place-items: end center; }
+.ganpati-idol { position: relative; z-index: 2; width: min(100%, 290px); height: 320px; object-fit: cover; object-position: center top; border-radius: 38% 38% 10% 10%; filter: drop-shadow(0 14px 22px color-mix(in oklab, var(--primary) 25%, transparent)); }
 .ganpati-halo { position: absolute; z-index: 1; width: 230px; aspect-ratio: 1; border-radius: 50%; border: 2px solid color-mix(in oklab, var(--primary-glow) 55%, transparent); box-shadow: 0 0 45px color-mix(in oklab, var(--primary-glow) 32%, transparent), inset 0 0 45px color-mix(in oklab, var(--primary-glow) 20%, transparent); animation: ganpati-halo 4s ease-in-out infinite; }
 .ganpati-rangoli { position: absolute; z-index: 3; bottom: -7px; width: 230px; height: 24px; border-radius: 50%; background: repeating-radial-gradient(circle, var(--primary) 0 5px, var(--primary-glow) 6px 10px, transparent 11px 15px); transform: perspective(120px) rotateX(65deg); opacity: .75; }
 
@@ -353,8 +353,8 @@
   .ganpati-welcome { min-height: 490px; grid-template-columns: 36px minmax(0, 1fr) 36px; text-align: center; padding: 2rem .8rem 0; }
   .ganpati-welcome-copy { grid-column: 1 / -1; align-self: end; }
   .ganpati-kalash-line, .ganpati-eyebrow { justify-content: center; }
-  .ganpati-idol-stage { grid-column: 2; min-height: 250px; }
-  .ganpati-idol { height: 245px; }
+  .ganpati-idol-stage { grid-column: 2; min-height: 280px; }
+  .ganpati-idol { width: min(100%, 260px); height: 280px; }
   .ganpati-diya { width: 42px; height: 18px; margin-bottom: 1.5rem; }
   .ganpati-diya span { width: 12px; height: 25px; bottom: 13px; }
   .ganpati-divider { gap: .45rem; }
