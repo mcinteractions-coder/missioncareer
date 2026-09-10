@@ -117,6 +117,7 @@
   --shadow-card: 0 10px 28px -18px oklch(0.45 0.12 45 / 0.3);
   --shadow-glow: 0 0 42px oklch(0.73 0.18 65 / 0.38);
   background-color: var(--background);
+  color: var(--foreground);
 }
 
 .dark .ganpati-app-shell {
@@ -145,6 +146,20 @@
   --gradient-primary: linear-gradient(135deg, oklch(0.68 0.2 44), oklch(0.78 0.17 70));
   --gradient-text: linear-gradient(135deg, oklch(0.79 0.17 63), oklch(0.88 0.13 84));
 }
+
+.ganpati-app-shell > .ganpati-theme { min-height: 100vh; }
+
+.ganpati-app-shell .glass,
+.ganpati-theme .glass {
+  background: color-mix(in oklab, var(--card) 82%, transparent);
+  border-color: color-mix(in oklab, var(--primary-glow) 35%, var(--border));
+}
+
+.ganpati-app-shell .bg-gradient-primary { background: var(--gradient-primary); }
+.ganpati-app-shell .text-gradient { background: var(--gradient-text); background-clip: text; color: transparent; }
+.ganpati-app-shell .shadow-card { box-shadow: var(--shadow-card); }
+.ganpati-app-shell .shadow-soft { box-shadow: var(--shadow-soft); }
+.ganpati-app-shell .shadow-glow { box-shadow: var(--shadow-glow); }
 
 .ganpati-theme {
   isolation: isolate;
