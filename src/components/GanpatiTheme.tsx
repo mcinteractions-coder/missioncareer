@@ -1,15 +1,9 @@
-import { useEffect } from "react";
 import { Sparkles } from "lucide-react";
 import ganpatiArtwork from "@/assets/ganpati-festival.png";
 
 const PETALS = Array.from({ length: 12 }, (_, index) => index);
 
 export function GanpatiTheme() {
-  useEffect(() => {
-    document.body.classList.add("ganpati-active");
-    return () => document.body.classList.remove("ganpati-active");
-  }, []);
-
   return (
     <>
       <div className="ganpati-ambient" aria-hidden="true">

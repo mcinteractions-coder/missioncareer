@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useLocation,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -228,6 +229,8 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const location = useLocation();
+  const isHomepage = location.pathname === "/";
 
   useEffect(() => {
     // Disable browser's automatic scroll restoration so refresh always lands at top
@@ -243,12 +246,14 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
-      <ChatBot />
-      <WhatsAppFloat />
-      <VisitorTracker />
-      <SectionEngagementTracker />
+      <div className={isHomepage ? "ganpati-app-shell" : undefined}>
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+        <ChatBot />
+        <WhatsAppFloat />
+        <VisitorTracker />
+        <SectionEngagementTracker />
+      </div>
     </QueryClientProvider>
   );
 }

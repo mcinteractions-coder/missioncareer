@@ -88,7 +88,7 @@
    Ganesh Chaturthi — full-surface festival theme
    Applied only while the public homepage is mounted.
    ========================================================= */
-body.ganpati-active {
+.ganpati-app-shell {
   --background: oklch(0.975 0.025 83);
   --foreground: oklch(0.25 0.055 45);
   --card: oklch(0.995 0.012 85);
@@ -117,9 +117,10 @@ body.ganpati-active {
   --shadow-card: 0 10px 28px -18px oklch(0.45 0.12 45 / 0.3);
   --shadow-glow: 0 0 42px oklch(0.73 0.18 65 / 0.38);
   background-color: var(--background);
+  color: var(--foreground);
 }
 
-body.ganpati-active.dark {
+.dark .ganpati-app-shell {
   --background: oklch(0.19 0.045 35);
   --foreground: oklch(0.94 0.04 82);
   --card: oklch(0.235 0.048 37);
@@ -145,6 +146,20 @@ body.ganpati-active.dark {
   --gradient-primary: linear-gradient(135deg, oklch(0.68 0.2 44), oklch(0.78 0.17 70));
   --gradient-text: linear-gradient(135deg, oklch(0.79 0.17 63), oklch(0.88 0.13 84));
 }
+
+.ganpati-app-shell > .ganpati-theme { min-height: 100vh; }
+
+.ganpati-app-shell .glass,
+.ganpati-theme .glass {
+  background: color-mix(in oklab, var(--card) 82%, transparent);
+  border-color: color-mix(in oklab, var(--primary-glow) 35%, var(--border));
+}
+
+.ganpati-app-shell .bg-gradient-primary { background: var(--gradient-primary); }
+.ganpati-app-shell .text-gradient { background: var(--gradient-text); background-clip: text; color: transparent; }
+.ganpati-app-shell .shadow-card { box-shadow: var(--shadow-card); }
+.ganpati-app-shell .shadow-soft { box-shadow: var(--shadow-soft); }
+.ganpati-app-shell .shadow-glow { box-shadow: var(--shadow-glow); }
 
 .ganpati-theme {
   isolation: isolate;
@@ -314,12 +329,12 @@ body.ganpati-active.dark {
 .ganpati-modak { font-size: .7rem; color: var(--primary-glow); animation: ganpati-shimmer 2s ease-in-out infinite; }
 
 .ganpati-floating-control,
-body.ganpati-active .ganpati-overlay-surface {
+.ganpati-app-shell .ganpati-overlay-surface {
   border: 1px solid color-mix(in oklab, var(--primary-glow) 58%, var(--border));
   box-shadow: var(--shadow-soft), 0 0 0 4px color-mix(in oklab, var(--primary-soft) 52%, transparent) !important;
 }
 
-body.ganpati-active .ganpati-overlay-surface::before {
+.ganpati-app-shell .ganpati-overlay-surface::before {
   content: "";
   position: absolute;
   inset: 0;
