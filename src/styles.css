@@ -353,8 +353,8 @@
   .ganpati-welcome { min-height: 490px; grid-template-columns: 36px minmax(0, 1fr) 36px; text-align: center; padding: 2rem .8rem 0; }
   .ganpati-welcome-copy { grid-column: 1 / -1; align-self: end; }
   .ganpati-kalash-line, .ganpati-eyebrow { justify-content: center; }
-  .ganpati-idol-stage { grid-column: 2; min-height: 250px; }
-  .ganpati-idol { height: 245px; }
+  .ganpati-idol-stage { grid-column: 2; min-height: 280px; }
+  .ganpati-idol { width: min(100%, 260px); height: 280px; }
   .ganpati-diya { width: 42px; height: 18px; margin-bottom: 1.5rem; }
   .ganpati-diya span { width: 12px; height: 25px; bottom: 13px; }
   .ganpati-divider { gap: .45rem; }
