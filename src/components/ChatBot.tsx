@@ -112,7 +112,7 @@ export function ChatBot() {
         <button
           onClick={() => setOpen(true)}
           aria-label="Open chat"
-          className="ganpati-floating-control fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-primary text-primary-foreground shadow-2xl transition-transform hover:scale-110 md:bottom-6 md:right-6 md:h-16 md:w-16"
+          className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-primary text-primary-foreground shadow-2xl transition-transform hover:scale-110 md:bottom-6 md:right-6 md:h-16 md:w-16"
         >
           <img
             src="/chatbot-logo.png"
@@ -130,7 +130,7 @@ export function ChatBot() {
 
       {/* Chat panel */}
       {open && (
-        <div className="ganpati-overlay-surface fixed inset-x-0 bottom-0 z-50 flex flex-col bg-background shadow-2xl md:inset-auto md:bottom-6 md:right-6 md:h-[600px] md:w-[400px] md:rounded-2xl md:border md:border-border" style={{ height: "min(100vh, 600px)" }}>
+        <div className="fixed inset-x-0 bottom-0 z-50 flex flex-col bg-background shadow-2xl md:inset-auto md:bottom-6 md:right-6 md:h-[600px] md:w-[400px] md:rounded-2xl md:border md:border-border" style={{ height: "min(100vh, 600px)" }}>
           {/* Header */}
           <div className="flex items-center justify-between rounded-t-2xl bg-gradient-primary p-4 text-primary-foreground">
             <div className="flex items-center gap-3">
