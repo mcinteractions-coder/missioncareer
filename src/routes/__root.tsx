@@ -229,8 +229,6 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const location = useLocation();
-  const isHomepage = location.pathname === "/";
 
   useEffect(() => {
     // Disable browser's automatic scroll restoration so refresh always lands at top
@@ -246,7 +244,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className={isHomepage ? "ganpati-app-shell" : undefined}>
+      <div>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <ChatBot />
