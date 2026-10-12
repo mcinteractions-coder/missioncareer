@@ -11,7 +11,7 @@ export function NavratriBanner() {
       <img className="navratri-artwork" src={durgaArtwork} alt="Maa Durga with her lion, surrounded by marigold garlands and glowing diyas for Navratri" width={1536} height={1024} fetchPriority="high" />
       <div className="navratri-banner-copy">
         <p className="navratri-eyebrow"><Sparkles size={16} aria-hidden="true" /> MISSION CAREER CELEBRATES</p>
-        <h2>Shubh<br />Navratri</h2>
+        <h2>Shubh <br />Navratri</h2>
         <p className="navratri-hindi" lang="hi">जय माता दी</p>
         <p className="navratri-wishes">Nine nights of devotion.<br />A world of new beginnings.</p>
         <div className="navratri-lights" aria-hidden="true"><Diya /><Flower2 size={24} /><Diya /></div>
