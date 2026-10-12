@@ -29,6 +29,7 @@ import { ProfileEvaluation } from "@/components/sections/ProfileEvaluation";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
+      { name: "impact-site-verification", value: "6536ab54-63cf-4251-af1a-bf667a13181c" },
       { title: "Mission Career — Study Abroad Without the Confusion" },
       { name: "description", content: "Mission Career helps you discover the best countries, universities, and scholarships with expert guidance at every step." },
       { property: "og:title", content: "Mission Career — Study Abroad Without the Confusion" },
