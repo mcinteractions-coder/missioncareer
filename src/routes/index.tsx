@@ -21,6 +21,7 @@ import { FestivalPopup } from "@/components/FestivalPopup";
 import { DocumentGrader } from "@/components/sections/DocumentGrader";
 import { DreamCard } from "@/components/sections/DreamCard";
 import { ProfileEvaluation } from "@/components/sections/ProfileEvaluation";
+import { NavratriBanner, NavratriDivider, NavratriPetals } from "@/components/NavratriTheme";
 
 
 
@@ -65,12 +66,18 @@ function Index() {
       <ScrollReveal />
       <Navbar />
       <div className="pt-16 md:pt-20" />
+      <NavratriBanner />
+      <NavratriPetals />
       <Hero />
       <UniversityMarquee />
       <FestivalPopup />
-      {sections.map((section) => (
-        <div key={section.key} data-reveal>{section}</div>
+      {sections.map((section, index) => (
+        <div key={section.key}>
+          {index % 3 === 0 && <NavratriDivider />}
+          <div data-reveal>{section}</div>
+        </div>
       ))}
+      <NavratriDivider />
       <Footer />
     </main>
   );
