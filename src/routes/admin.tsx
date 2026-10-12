@@ -58,7 +58,15 @@ import {
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
-    meta: [{ title: "Admin — Mission Career" }, { name: "robots", content: "noindex" }],
+    meta: [
+      { title: "Admin — Mission Career" },
+      { name: "robots", content: "noindex" },
+      { name: "description", content: "Mission Career administration for enquiries, appointments and website content." },
+      { property: "og:title", content: "Admin — Mission Career" },
+      { property: "og:description", content: "Mission Career administration for enquiries, appointments and website content." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
   }),
   component: AdminPage,
 });
