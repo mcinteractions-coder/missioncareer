@@ -1,0 +1,2 @@
+# Architecture rules
+- Scope temporary public festival tokens to a route-aware shared wrapper, with decorative content in a dedicated component; this includes floating panels while leaving admin tools unchanged.

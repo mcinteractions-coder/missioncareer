@@ -6,6 +6,7 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  useLocation,
 } from "@tanstack/react-router";
 import type { ErrorComponentProps } from "@tanstack/react-router";
 import { useEffect } from "react";
@@ -229,6 +230,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useLocation({ select: (location) => location.pathname });
 
   useEffect(() => {
     // Disable browser's automatic scroll restoration so refresh always lands at top
@@ -244,7 +246,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div>
+      <div className={pathname === "/" ? "navratri-theme" : undefined}>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <ChatBot />

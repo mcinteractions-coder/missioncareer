@@ -6,7 +6,14 @@ import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
 
 export const Route = createFileRoute("/blog/$id")({
-  head: () => ({ meta: [{ title: "Blog — Mission Career" }] }),
+  head: () => ({ meta: [
+    { title: "Study Abroad Journal — Mission Career" },
+    { name: "description", content: "Study abroad advice, student stories and university updates from Mission Career." },
+    { property: "og:title", content: "Study Abroad Journal — Mission Career" },
+    { property: "og:description", content: "Study abroad advice, student stories and university updates from Mission Career." },
+    { property: "og:type", content: "article" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: BlogPostPage,
 });
 
