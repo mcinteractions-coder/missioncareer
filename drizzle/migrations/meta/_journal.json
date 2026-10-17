@@ -8,6 +8,13 @@
       "when": 1792243279632,
       "tag": "0000_caller_meetings",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792244233549,
+      "tag": "0001_caller_meetings_verified",
+      "breakpoints": true
     }
   ]
 }

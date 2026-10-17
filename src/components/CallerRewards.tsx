@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Heart, Lock, Plus, Sparkles, Trash2, Trophy } from "lucide-react";
-import { listCallerMeetings, addCallerMeeting, deleteCallerMeeting } from "@/lib/callers.functions";
+import { BadgeCheck, Heart, Lock, Plus, Sparkles, Trash2, Trophy } from "lucide-react";
+import { listCallerMeetings, addCallerMeeting, deleteCallerMeeting, verifyCallerMeeting } from "@/lib/callers.functions";
 import { REWARD_TIERS, rewardMonths } from "@/lib/rewards";
+import { RamenVerify } from "@/components/RamenVerify";
 import chocolate from "@/assets/rewards/chocolate.png";
 import ramen from "@/assets/rewards/ramen.png";
 import earbuds from "@/assets/rewards/earbuds.png";
@@ -13,7 +14,7 @@ type Caller = (typeof CALLERS)[number];
 const IMAGES = [chocolate, ramen, earbuds, smartwatch];
 const EMOJI: Record<Caller, string> = { "Akshara Ravidas": "🦋", "Kamakshi Gaur": "🌸" };
 
-type Row = { id: string; caller: string; student_name: string; student_phone: string; created_at: string };
+type Row = { id: string; caller: string; student_name: string; student_phone: string; created_at: string; verified: boolean };
 
 const monthLabel = (m: string) => {
   const [y, mo] = m.split("-").map(Number);
@@ -28,6 +29,7 @@ export function CallerRewards() {
   const list = useServerFn(listCallerMeetings);
   const add = useServerFn(addCallerMeeting);
   const del = useServerFn(deleteCallerMeeting);
+  const verify = useServerFn(verifyCallerMeeting);
 
   const load = useCallback(async () => {
     try {
@@ -79,6 +81,10 @@ export function CallerRewards() {
               await del({ data: { pin, id } });
               await load();
             }}
+            onVerify={async (id, code) => {
+              await verify({ data: { pin, id, code } });
+              await load();
+            }}
           />
         ))}
       </div>
@@ -91,18 +97,21 @@ function CallerCard({
   rows,
   onAdd,
   onDelete,
+  onVerify,
 }: {
   caller: Caller;
   rows: Row[];
   onAdd: (name: string, phone: string) => Promise<void>;
   onDelete: (id: string) => Promise<void>;
+  onVerify: (id: string, code: string) => Promise<void>;
 }) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const [pop, setPop] = useState(false);
-  const count = rows.length;
+  const [verifying, setVerifying] = useState<Row | null>(null);
+  const count = rows.filter((r) => r.verified).length;
   const next = REWARD_TIERS.find((t) => count < t.at);
   const pct = Math.min(100, (count / 20) * 100);
 
@@ -185,12 +194,22 @@ function CallerCard({
       <ul className="space-y-2 max-h-64 overflow-y-auto">
         {rows.length === 0 && <li className="text-center text-sm text-muted-foreground py-4">No meetings yet this month ✨</li>}
         {rows.map((r, i) => (
-          <li key={r.id} className="flex items-center gap-3 rounded-xl bg-background px-3 py-2">
+          <li key={r.id} className={`flex items-center gap-3 rounded-xl bg-background px-3 py-2 transition ${r.verified ? "" : "grayscale opacity-70"}`}>
             <span className="h-7 w-7 rounded-full bg-primary/15 text-primary text-xs font-bold flex items-center justify-center">{rows.length - i}</span>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-foreground truncate">{r.student_name}</p>
               <p className="text-xs text-muted-foreground">{r.student_phone}</p>
             </div>
+            {r.verified ? (
+              <BadgeCheck className="h-5 w-5 text-primary" aria-label="Verified" />
+            ) : (
+              <button
+                onClick={() => setVerifying(r)}
+                className="rounded-lg bg-primary px-2.5 py-1 text-xs font-bold text-primary-foreground"
+              >
+                Verify
+              </button>
+            )}
             <button
               onClick={() => confirm("Delete this entry?") && onDelete(r.id)}
               aria-label="Delete entry"
@@ -201,6 +220,16 @@ function CallerCard({
           </li>
         ))}
       </ul>
+      {verifying && (
+        <RamenVerify
+          studentName={verifying.student_name}
+          onClose={() => setVerifying(null)}
+          onVerify={async (code) => {
+            await onVerify(verifying.id, code);
+            setVerifying(null);
+          }}
+        />
+      )}
     </div>
   );
 }

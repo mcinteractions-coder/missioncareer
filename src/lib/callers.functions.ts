@@ -50,6 +50,17 @@ export const addCallerMeeting = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+export const verifyCallerMeeting = createServerFn({ method: "POST" })
+  .inputValidator(z.object({ pin: z.string(), id: z.string().uuid(), code: z.string() }))
+  .handler(async ({ data }) => {
+    checkPin(data.pin);
+    if (data.code.trim() !== "1258") throw new Error("Wrong code");
+    const db = await admin();
+    const { error } = await db.from("caller_meetings").update({ verified: true }).eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
 export const deleteCallerMeeting = createServerFn({ method: "POST" })
   .inputValidator(z.object({ pin: z.string(), id: z.string().uuid() }))
   .handler(async ({ data }) => {
