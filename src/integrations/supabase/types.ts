@@ -67,6 +67,7 @@ export type Database = {
           month: string
           student_name: string
           student_phone: string
+          verified: boolean
         }
         Insert: {
           caller: string
@@ -75,6 +76,7 @@ export type Database = {
           month: string
           student_name: string
           student_phone: string
+          verified?: boolean
         }
         Update: {
           caller?: string
@@ -83,6 +85,7 @@ export type Database = {
           month?: string
           student_name?: string
           student_phone?: string
+          verified?: boolean
         }
         Relationships: []
       }

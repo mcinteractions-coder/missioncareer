@@ -1,0 +1,1 @@
+ALTER TABLE public.caller_meetings ADD COLUMN verified boolean NOT NULL DEFAULT false;
