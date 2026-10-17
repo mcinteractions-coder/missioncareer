@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Heart, Lock, Plus, Sparkles, Trash2, Trophy } from "lucide-react";
-import { listCallerMeetings, addCallerMeeting, deleteCallerMeeting } from "@/lib/callers.functions";
+import { BadgeCheck, Heart, Lock, Plus, Sparkles, Trash2, Trophy } from "lucide-react";
+import { listCallerMeetings, addCallerMeeting, deleteCallerMeeting, verifyCallerMeeting } from "@/lib/callers.functions";
 import { REWARD_TIERS, rewardMonths } from "@/lib/rewards";
+import { RamenVerify } from "@/components/RamenVerify";
 import chocolate from "@/assets/rewards/chocolate.png";
 import ramen from "@/assets/rewards/ramen.png";
 import earbuds from "@/assets/rewards/earbuds.png";
@@ -13,7 +14,7 @@ type Caller = (typeof CALLERS)[number];
 const IMAGES = [chocolate, ramen, earbuds, smartwatch];
 const EMOJI: Record<Caller, string> = { "Akshara Ravidas": "🦋", "Kamakshi Gaur": "🌸" };
 
-type Row = { id: string; caller: string; student_name: string; student_phone: string; created_at: string };
+type Row = { id: string; caller: string; student_name: string; student_phone: string; created_at: string; verified: boolean };
 
 const monthLabel = (m: string) => {
   const [y, mo] = m.split("-").map(Number);
