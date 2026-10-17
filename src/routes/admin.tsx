@@ -38,6 +38,7 @@ import { fetchPosts, fileToDataURL, type Post, type PostKind } from "@/lib/conte
 import { supabase } from "@/integrations/supabase/client";
 import { Booking } from "@/components/sections/Booking";
 import { SeminarDeck } from "@/components/sections/SeminarDeck";
+import { CallerRewards } from "@/components/CallerRewards";
 import {
   adminAddPost,
   adminDeletePost,
@@ -130,13 +131,14 @@ function AdminPage() {
   return <AdminPanel />;
 }
 
-type TabKey = PostKind | "leads" | "bookings" | "analytics" | "bookslot" | "seminar" | "dreamcards";
+type TabKey = PostKind | "leads" | "bookings" | "analytics" | "bookslot" | "seminar" | "dreamcards" | "rewards";
 
 const TABS: { key: TabKey; label: string; icon: typeof Newspaper }[] = [
   { key: "analytics", label: "Live Analytics", icon: Activity },
   { key: "bookings", label: "Counseling Bookings", icon: CalendarDays },
   { key: "bookslot", label: "Book Your Slot", icon: CalendarDays },
   { key: "seminar", label: "Seminar Deck", icon: Presentation },
+  { key: "rewards", label: "Caller Rewards", icon: Sparkles },
   { key: "dreamcards", label: "Dream Cards", icon: Sparkles },
   { key: "blog", label: "Blog Posts", icon: Newspaper },
   { key: "success", label: "Success Stories", icon: Star },
@@ -284,6 +286,8 @@ function AdminPanel() {
           <BookingsPanel />
         ) : tab === "bookslot" ? (
           <Booking />
+        ) : tab === "rewards" ? (
+          <CallerRewards />
         ) : tab === "seminar" ? (
           <SeminarDeck />
         ) : tab === "analytics" ? (
