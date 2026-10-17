@@ -59,6 +59,33 @@ export type Database = {
         }
         Relationships: []
       }
+      caller_meetings: {
+        Row: {
+          caller: string
+          created_at: string
+          id: string
+          month: string
+          student_name: string
+          student_phone: string
+        }
+        Insert: {
+          caller: string
+          created_at?: string
+          id?: string
+          month: string
+          student_name: string
+          student_phone: string
+        }
+        Update: {
+          caller?: string
+          created_at?: string
+          id?: string
+          month?: string
+          student_name?: string
+          student_phone?: string
+        }
+        Relationships: []
+      }
       chat_messages: {
         Row: {
           content: string
