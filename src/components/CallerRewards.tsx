@@ -194,12 +194,22 @@ function CallerCard({
       <ul className="space-y-2 max-h-64 overflow-y-auto">
         {rows.length === 0 && <li className="text-center text-sm text-muted-foreground py-4">No meetings yet this month ✨</li>}
         {rows.map((r, i) => (
-          <li key={r.id} className="flex items-center gap-3 rounded-xl bg-background px-3 py-2">
+          <li key={r.id} className={`flex items-center gap-3 rounded-xl bg-background px-3 py-2 transition ${r.verified ? "" : "grayscale opacity-70"}`}>
             <span className="h-7 w-7 rounded-full bg-primary/15 text-primary text-xs font-bold flex items-center justify-center">{rows.length - i}</span>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-foreground truncate">{r.student_name}</p>
               <p className="text-xs text-muted-foreground">{r.student_phone}</p>
             </div>
+            {r.verified ? (
+              <BadgeCheck className="h-5 w-5 text-primary" aria-label="Verified" />
+            ) : (
+              <button
+                onClick={() => setVerifying(r)}
+                className="rounded-lg bg-primary px-2.5 py-1 text-xs font-bold text-primary-foreground"
+              >
+                Verify
+              </button>
+            )}
             <button
               onClick={() => confirm("Delete this entry?") && onDelete(r.id)}
               aria-label="Delete entry"
@@ -210,6 +220,16 @@ function CallerCard({
           </li>
         ))}
       </ul>
+      {verifying && (
+        <RamenVerify
+          studentName={verifying.student_name}
+          onClose={() => setVerifying(null)}
+          onVerify={async (code) => {
+            await onVerify(verifying.id, code);
+            setVerifying(null);
+          }}
+        />
+      )}
     </div>
   );
 }
