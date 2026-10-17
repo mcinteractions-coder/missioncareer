@@ -29,6 +29,7 @@ export function CallerRewards() {
   const list = useServerFn(listCallerMeetings);
   const add = useServerFn(addCallerMeeting);
   const del = useServerFn(deleteCallerMeeting);
+  const verify = useServerFn(verifyCallerMeeting);
 
   const load = useCallback(async () => {
     try {
@@ -80,6 +81,10 @@ export function CallerRewards() {
               await del({ data: { pin, id } });
               await load();
             }}
+            onVerify={async (id, code) => {
+              await verify({ data: { pin, id, code } });
+              await load();
+            }}
           />
         ))}
       </div>
@@ -92,18 +97,21 @@ function CallerCard({
   rows,
   onAdd,
   onDelete,
+  onVerify,
 }: {
   caller: Caller;
   rows: Row[];
   onAdd: (name: string, phone: string) => Promise<void>;
   onDelete: (id: string) => Promise<void>;
+  onVerify: (id: string, code: string) => Promise<void>;
 }) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const [pop, setPop] = useState(false);
-  const count = rows.length;
+  const [verifying, setVerifying] = useState<Row | null>(null);
+  const count = rows.filter((r) => r.verified).length;
   const next = REWARD_TIERS.find((t) => count < t.at);
   const pct = Math.min(100, (count / 20) * 100);
 
