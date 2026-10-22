@@ -526,9 +526,15 @@ export const adminSessionDetail = createServerFn({ method: "POST" })
       whatsapp_popup_shown: "WhatsApp popup shown to visitor",
       whatsapp_button_click: "Clicked 'Directly talk to us on WhatsApp' and opened WhatsApp",
       whatsapp_backdrop_click: "Tried to close by clicking outside (blocked — mandatory gate)",
+      gautam_whatsapp_click:
+        "Clicked 'Talk with Gautam Sir' and opened Gautam Sir's WhatsApp chat",
     };
     const whatsappEvents = events
-      .filter((e) => e.event_type && e.event_type.startsWith("whatsapp_"))
+      .filter(
+        (e) =>
+          e.event_type &&
+          (e.event_type.startsWith("whatsapp_") || e.event_type === "gautam_whatsapp_click"),
+      )
       .map((e) => {
         const t = new Date(e.created_at).toLocaleTimeString("en-IN", {
           hour: "2-digit",
@@ -538,11 +544,13 @@ export const adminSessionDetail = createServerFn({ method: "POST" })
         return `- ${t} → ${WHATSAPP_LABEL[e.event_type] || e.event_type}`;
       });
     const whatsappOutcome = whatsappEvents.length
-      ? events.some((e) => e.event_type === "whatsapp_button_click")
-        ? "OUTCOME: Visitor clicked the WhatsApp button and was sent to chat."
-        : events.some((e) => e.event_type === "whatsapp_backdrop_click")
-          ? "OUTCOME: Visitor tried to dismiss the WhatsApp gate by clicking outside."
-          : "OUTCOME: Visitor saw the WhatsApp popup but did not click the button."
+      ? events.some((e) => e.event_type === "gautam_whatsapp_click")
+        ? "OUTCOME: Visitor opened Gautam Sir's WhatsApp chat to talk directly."
+        : events.some((e) => e.event_type === "whatsapp_button_click")
+          ? "OUTCOME: Visitor clicked the WhatsApp button and was sent to chat."
+          : events.some((e) => e.event_type === "whatsapp_backdrop_click")
+            ? "OUTCOME: Visitor tried to dismiss the WhatsApp gate by clicking outside."
+            : "OUTCOME: Visitor saw the WhatsApp popup but did not click the button."
       : "OUTCOME: WhatsApp popup was not shown for this visitor.";
 
 

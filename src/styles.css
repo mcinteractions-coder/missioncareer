@@ -36,6 +36,8 @@
     --ring: #2f6bd6;
     --sky-soft: #eff5fb;
     --sky-tint: #d6e6f5;
+    --whatsapp: #128c4b;
+    --whatsapp-foreground: #ffffff;
     --gradient-hero: linear-gradient(135deg, #eff5fb 0%, #d6e6f5 100%);
     --gradient-primary: linear-gradient(135deg, #2f6bd6 0%, #4d8be3 100%);
     --gradient-text: linear-gradient(135deg, #2f6bd6, #3b5dd1);
@@ -67,6 +69,8 @@
     --ring: #6aa3f0;
     --sky-soft: #1d273f;
     --sky-tint: #243353;
+    --whatsapp: #25d366;
+    --whatsapp-foreground: #0e1426;
     --gradient-hero: linear-gradient(135deg, #1a2238 0%, #243353 100%);
     --gradient-primary: linear-gradient(135deg, #6aa3f0 0%, #5b8be0 100%);
     --gradient-text: linear-gradient(135deg, #8cbcf5, #93a7ef);
@@ -115,6 +119,8 @@
   --color-ring: var(--ring);
   --color-sky-soft: var(--sky-soft);
   --color-sky-tint: var(--sky-tint);
+  --color-whatsapp: var(--whatsapp);
+  --color-whatsapp-foreground: var(--whatsapp-foreground);
 }
 
 :root {
@@ -142,6 +148,8 @@
   --ring: oklch(0.62 0.18 240);
   --sky-soft: oklch(0.97 0.025 235);
   --sky-tint: oklch(0.93 0.05 230);
+  --whatsapp: oklch(0.52 0.15 155);
+  --whatsapp-foreground: oklch(1 0 0);
 
   --gradient-hero: linear-gradient(135deg, oklch(0.97 0.025 235) 0%, oklch(0.93 0.06 230) 100%);
   --gradient-primary: linear-gradient(135deg, oklch(0.62 0.18 240) 0%, oklch(0.7 0.16 225) 100%);
@@ -175,6 +183,8 @@
   --ring: oklch(0.72 0.17 235);
   --sky-soft: oklch(0.24 0.04 240);
   --sky-tint: oklch(0.3 0.06 235);
+  --whatsapp: oklch(0.76 0.19 155);
+  --whatsapp-foreground: oklch(0.15 0.04 250);
 
   --gradient-hero: linear-gradient(135deg, oklch(0.2 0.04 250) 0%, oklch(0.26 0.07 240) 100%);
   --gradient-primary: linear-gradient(135deg, oklch(0.72 0.17 235) 0%, oklch(0.65 0.18 245) 100%);
@@ -561,6 +571,8 @@
     --ring: #2f6bd6;
     --sky-soft: #eff5fb;
     --sky-tint: #d6e6f5;
+    --whatsapp: #128c4b;
+    --whatsapp-foreground: #ffffff;
     --gradient-hero: linear-gradient(135deg, #eff5fb 0%, #d6e6f5 100%);
     --gradient-primary: linear-gradient(135deg, #2f6bd6 0%, #4d8be3 100%);
     --gradient-text: linear-gradient(135deg, #2f6bd6, #3b5dd1);
@@ -593,6 +605,8 @@
     --ring: #6aa3f0;
     --sky-soft: #1d273f;
     --sky-tint: #243353;
+    --whatsapp: #25d366;
+    --whatsapp-foreground: #0e1426;
     --gradient-hero: linear-gradient(135deg, #1a2238 0%, #243353 100%);
     --gradient-primary: linear-gradient(135deg, #6aa3f0 0%, #5b8be0 100%);
     --gradient-text: linear-gradient(135deg, #8cbcf5, #93a7ef);

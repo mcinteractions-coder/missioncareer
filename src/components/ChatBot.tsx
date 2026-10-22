@@ -2,11 +2,36 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { useServerFn } from "@tanstack/react-start";
-import { ChevronDown, Send, RotateCcw, Loader2, Bot } from "lucide-react";
+import { ChevronDown, Send, RotateCcw, Loader2, Bot, MessageCircle } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { loadChatHistory, clearChatHistory } from "@/lib/chat.functions";
+import gautam from "@/assets/gautam-umashankar.png";
 
 const SESSION_STORAGE_KEY = "mc_chat_session_key";
+
+const GAUTAM_PHONE = "919702989937";
+const GAUTAM_MSG = encodeURIComponent(
+  "Hi Gautam Sir! I visited the Mission Career website and I'd like to talk about studying abroad.",
+);
+const GAUTAM_WA = `https://wa.me/${GAUTAM_PHONE}?text=${GAUTAM_MSG}`;
+
+function logGautamClick() {
+  try {
+    const payload = JSON.stringify({
+      session_id: sessionStorage.getItem("mc_visitor_sid") || "anon",
+      path: window.location.pathname,
+      event_type: "gautam_whatsapp_click",
+    });
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(
+        "/api/track",
+        new Blob([payload], { type: "application/json" }),
+      );
+    }
+  } catch {
+    /* ignore */
+  }
+}
 
 function getSessionKey(): string {
   if (typeof window === "undefined") return "";
@@ -107,25 +132,53 @@ export function ChatBot() {
 
   return (
     <>
-      {/* Floating bubble */}
+      {/* Floating actions: Gautam Sir on WhatsApp + AI assistant */}
       {!open && (
-        <button
-          onClick={() => setOpen(true)}
-          aria-label="Open chat"
-          className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-primary text-primary-foreground shadow-2xl transition-transform hover:scale-110 md:bottom-6 md:right-6 md:h-16 md:w-16"
-        >
-          <img
-            src="/chatbot-logo.png"
-            alt="Chatbot"
-            width={36}
-            height={36}
-            className="h-7 w-7 md:h-8 md:w-8 object-contain"
-          />
-          <span className="absolute -top-1 -right-1 flex h-3 w-3">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
-            <span className="relative inline-flex h-3 w-3 rounded-full bg-primary"></span>
-          </span>
-        </button>
+        <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3 md:bottom-6 md:right-6">
+          <a
+            href={GAUTAM_WA}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={logGautamClick}
+            aria-label="Talk with Gautam Sir on WhatsApp"
+            className="flex items-center gap-2.5 rounded-full border border-border bg-card py-1.5 pl-1.5 pr-4 shadow-2xl transition-transform hover:scale-105 active:scale-95"
+          >
+            <img
+              src={gautam}
+              alt="Gautam Umashankar, International Admission Expert"
+              width={40}
+              height={40}
+              className="h-10 w-10 shrink-0 rounded-full object-cover object-top ring-2 ring-whatsapp"
+            />
+            <span className="flex flex-col items-start leading-tight">
+              <span className="text-[13px] font-bold whitespace-nowrap text-foreground">
+                Talk with Gautam Sir
+              </span>
+              <span className="flex items-center gap-1 text-[10px] font-semibold whitespace-nowrap text-whatsapp">
+                <MessageCircle className="h-3 w-3" fill="currentColor" />
+                on WhatsApp · free counselling
+              </span>
+            </span>
+          </a>
+
+          <button
+            onClick={() => setOpen(true)}
+            aria-label="Open chat"
+            className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-primary text-primary-foreground shadow-2xl transition-transform hover:scale-110 md:h-16 md:w-16"
+          >
+            <img
+              src="/chatbot-logo.png"
+              alt="Chatbot"
+              width={36}
+              height={36}
+              className="h-7 w-7 md:h-8 md:w-8 object-contain"
+            />
+            <span className="absolute -top-1 -right-1 flex h-3 w-3">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex h-3 w-3 rounded-full bg-primary"></span>
+            </span>
+          </button>
+        </div>
       )}
 
       {/* Chat panel */}
