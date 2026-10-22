@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, Calendar, GraduationCap, Briefcase, Wallet, Home, CheckCircle2, Award } from "lucide-react";
+import { ArrowLeft, Calendar, GraduationCap, Briefcase, Wallet, Home, CheckCircle2, Award, MessageCircle } from "lucide-react";
 import { getCountryGuide, COUNTRY_GUIDES } from "@/data/country-guides";
 import { CountryLeadForm } from "@/components/CountryLeadForm";
 
@@ -165,7 +165,7 @@ function CountryPage() {
                 href={`https://wa.me/919870003748?text=${encodeURIComponent(`Hi Mission Career! I'm exploring studying in ${cap.replace(/^The /, "")}. Can you guide me?`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="sm:col-span-2 flex items-center justify-center gap-2 rounded-xl bg-[--color-whatsapp] px-4 py-3 font-semibold text-[--color-whatsapp-foreground] shadow-card hover:opacity-90 transition-opacity"
+                className="sm:col-span-2 flex items-center justify-center gap-2 rounded-xl bg-whatsapp px-4 py-3 font-semibold text-whatsapp-foreground shadow-card hover:opacity-90 transition-opacity"
               >
                 <MessageCircle className="h-5 w-5" /> Talk to us on WhatsApp
               </a>
