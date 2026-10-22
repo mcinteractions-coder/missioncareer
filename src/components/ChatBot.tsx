@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { useServerFn } from "@tanstack/react-start";
-import { ChevronDown, Send, RotateCcw, Loader2, Bot, MessageCircle } from "lucide-react";
+import { ChevronDown, Send, RotateCcw, Loader2, Bot } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { loadChatHistory, clearChatHistory } from "@/lib/chat.functions";
 import gautam from "@/assets/gautam-umashankar.png";
@@ -153,10 +153,6 @@ export function ChatBot() {
             <span className="flex flex-col items-start leading-tight">
               <span className="text-[13px] font-bold whitespace-nowrap text-foreground">
                 Talk with Gautam Sir
-              </span>
-              <span className="flex items-center gap-1 text-[10px] font-semibold whitespace-nowrap text-whatsapp">
-                <MessageCircle className="h-3 w-3" fill="currentColor" />
-                on WhatsApp · free counselling
               </span>
             </span>
           </a>
