@@ -235,11 +235,20 @@ function RootComponent() {
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
     }
-    // Clear any hash on refresh and scroll to top
+    // On arrival with a hash (redirects, shared links), scroll to that section;
+    // otherwise land at top. Only runs on mount, so in-page nav links are unaffected.
     if (window.location.hash) {
-      window.history.replaceState(null, "", window.location.pathname + window.location.search);
+      const targetId = decodeURIComponent(window.location.hash.slice(1));
+      const target = document.getElementById(targetId);
+      if (target) {
+        target.scrollIntoView({ behavior: "instant", block: "start" });
+      } else {
+        window.history.replaceState(null, "", window.location.pathname + window.location.search);
+        window.scrollTo(0, 0);
+      }
+    } else {
+      window.scrollTo(0, 0);
     }
-    window.scrollTo(0, 0);
   }, []);
 
   return (

@@ -11,6 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as MbaMasterOfBusinessAdministrationRouteImport } from './routes/mba-master-of-business-administration'
+import { Route as Post2RouteImport } from './routes/post-2'
+import { Route as SatScholasticAssessmentTestRouteImport } from './routes/sat-scholastic-assessment-test'
+import { Route as StudyAbroadServicesRouteImport } from './routes/study-abroad-services'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ApiTrackRouteImport } from './routes/api/track'
 import { Route as BlogIdRouteImport } from './routes/blog.$id'
@@ -23,6 +27,28 @@ const IndexRoute = IndexRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MbaMasterOfBusinessAdministrationRoute =
+  MbaMasterOfBusinessAdministrationRouteImport.update({
+    id: '/mba-master-of-business-administration',
+    path: '/mba-master-of-business-administration',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Post2Route = Post2RouteImport.update({
+  id: '/post-2',
+  path: '/post-2',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SatScholasticAssessmentTestRoute =
+  SatScholasticAssessmentTestRouteImport.update({
+    id: '/sat-scholastic-assessment-test',
+    path: '/sat-scholastic-assessment-test',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const StudyAbroadServicesRoute = StudyAbroadServicesRouteImport.update({
+  id: '/study-abroad-services',
+  path: '/study-abroad-services',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiChatRoute = ApiChatRouteImport.update({
@@ -44,6 +70,10 @@ const BlogIdRoute = BlogIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/mba-master-of-business-administration': typeof MbaMasterOfBusinessAdministrationRoute
+  '/post-2': typeof Post2Route
+  '/sat-scholastic-assessment-test': typeof SatScholasticAssessmentTestRoute
+  '/study-abroad-services': typeof StudyAbroadServicesRoute
   '/api/chat': typeof ApiChatRoute
   '/api/track': typeof ApiTrackRoute
   '/blog/$id': typeof BlogIdRoute
@@ -51,6 +81,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/mba-master-of-business-administration': typeof MbaMasterOfBusinessAdministrationRoute
+  '/post-2': typeof Post2Route
+  '/sat-scholastic-assessment-test': typeof SatScholasticAssessmentTestRoute
+  '/study-abroad-services': typeof StudyAbroadServicesRoute
   '/api/chat': typeof ApiChatRoute
   '/api/track': typeof ApiTrackRoute
   '/blog/$id': typeof BlogIdRoute
@@ -59,21 +93,57 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/mba-master-of-business-administration': typeof MbaMasterOfBusinessAdministrationRoute
+  '/post-2': typeof Post2Route
+  '/sat-scholastic-assessment-test': typeof SatScholasticAssessmentTestRoute
+  '/study-abroad-services': typeof StudyAbroadServicesRoute
   '/api/chat': typeof ApiChatRoute
   '/api/track': typeof ApiTrackRoute
   '/blog/$id': typeof BlogIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/api/chat' | '/api/track' | '/blog/$id'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/mba-master-of-business-administration'
+    | '/post-2'
+    | '/sat-scholastic-assessment-test'
+    | '/study-abroad-services'
+    | '/api/chat'
+    | '/api/track'
+    | '/blog/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/api/chat' | '/api/track' | '/blog/$id'
-  id: '__root__' | '/' | '/admin' | '/api/chat' | '/api/track' | '/blog/$id'
+  to:
+    | '/'
+    | '/admin'
+    | '/mba-master-of-business-administration'
+    | '/post-2'
+    | '/sat-scholastic-assessment-test'
+    | '/study-abroad-services'
+    | '/api/chat'
+    | '/api/track'
+    | '/blog/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/mba-master-of-business-administration'
+    | '/post-2'
+    | '/sat-scholastic-assessment-test'
+    | '/study-abroad-services'
+    | '/api/chat'
+    | '/api/track'
+    | '/blog/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
+  MbaMasterOfBusinessAdministrationRoute: typeof MbaMasterOfBusinessAdministrationRoute
+  Post2Route: typeof Post2Route
+  SatScholasticAssessmentTestRoute: typeof SatScholasticAssessmentTestRoute
+  StudyAbroadServicesRoute: typeof StudyAbroadServicesRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiTrackRoute: typeof ApiTrackRoute
   BlogIdRoute: typeof BlogIdRoute
@@ -93,6 +163,34 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mba-master-of-business-administration': {
+      id: '/mba-master-of-business-administration'
+      path: '/mba-master-of-business-administration'
+      fullPath: '/mba-master-of-business-administration'
+      preLoaderRoute: typeof MbaMasterOfBusinessAdministrationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/post-2': {
+      id: '/post-2'
+      path: '/post-2'
+      fullPath: '/post-2'
+      preLoaderRoute: typeof Post2RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sat-scholastic-assessment-test': {
+      id: '/sat-scholastic-assessment-test'
+      path: '/sat-scholastic-assessment-test'
+      fullPath: '/sat-scholastic-assessment-test'
+      preLoaderRoute: typeof SatScholasticAssessmentTestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/study-abroad-services': {
+      id: '/study-abroad-services'
+      path: '/study-abroad-services'
+      fullPath: '/study-abroad-services'
+      preLoaderRoute: typeof StudyAbroadServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/chat': {
@@ -122,6 +220,11 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
+  MbaMasterOfBusinessAdministrationRoute:
+    MbaMasterOfBusinessAdministrationRoute,
+  Post2Route: Post2Route,
+  SatScholasticAssessmentTestRoute: SatScholasticAssessmentTestRoute,
+  StudyAbroadServicesRoute: StudyAbroadServicesRoute,
   ApiChatRoute: ApiChatRoute,
   ApiTrackRoute: ApiTrackRoute,
   BlogIdRoute: BlogIdRoute,
