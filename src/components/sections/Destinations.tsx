@@ -50,7 +50,7 @@ const COUNTRIES: Country[] = [
 const INITIAL_COUNT = 8;
 
 const GUIDE_SLUG_BY_CODE: Record<string, string> = {
-  uk: "uk",
+  gb: "uk",
   us: "usa",
   ca: "canada",
   au: "australia",
