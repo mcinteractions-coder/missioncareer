@@ -148,6 +148,8 @@
   --ring: oklch(0.62 0.18 240);
   --sky-soft: oklch(0.97 0.025 235);
   --sky-tint: oklch(0.93 0.05 230);
+  --whatsapp: oklch(0.52 0.15 155);
+  --whatsapp-foreground: oklch(1 0 0);
 
   --gradient-hero: linear-gradient(135deg, oklch(0.97 0.025 235) 0%, oklch(0.93 0.06 230) 100%);
   --gradient-primary: linear-gradient(135deg, oklch(0.62 0.18 240) 0%, oklch(0.7 0.16 225) 100%);
@@ -181,6 +183,8 @@
   --ring: oklch(0.72 0.17 235);
   --sky-soft: oklch(0.24 0.04 240);
   --sky-tint: oklch(0.3 0.06 235);
+  --whatsapp: oklch(0.76 0.19 155);
+  --whatsapp-foreground: oklch(0.15 0.04 250);
 
   --gradient-hero: linear-gradient(135deg, oklch(0.2 0.04 250) 0%, oklch(0.26 0.07 240) 100%);
   --gradient-primary: linear-gradient(135deg, oklch(0.72 0.17 235) 0%, oklch(0.65 0.18 245) 100%);
