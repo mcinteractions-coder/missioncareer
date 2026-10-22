@@ -82,7 +82,7 @@ function CountryCard({ c }: { c: Country }) {
             <span className="text-primary font-semibold">{c.unis}</span> Universities
           </p>
           <p className="mt-3 text-[10px] md:text-xs uppercase tracking-wider text-primary/70 font-semibold">
-            Tap / hover for details
+            {slug ? "Click for full guide" : "Tap / hover for details"}
           </p>
         </div>
 
@@ -121,8 +121,8 @@ function CountryCard({ c }: { c: Country }) {
               <span><span className="text-white/75">Climate: </span>{c.climate}</span>
             </li>
           </ul>
-          <a
-            href="#contact"
+          <button
+            type="button"
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
@@ -131,9 +131,31 @@ function CountryCard({ c }: { c: Country }) {
             className="absolute bottom-3 right-3 inline-flex items-center gap-1 text-[10px] md:text-xs font-bold bg-white text-blue-700 hover:bg-white/90 px-2.5 py-1 rounded-full shadow-md"
           >
             Enquire <ArrowRight className="h-3 w-3" />
-          </a>
+          </button>
         </div>
-      </div>
+    </div>
+  );
+
+  if (slug) {
+    return (
+      <Link
+        to="/study-abroad/$country"
+        params={{ country: slug }}
+        className="group [perspective:1200px] h-56 md:h-64 block cursor-pointer"
+        aria-label={`View the full study in ${c.name} guide`}
+      >
+        {inner}
+      </Link>
+    );
+  }
+
+  return (
+    <div
+      className="group [perspective:1200px] h-56 md:h-64 cursor-pointer"
+      onClick={() => setFlipped((v) => !v)}
+      onMouseLeave={() => setFlipped(false)}
+    >
+      {inner}
     </div>
   );
 }
