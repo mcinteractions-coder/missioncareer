@@ -2,11 +2,36 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { useServerFn } from "@tanstack/react-start";
-import { ChevronDown, Send, RotateCcw, Loader2, Bot } from "lucide-react";
+import { ChevronDown, Send, RotateCcw, Loader2, Bot, MessageCircle } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { loadChatHistory, clearChatHistory } from "@/lib/chat.functions";
+import gautam from "@/assets/gautam-umashankar.png";
 
 const SESSION_STORAGE_KEY = "mc_chat_session_key";
+
+const GAUTAM_PHONE = "919702989937";
+const GAUTAM_MSG = encodeURIComponent(
+  "Hi Gautam Sir! I visited the Mission Career website and I'd like to talk about studying abroad.",
+);
+const GAUTAM_WA = `https://wa.me/${GAUTAM_PHONE}?text=${GAUTAM_MSG}`;
+
+function logGautamClick() {
+  try {
+    const payload = JSON.stringify({
+      session_id: sessionStorage.getItem("mc_visitor_sid") || "anon",
+      path: window.location.pathname,
+      event_type: "gautam_whatsapp_click",
+    });
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(
+        "/api/track",
+        new Blob([payload], { type: "application/json" }),
+      );
+    }
+  } catch {
+    /* ignore */
+  }
+}
 
 function getSessionKey(): string {
   if (typeof window === "undefined") return "";
