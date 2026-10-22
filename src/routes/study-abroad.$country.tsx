@@ -13,7 +13,7 @@ export const Route = createFileRoute("/study-abroad/$country")({
     return guide;
   },
   head: ({ params, loaderData }) => {
-    if (!loaderData) return { meta: [{ title: "Country guide — Mission Career" }, { name: "robots", content: "noindex" }] };
+    if (!loaderData) return { meta: [{ title: "Country guide — Mission Career" } as never, { name: "robots", content: "noindex" }] };
     const name = loaderData.name.replace(/^the /, "the ");
     const title = `Study in ${name} from India — Fees, Universities & Visa | Mission Career`;
     const desc = `Plan your study in ${name}: tuition fees, top universities, ${loaderData.visaName} steps and scholarships. Free counselling from Mission Career, Mumbai.`;
