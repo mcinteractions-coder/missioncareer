@@ -49,19 +49,23 @@ const COUNTRIES: Country[] = [
 
 const INITIAL_COUNT = 8;
 
+const GUIDE_SLUG_BY_CODE: Record<string, string> = {
+  uk: "uk",
+  us: "usa",
+  ca: "canada",
+  au: "australia",
+  de: "germany",
+};
+
 function CountryCard({ c }: { c: Country }) {
   const [flipped, setFlipped] = useState(false);
-  return (
+  const slug = GUIDE_SLUG_BY_CODE[c.code];
+  const inner = (
     <div
-      className="group [perspective:1200px] h-56 md:h-64 cursor-pointer"
-      onClick={() => setFlipped((v) => !v)}
-      onMouseLeave={() => setFlipped(false)}
+      className={`relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] ${
+        flipped ? "[transform:rotateY(180deg)]" : ""
+      }`}
     >
-      <div
-        className={`relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] ${
-          flipped ? "[transform:rotateY(180deg)]" : ""
-        }`}
-      >
         {/* FRONT */}
         <div className="absolute inset-0 [backface-visibility:hidden] bg-card rounded-2xl p-4 md:p-6 shadow-card flex flex-col items-center justify-center text-center">
           <div className="flag-wave w-16 h-12 md:w-20 md:h-14 overflow-hidden rounded-md shadow-md mb-3">
