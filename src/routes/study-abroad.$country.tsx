@@ -143,6 +143,36 @@ function CountryPage() {
           </section>
 
           <section>
+            <h2 className="text-xl font-bold text-foreground mb-3">Explore Mission Career</h2>
+            <div className="grid sm:grid-cols-2 gap-3">
+              {[
+                { label: "Our Services", desc: "Everything we help with", to: "/", hash: "services", icon: GraduationCap },
+                { label: "Book a Free Session", desc: "1-on-1 counselling in Mumbai", to: "/", hash: "booking", icon: Calendar },
+                { label: "Free Profile Evaluation", desc: "Know your admission chances", to: "/", hash: "evaluation", icon: CheckCircle2 },
+                { label: "Check Your Documents", desc: "AI document grading tool", to: "/", hash: "grader", icon: Award },
+                { label: "Student Success Stories", desc: "Reviews from our students", to: "/", hash: "success", icon: Briefcase },
+                { label: "Read Our Blog", desc: "Study abroad tips & updates", to: "/", hash: "blog", icon: Wallet },
+              ].map((b) => (
+                <Link key={b.label} to={b.to} hash={b.hash} className="flex items-center gap-3 bg-card rounded-xl p-4 shadow-card text-foreground hover:text-primary transition-colors">
+                  <b.icon className="h-5 w-5 text-primary shrink-0" />
+                  <span>
+                    <span className="block font-semibold">{b.label}</span>
+                    <span className="block text-xs text-muted-foreground">{b.desc}</span>
+                  </span>
+                </Link>
+              ))}
+              <a
+                href={`https://wa.me/919870003748?text=${encodeURIComponent(`Hi Mission Career! I'm exploring studying in ${cap.replace(/^The /, "")}. Can you guide me?`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="sm:col-span-2 flex items-center justify-center gap-2 rounded-xl bg-[--color-whatsapp] px-4 py-3 font-semibold text-[--color-whatsapp-foreground] shadow-card hover:opacity-90 transition-opacity"
+              >
+                <MessageCircle className="h-5 w-5" /> Talk to us on WhatsApp
+              </a>
+            </div>
+          </section>
+
+          <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">Common questions</h2>
             <div className="space-y-3">
               {g.faqs.map((f) => (
