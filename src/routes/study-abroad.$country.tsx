@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Calendar, GraduationCap, Briefcase, Wallet, Home, CheckCircle2, Award, MessageCircle, Sparkles, Plane, HelpCircle, ChevronDown, Globe } from "lucide-react";
-import type React from "react";
+import type { LucideIcon } from "lucide-react";
 import { getCountryGuide, COUNTRY_GUIDES } from "@/data/country-guides";
 import { CountryLeadForm } from "@/components/CountryLeadForm";
 
@@ -13,7 +13,7 @@ export const Route = createFileRoute("/study-abroad/$country")({
     return guide;
   },
   head: ({ params, loaderData }) => {
-    if (!loaderData) return { meta: [{ title: "Country guide — Mission Career" } as never, { name: "robots", content: "noindex" }] };
+    if (!loaderData) return { meta: [{ title: "Country guide — Mission Career" }, { name: "robots", content: "noindex" }] };
     const name = loaderData.name.replace(/^the /, "the ");
     const title = `Study in ${name} from India — Fees, Universities & Visa | Mission Career`;
     const desc = `Plan your study in ${name}: tuition fees, top universities, ${loaderData.visaName} steps and scholarships. Free counselling from Mission Career, Mumbai.`;
@@ -55,7 +55,7 @@ export const Route = createFileRoute("/study-abroad/$country")({
   ),
 });
 
-function SectionTitle({ icon: Icon, kicker, title }: { icon: React.ElementType; kicker: string; title: string }) {
+function SectionTitle({ icon: Icon, kicker, title }: { icon: LucideIcon; kicker: string; title: string }) {
   return (
     <div className="mb-5 flex items-center gap-3">
       <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-primary text-primary-foreground shadow-glow">
