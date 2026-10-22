@@ -18,6 +18,7 @@ import { Route as StudyAbroadServicesRouteImport } from './routes/study-abroad-s
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ApiTrackRouteImport } from './routes/api/track'
 import { Route as BlogIdRouteImport } from './routes/blog.$id'
+import { Route as StudyAbroadCountryRouteImport } from './routes/study-abroad.$country'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -66,6 +67,11 @@ const BlogIdRoute = BlogIdRouteImport.update({
   path: '/blog/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StudyAbroadCountryRoute = StudyAbroadCountryRouteImport.update({
+  id: '/study-abroad/$country',
+  path: '/study-abroad/$country',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -77,6 +83,7 @@ export interface FileRoutesByFullPath {
   '/api/chat': typeof ApiChatRoute
   '/api/track': typeof ApiTrackRoute
   '/blog/$id': typeof BlogIdRoute
+  '/study-abroad/$country': typeof StudyAbroadCountryRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/api/chat': typeof ApiChatRoute
   '/api/track': typeof ApiTrackRoute
   '/blog/$id': typeof BlogIdRoute
+  '/study-abroad/$country': typeof StudyAbroadCountryRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -100,6 +108,7 @@ export interface FileRoutesById {
   '/api/chat': typeof ApiChatRoute
   '/api/track': typeof ApiTrackRoute
   '/blog/$id': typeof BlogIdRoute
+  '/study-abroad/$country': typeof StudyAbroadCountryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/api/track'
     | '/blog/$id'
+    | '/study-abroad/$country'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -124,6 +134,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/api/track'
     | '/blog/$id'
+    | '/study-abroad/$country'
   id:
     | '__root__'
     | '/'
@@ -135,6 +146,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/api/track'
     | '/blog/$id'
+    | '/study-abroad/$country'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -147,6 +159,7 @@ export interface RootRouteChildren {
   ApiChatRoute: typeof ApiChatRoute
   ApiTrackRoute: typeof ApiTrackRoute
   BlogIdRoute: typeof BlogIdRoute
+  StudyAbroadCountryRoute: typeof StudyAbroadCountryRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -214,6 +227,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/study-abroad/$country': {
+      id: '/study-abroad/$country'
+      path: '/study-abroad/$country'
+      fullPath: '/study-abroad/$country'
+      preLoaderRoute: typeof StudyAbroadCountryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -228,6 +248,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiChatRoute: ApiChatRoute,
   ApiTrackRoute: ApiTrackRoute,
   BlogIdRoute: BlogIdRoute,
+  StudyAbroadCountryRoute: StudyAbroadCountryRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
