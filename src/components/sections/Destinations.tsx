@@ -1,6 +1,8 @@
 import { ArrowRight, ChevronUp, GraduationCap, Wallet, Calendar, Thermometer } from "lucide-react";
 import { useState } from "react";
 import { Counter } from "@/components/Counter";
+import { Link } from "@tanstack/react-router";
+import { COUNTRY_GUIDES } from "@/data/country-guides";
 
 type Country = {
   code: string;
@@ -166,6 +168,17 @@ export function Destinations() {
               <>View All Countries <ArrowRight className="h-4 w-4" /></>
             )}
           </button>
+        </div>
+
+        <div className="mt-8 text-center">
+          <p className="text-sm font-semibold text-muted-foreground mb-3">Detailed country guides</p>
+          <div className="flex flex-wrap justify-center gap-2">
+            {COUNTRY_GUIDES.map((g) => (
+              <Link key={g.slug} to="/study-abroad/$country" params={{ country: g.slug }} className="rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-foreground hover:text-primary shadow-card">
+                Study in {g.name.replace(/^the /, "")}
+              </Link>
+            ))}
+          </div>
         </div>
 
         <div className="mt-12 md:mt-16 grid grid-cols-3 gap-3 md:gap-6 bg-gradient-primary rounded-2xl md:rounded-3xl p-5 md:p-8 shadow-soft text-primary-foreground">
