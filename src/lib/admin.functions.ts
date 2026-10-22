@@ -527,7 +527,7 @@ export const adminSessionDetail = createServerFn({ method: "POST" })
       whatsapp_button_click: "Clicked 'Directly talk to us on WhatsApp' and opened WhatsApp",
       whatsapp_backdrop_click: "Tried to close by clicking outside (blocked — mandatory gate)",
       gautam_whatsapp_click:
-        "Clicked 'Talk with Gautam Sir' and opened Gautam Sir's WhatsApp chat",
+        "Clicked 'Talk to Gautam Sir' and opened Gautam Sir's WhatsApp chat",
     };
     const whatsappEvents = events
       .filter(

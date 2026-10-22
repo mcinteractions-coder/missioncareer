@@ -140,7 +140,7 @@ export function ChatBot() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={logGautamClick}
-            aria-label="Talk with Gautam Sir on WhatsApp"
+            aria-label="Talk to Gautam Sir on WhatsApp"
             className="flex items-center gap-2.5 rounded-full border border-border bg-card py-1.5 pl-1.5 pr-4 shadow-2xl transition-transform hover:scale-105 active:scale-95"
           >
             <img
@@ -152,7 +152,7 @@ export function ChatBot() {
             />
             <span className="flex flex-col items-start leading-tight">
               <span className="text-[13px] font-bold whitespace-nowrap text-foreground">
-                Talk with Gautam Sir
+                Talk to Gautam Sir
               </span>
             </span>
           </a>
