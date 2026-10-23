@@ -14,10 +14,11 @@ export const Route = createFileRoute("/study-abroad/$country")({
   },
   head: ({ params, loaderData }) => {
     if (!loaderData) return { meta: [{ title: "Country guide — Mission Career" }, { name: "robots", content: "noindex" }] };
-    const name = loaderData.name.replace(/^the /, "the ");
-    const title = `Study in ${name} from India — Fees, Universities & Visa | Mission Career`;
-    const desc = `Plan your study in ${name}: tuition fees, top universities, ${loaderData.visaName} steps and scholarships. Free counselling from Mission Career, Mumbai.`;
+    const name = loaderData.name.replace(/^the /, "");
+    const title = `Study in ${name} from India 2026: Fees & Visa | Mission Career`;
+    const desc = `Study in ${name} from India: fees, top universities, ${loaderData.visaName} steps & scholarships for 2026-27. Free counselling at Mission Career, Mumbai.`;
     const url = `${SITE}/study-abroad/${params.country}`;
+    const image = `https://flagcdn.com/w1280/${loaderData.code}.png`;
     return {
       meta: [
         { title },
@@ -26,7 +27,12 @@ export const Route = createFileRoute("/study-abroad/$country")({
         { property: "og:description", content: desc },
         { property: "og:type", content: "article" },
         { property: "og:url", content: url },
+        { property: "og:image", content: image },
+        { property: "og:image:alt", content: `Flag of ${name}` },
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: desc },
+        { name: "twitter:image", content: image },
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: [
