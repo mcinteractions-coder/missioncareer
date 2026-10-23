@@ -1,3 +1,4 @@
+import { EXTRA_GUIDES } from "./country-guides-extra";
 export type CountryGuide = {
   slug: string;
   code: string;
@@ -160,6 +161,7 @@ export const COUNTRY_GUIDES: CountryGuide[] = [
       { q: "Which intake is better for Australia?", a: "February is the main intake with the most courses; July is a good second option." },
     ],
   },
+  ...EXTRA_GUIDES,
 ];
 
 export const getCountryGuide = (slug: string) => COUNTRY_GUIDES.find((c) => c.slug === slug);
