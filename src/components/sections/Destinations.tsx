@@ -49,13 +49,9 @@ const COUNTRIES: Country[] = [
 
 const INITIAL_COUNT = 8;
 
-const GUIDE_SLUG_BY_CODE: Record<string, string> = {
-  gb: "uk",
-  us: "usa",
-  ca: "canada",
-  au: "australia",
-  de: "germany",
-};
+const GUIDE_SLUG_BY_CODE: Record<string, string> = Object.fromEntries(
+  COUNTRY_GUIDES.map((g) => [g.code, g.slug]),
+);
 
 function CountryCard({ c }: { c: Country }) {
   const [flipped, setFlipped] = useState(false);
