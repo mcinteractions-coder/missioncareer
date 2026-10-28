@@ -1,20 +1,53 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 const logoAsset = { url: "/mission-logo-transparent.png" };
 import { ThemeToggle } from "@/components/ThemeToggle";
 
-const links = [
+type NavItem = { label: string; href?: string; to?: "/success-stories" };
+
+const links: NavItem[] = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
   { label: "Services", href: "#services" },
   { label: "Destinations", href: "#destinations" },
   { label: "Process", href: "#process" },
   { label: "Reviews", href: "#reviews" },
-  { label: "Success Stories", href: "#success" },
+  { label: "Success Stories", to: "/success-stories" },
   { label: "Globe", href: "#globe" },
   { label: "Deadlines", href: "#deadlines" },
   { label: "Contact", href: "#contact" },
 ];
+
+function NavLink({
+  item,
+  className,
+  underline,
+  onNavigate,
+}: {
+  item: NavItem;
+  className: string;
+  underline?: boolean;
+  onNavigate?: () => void;
+}) {
+  const inner = (
+    <>
+      {item.label}
+      {underline && (
+        <span className="absolute left-2.5 right-2.5 -bottom-0.5 h-0.5 bg-primary scale-x-0 group-hover:scale-x-100 origin-left transition-transform" />
+      )}
+    </>
+  );
+  return item.to ? (
+    <Link to={item.to} className={className} onClick={onNavigate}>
+      {inner}
+    </Link>
+  ) : (
+    <a href={item.href} className={className} onClick={onNavigate}>
+      {inner}
+    </a>
+  );
+}
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -45,14 +78,12 @@ export function Navbar() {
 
         <div className="hidden lg:flex items-center gap-0.5 flex-1 justify-center">
           {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
+            <NavLink
+              key={l.label}
+              item={l}
+              underline
               className="relative px-2.5 py-2 text-sm font-medium text-foreground/80 hover:text-primary transition-colors group whitespace-nowrap"
-            >
-              {l.label}
-              <span className="absolute left-2.5 right-2.5 -bottom-0.5 h-0.5 bg-primary scale-x-0 group-hover:scale-x-100 origin-left transition-transform" />
-            </a>
+            />
           ))}
         </div>
 
@@ -83,14 +114,12 @@ export function Navbar() {
         <div className="lg:hidden glass border-t border-border mt-2">
           <div className="container mx-auto px-4 py-4 flex flex-col gap-1">
             {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                onClick={() => setOpen(false)}
+              <NavLink
+                key={l.label}
+                item={l}
+                onNavigate={() => setOpen(false)}
                 className="py-2 text-sm font-medium text-foreground/80 hover:text-primary"
-              >
-                {l.label}
-              </a>
+              />
             ))}
             <a
               href="#contact"
