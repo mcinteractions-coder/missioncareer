@@ -15,6 +15,7 @@ import { Route as MbaMasterOfBusinessAdministrationRouteImport } from './routes/
 import { Route as Post2RouteImport } from './routes/post-2'
 import { Route as SatScholasticAssessmentTestRouteImport } from './routes/sat-scholastic-assessment-test'
 import { Route as StudyAbroadServicesRouteImport } from './routes/study-abroad-services'
+import { Route as SuccessStoriesRouteImport } from './routes/success-stories'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ApiTrackRouteImport } from './routes/api/track'
 import { Route as BlogIdRouteImport } from './routes/blog.$id'
@@ -52,6 +53,11 @@ const StudyAbroadServicesRoute = StudyAbroadServicesRouteImport.update({
   path: '/study-abroad-services',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SuccessStoriesRoute = SuccessStoriesRouteImport.update({
+  id: '/success-stories',
+  path: '/success-stories',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/post-2': typeof Post2Route
   '/sat-scholastic-assessment-test': typeof SatScholasticAssessmentTestRoute
   '/study-abroad-services': typeof StudyAbroadServicesRoute
+  '/success-stories': typeof SuccessStoriesRoute
   '/api/chat': typeof ApiChatRoute
   '/api/track': typeof ApiTrackRoute
   '/blog/$id': typeof BlogIdRoute
@@ -92,6 +99,7 @@ export interface FileRoutesByTo {
   '/post-2': typeof Post2Route
   '/sat-scholastic-assessment-test': typeof SatScholasticAssessmentTestRoute
   '/study-abroad-services': typeof StudyAbroadServicesRoute
+  '/success-stories': typeof SuccessStoriesRoute
   '/api/chat': typeof ApiChatRoute
   '/api/track': typeof ApiTrackRoute
   '/blog/$id': typeof BlogIdRoute
@@ -105,6 +113,7 @@ export interface FileRoutesById {
   '/post-2': typeof Post2Route
   '/sat-scholastic-assessment-test': typeof SatScholasticAssessmentTestRoute
   '/study-abroad-services': typeof StudyAbroadServicesRoute
+  '/success-stories': typeof SuccessStoriesRoute
   '/api/chat': typeof ApiChatRoute
   '/api/track': typeof ApiTrackRoute
   '/blog/$id': typeof BlogIdRoute
@@ -119,6 +128,7 @@ export interface FileRouteTypes {
     | '/post-2'
     | '/sat-scholastic-assessment-test'
     | '/study-abroad-services'
+    | '/success-stories'
     | '/api/chat'
     | '/api/track'
     | '/blog/$id'
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
     | '/post-2'
     | '/sat-scholastic-assessment-test'
     | '/study-abroad-services'
+    | '/success-stories'
     | '/api/chat'
     | '/api/track'
     | '/blog/$id'
@@ -143,6 +154,7 @@ export interface FileRouteTypes {
     | '/post-2'
     | '/sat-scholastic-assessment-test'
     | '/study-abroad-services'
+    | '/success-stories'
     | '/api/chat'
     | '/api/track'
     | '/blog/$id'
@@ -156,6 +168,7 @@ export interface RootRouteChildren {
   Post2Route: typeof Post2Route
   SatScholasticAssessmentTestRoute: typeof SatScholasticAssessmentTestRoute
   StudyAbroadServicesRoute: typeof StudyAbroadServicesRoute
+  SuccessStoriesRoute: typeof SuccessStoriesRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiTrackRoute: typeof ApiTrackRoute
   BlogIdRoute: typeof BlogIdRoute
@@ -206,6 +219,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudyAbroadServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/success-stories': {
+      id: '/success-stories'
+      path: '/success-stories'
+      fullPath: '/success-stories'
+      preLoaderRoute: typeof SuccessStoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/chat': {
       id: '/api/chat'
       path: '/api/chat'
@@ -245,6 +265,7 @@ const rootRouteChildren: RootRouteChildren = {
   Post2Route: Post2Route,
   SatScholasticAssessmentTestRoute: SatScholasticAssessmentTestRoute,
   StudyAbroadServicesRoute: StudyAbroadServicesRoute,
+  SuccessStoriesRoute: SuccessStoriesRoute,
   ApiChatRoute: ApiChatRoute,
   ApiTrackRoute: ApiTrackRoute,
   BlogIdRoute: BlogIdRoute,
