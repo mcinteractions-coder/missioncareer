@@ -34,6 +34,11 @@ export function Footer() {
               {[["Mission Career Home","#home"],["About Our Consultancy","#about"],["Counseling Services","#services"],["Study Destinations","#destinations"],["Admission Process","#process"],["Book a Free Session","#contact"]].map(([l,h]) => (
                 <li key={l}><a href={h} className="hover:text-primary transition-colors">{l}</a></li>
               ))}
+              <li>
+                <Link to="/success-stories" className="hover:text-primary transition-colors">
+                  Student Success Stories
+                </Link>
+              </li>
             </ul>
           </div>
 

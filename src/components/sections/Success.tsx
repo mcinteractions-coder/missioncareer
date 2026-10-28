@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, GraduationCap, MapPin, BookOpen, School, Building2, BookMarked } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { fetchPosts, type Post } from "@/lib/content-store";
 
 interface StoryCard {
@@ -35,7 +36,6 @@ function avatarFor(gender: "male" | "female", name: string) {
 
 export function Success() {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     fetchPosts("success").then(setPosts);
@@ -53,7 +53,7 @@ export function Success() {
     destination: p.destination || "",
     image: p.image,
   }));
-  const visible = showAll ? all : all.slice(0, INITIAL_COUNT);
+  const visible = all.slice(0, INITIAL_COUNT);
 
   return (
     <section id="success" className="py-12 md:py-24 bg-background">
@@ -78,13 +78,13 @@ export function Success() {
 
         {all.length > INITIAL_COUNT && (
           <div className="mt-8 md:mt-10 flex justify-center">
-            <button
-              onClick={() => setShowAll((v) => !v)}
+            <Link
+              to="/success-stories"
               className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-5 py-2.5 md:px-6 md:py-3 text-sm md:text-base font-semibold text-primary-foreground shadow-soft hover:shadow-glow transition-shadow"
             >
-              {showAll ? "Show Less" : `View All Success Stories (${all.length})`}
-              <ArrowRight className={`h-4 w-4 transition-transform ${showAll ? "rotate-90" : ""}`} />
-            </button>
+              View All Success Stories ({all.length})
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         )}
       </div>
