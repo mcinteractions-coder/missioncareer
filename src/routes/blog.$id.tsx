@@ -94,13 +94,21 @@ function BlogPostPage() {
           <ArrowLeft className="h-4 w-4" /> Back to blog
         </Link>
         <p className="text-sm text-primary font-semibold mb-3">{new Date(post.created_at).toLocaleDateString()}</p>
-        <h1 className="text-4xl md:text-5xl font-extrabold mb-6">{post.title}</h1>
+        {seo && <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">{seo.category}</p>}
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-6">{seo?.h1 ?? post.title}</h1>
         {post.image && (
-          <img src={post.image} alt={post.title} className="w-full rounded-3xl shadow-card mb-8 object-cover max-h-[480px]" />
+          <img src={post.image} alt={seo?.imageAlt ?? post.title} title={seo?.imageTitle} className="w-full rounded-3xl shadow-card mb-8 object-cover max-h-[480px]" />
         )}
         <div className="prose prose-lg max-w-none text-foreground whitespace-pre-wrap leading-relaxed text-lg">
           {post.text}
         </div>
+        {seo && (
+          <div className="mt-10 flex flex-wrap gap-2">
+            {seo.tags.map((t) => (
+              <span key={t} className="rounded-full bg-primary-soft px-3 py-1 text-xs font-semibold text-primary">#{t}</span>
+            ))}
+          </div>
+        )}
       </article>
       <Footer />
     </main>
