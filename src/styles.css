@@ -677,3 +677,67 @@
   --border: oklch(0.88 0.05 305);
   --input: oklch(0.86 0.06 305);
 }
+
+/* ===== Temporary Diwali festival theme (public pages only, see DiwaliTheme) ===== */
+.theme-diwali {
+  --background: oklch(0.975 0.025 80);
+  --foreground: oklch(0.25 0.07 30);
+  --card: oklch(0.995 0.015 85);
+  --card-foreground: oklch(0.25 0.07 30);
+  --popover: oklch(0.995 0.015 85);
+  --popover-foreground: oklch(0.25 0.07 30);
+  --primary: oklch(0.6 0.19 45);
+  --primary-foreground: oklch(1 0 0);
+  --primary-soft: oklch(0.93 0.06 75);
+  --primary-glow: oklch(0.8 0.16 80);
+  --secondary: oklch(0.94 0.04 75);
+  --secondary-foreground: oklch(0.28 0.08 30);
+  --muted: oklch(0.95 0.03 80);
+  --muted-foreground: oklch(0.48 0.06 40);
+  --accent: oklch(0.9 0.08 80);
+  --accent-foreground: oklch(0.35 0.12 25);
+  --border: oklch(0.86 0.07 75);
+  --input: oklch(0.88 0.06 75);
+  --ring: oklch(0.6 0.19 45);
+  --sky-soft: oklch(0.96 0.04 80);
+  --sky-tint: oklch(0.91 0.08 75);
+  --gradient-hero: radial-gradient(circle at 20% 10%, oklch(0.93 0.1 85 / 0.9), transparent 45%), radial-gradient(circle at 85% 30%, oklch(0.9 0.09 40 / 0.6), transparent 45%), linear-gradient(135deg, oklch(0.97 0.035 80) 0%, oklch(0.92 0.07 60) 100%);
+  --gradient-primary: linear-gradient(135deg, oklch(0.62 0.2 40) 0%, oklch(0.72 0.17 70) 100%);
+  --gradient-text: linear-gradient(135deg, oklch(0.55 0.2 30), oklch(0.68 0.17 70));
+  --shadow-soft: 0 10px 40px -10px oklch(0.65 0.18 55 / 0.35);
+  --shadow-card: 0 4px 22px -4px oklch(0.55 0.14 45 / 0.2);
+  --shadow-glow: 0 0 40px oklch(0.8 0.17 80 / 0.5);
+}
+.dark .theme-diwali, .dark.theme-diwali, .theme-diwali.dark {
+  --background: oklch(0.17 0.04 30);
+  --foreground: oklch(0.96 0.03 85);
+  --card: oklch(0.22 0.05 30);
+  --card-foreground: oklch(0.96 0.03 85);
+  --popover: oklch(0.22 0.05 30);
+  --popover-foreground: oklch(0.96 0.03 85);
+  --primary: oklch(0.78 0.16 70);
+  --primary-foreground: oklch(0.18 0.05 30);
+  --primary-soft: oklch(0.3 0.07 40);
+  --secondary: oklch(0.26 0.05 35);
+  --secondary-foreground: oklch(0.96 0.03 85);
+  --muted: oklch(0.24 0.04 35);
+  --muted-foreground: oklch(0.78 0.05 75);
+  --accent: oklch(0.32 0.08 40);
+  --accent-foreground: oklch(0.95 0.05 85);
+  --border: oklch(0.35 0.06 45);
+  --input: oklch(0.3 0.05 40);
+  --ring: oklch(0.78 0.16 70);
+  --sky-soft: oklch(0.22 0.05 35);
+  --sky-tint: oklch(0.28 0.07 40);
+  --gradient-hero: radial-gradient(circle at 20% 10%, oklch(0.4 0.12 60 / 0.5), transparent 45%), linear-gradient(135deg, oklch(0.18 0.05 30) 0%, oklch(0.25 0.08 35) 100%);
+  --gradient-primary: linear-gradient(135deg, oklch(0.72 0.18 55) 0%, oklch(0.8 0.15 80) 100%);
+  --gradient-text: linear-gradient(135deg, oklch(0.82 0.15 80), oklch(0.72 0.18 50));
+}
+.theme-diwali { background-color: var(--background); color: var(--foreground); }
+@keyframes diwali-flicker { 0%,100% { transform: scaleY(1) rotate(-2deg); opacity: 1 } 50% { transform: scaleY(1.18) rotate(2deg); opacity: .85 } }
+@keyframes diwali-twinkle { 0%,100% { opacity: .15; transform: scale(.6) } 50% { opacity: 1; transform: scale(1) } }
+@keyframes diwali-swing { 0%,100% { transform: rotate(-4deg) } 50% { transform: rotate(4deg) } }
+.diwali-flame { animation: diwali-flicker 1.2s ease-in-out infinite; transform-origin: bottom center; }
+.diwali-spark { animation: diwali-twinkle 2.4s ease-in-out infinite; }
+.diwali-lantern { animation: diwali-swing 3.5s ease-in-out infinite; transform-origin: top center; }
+@media (prefers-reduced-motion: reduce) { .diwali-flame, .diwali-spark, .diwali-lantern { animation: none; } }
