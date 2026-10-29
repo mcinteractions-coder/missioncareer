@@ -4,28 +4,71 @@ import { ArrowLeft } from "lucide-react";
 import { fetchPosts, type Post } from "@/lib/content-store";
 import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
+import { seoBySlugOrId } from "@/data/blog-seo";
+
+const SITE = "https://www.missioncareer.net";
 
 export const Route = createFileRoute("/blog/$id")({
-  head: () => ({ meta: [
-    { title: "Study Abroad Journal — Mission Career" },
-    { name: "description", content: "Study abroad advice, student stories and university updates from Mission Career." },
-    { property: "og:title", content: "Study Abroad Journal — Mission Career" },
-    { property: "og:description", content: "Study abroad advice, student stories and university updates from Mission Career." },
-    { property: "og:type", content: "article" },
-    { name: "twitter:card", content: "summary_large_image" },
-  ] }),
+  head: ({ params }) => {
+    const seo = seoBySlugOrId(params.id);
+    if (!seo) {
+      return { meta: [
+        { title: "Study Abroad Journal — Mission Career" },
+        { name: "description", content: "Study abroad advice, student stories and university updates from Mission Career." },
+        { property: "og:title", content: "Study Abroad Journal — Mission Career" },
+        { property: "og:description", content: "Study abroad advice, student stories and university updates from Mission Career." },
+        { property: "og:type", content: "article" },
+        { name: "twitter:card", content: "summary_large_image" },
+      ] };
+    }
+    const url = `${SITE}/blog/${seo.slug}`;
+    return {
+      meta: [
+        { title: seo.seoTitle },
+        { name: "description", content: seo.description },
+        { name: "keywords", content: seo.keywords.join(", ") },
+        { property: "og:title", content: seo.seoTitle },
+        { property: "og:description", content: seo.description },
+        { property: "og:type", content: "article" },
+        { property: "og:url", content: url },
+        { property: "article:section", content: seo.category },
+        ...seo.tags.map((t) => ({ property: "article:tag", content: t })),
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: seo.seoTitle },
+        { name: "twitter:description", content: seo.description },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [{
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          headline: seo.h1,
+          description: seo.description,
+          keywords: seo.keywords.join(", "),
+          articleSection: seo.category,
+          mainEntityOfPage: url,
+          url,
+          author: { "@type": "Organization", name: "Mission Career" },
+          publisher: { "@type": "Organization", name: "Mission Career", url: SITE },
+        }),
+      }],
+    };
+  },
   component: BlogPostPage,
 });
 
 function BlogPostPage() {
   const { id } = Route.useParams();
+  const seo = seoBySlugOrId(id);
+  const postId = seo?.postId ?? id;
   const [post, setPost] = useState<Post | null | undefined>(undefined);
 
   useEffect(() => {
     fetchPosts("blog").then((posts) => {
-      setPost(posts.find((p) => p.id === id) ?? null);
+      setPost(posts.find((p) => p.id === postId) ?? null);
     });
-  }, [id]);
+  }, [postId]);
 
   if (post === undefined) {
     return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading…</div>;
@@ -51,13 +94,21 @@ function BlogPostPage() {
           <ArrowLeft className="h-4 w-4" /> Back to blog
         </Link>
         <p className="text-sm text-primary font-semibold mb-3">{new Date(post.created_at).toLocaleDateString()}</p>
-        <h1 className="text-4xl md:text-5xl font-extrabold mb-6">{post.title}</h1>
+        {seo && <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">{seo.category}</p>}
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-6">{seo?.h1 ?? post.title}</h1>
         {post.image && (
-          <img src={post.image} alt={post.title} className="w-full rounded-3xl shadow-card mb-8 object-cover max-h-[480px]" />
+          <img src={post.image} alt={seo?.imageAlt ?? post.title} title={seo?.imageTitle} className="w-full rounded-3xl shadow-card mb-8 object-cover max-h-[480px]" />
         )}
         <div className="prose prose-lg max-w-none text-foreground whitespace-pre-wrap leading-relaxed text-lg">
           {post.text}
         </div>
+        {seo && (
+          <div className="mt-10 flex flex-wrap gap-2">
+            {seo.tags.map((t) => (
+              <span key={t} className="rounded-full bg-primary-soft px-3 py-1 text-xs font-semibold text-primary">#{t}</span>
+            ))}
+          </div>
+        )}
       </article>
       <Footer />
     </main>
