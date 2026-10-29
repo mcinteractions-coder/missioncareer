@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Newspaper } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { fetchPosts, type Post } from "@/lib/content-store";
+import { seoBySlugOrId, slugForPost } from "@/data/blog-seo";
 
 export function Blog() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -32,10 +33,10 @@ export function Blog() {
               <Link
                 key={p.id}
                 to="/blog/$id"
-                params={{ id: p.id }}
+                params={{ id: slugForPost(p.id) }}
                 className="block bg-card rounded-2xl shadow-card overflow-hidden hover:shadow-soft transition hover:-translate-y-1"
               >
-                {p.image && <img src={p.image} alt={p.title} className="w-full h-40 md:h-48 object-cover" />}
+                {p.image && <img src={p.image} alt={seoBySlugOrId(p.id)?.imageAlt ?? p.title} title={seoBySlugOrId(p.id)?.imageTitle} className="w-full h-40 md:h-48 object-cover" />}
                 <div className="p-5 md:p-6">
                   <p className="text-xs text-primary font-semibold mb-2">{new Date(p.created_at).toLocaleDateString()}</p>
                   <p className="font-bold text-base md:text-lg text-foreground line-clamp-2">{p.title}</p>
