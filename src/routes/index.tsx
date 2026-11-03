@@ -21,6 +21,7 @@ import { FestivalPopup } from "@/components/FestivalPopup";
 import { DocumentGrader } from "@/components/sections/DocumentGrader";
 import { DreamCard } from "@/components/sections/DreamCard";
 import { ProfileEvaluation } from "@/components/sections/ProfileEvaluation";
+import { DiwaliGamesCard } from "@/components/sections/DiwaliGamesCard";
 
 
 
@@ -51,6 +52,7 @@ function Index() {
     <Reviews key="reviews" />,
     <Process key="process" />,
     <Success key="success" />,
+    <DiwaliGamesCard key="diwali-games" />,
     <ProfileEvaluation key="evaluation" />,
     <DocumentGrader key="grader" />,
     <Deadlines key="deadlines" />,
