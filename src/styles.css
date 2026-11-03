@@ -741,3 +741,12 @@
 .diwali-spark { animation: diwali-twinkle 2.4s ease-in-out infinite; }
 .diwali-lantern { animation: diwali-swing 3.5s ease-in-out infinite; transform-origin: top center; }
 @media (prefers-reduced-motion: reduce) { .diwali-flame, .diwali-spark, .diwali-lantern { animation: none; } }
+@keyframes diwali-shake { 0%,100% { transform: translateX(0) } 25% { transform: translateX(-5px) } 75% { transform: translateX(5px) } }
+@keyframes diwali-pop { 0% { transform: scale(.5); opacity: 0 } 60% { transform: scale(1.15) } 100% { transform: scale(1); opacity: 1 } }
+@keyframes diwali-glow-pulse { 0%,100% { box-shadow: 0 0 0 0 oklch(0.8 0.17 80 / .45) } 50% { box-shadow: 0 0 22px 6px oklch(0.8 0.17 80 / .55) } }
+@keyframes diwali-confetti-fall { 0% { transform: translateY(-12px) rotate(0); opacity: 1 } 100% { transform: translateY(320px) rotate(540deg); opacity: 0 } }
+.diwali-shake { animation: diwali-shake .38s ease-in-out; }
+.diwali-pop { animation: diwali-pop .3s ease-out; }
+.diwali-glow { animation: diwali-glow-pulse 1.5s ease-in-out infinite; }
+.diwali-confetti-bit { opacity: 0; animation: diwali-confetti-fall 1.9s ease-in infinite; }
+@media (prefers-reduced-motion: reduce) { .diwali-shake, .diwali-pop, .diwali-glow, .diwali-confetti-bit { animation: none; } }

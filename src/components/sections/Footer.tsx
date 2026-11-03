@@ -39,6 +39,11 @@ export function Footer() {
                   Student Success Stories
                 </Link>
               </li>
+              <li>
+                <Link to="/diwali-games" className="hover:text-primary transition-colors">
+                  Diwali Games
+                </Link>
+              </li>
             </ul>
           </div>
 
