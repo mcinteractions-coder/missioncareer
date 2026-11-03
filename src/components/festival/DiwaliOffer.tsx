@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { X, Sparkles } from "lucide-react";
 import { Diya } from "./DiwaliDecor";
 
 const WA = `https://wa.me/919870003748?text=${encodeURIComponent("Hi Mission Career! I want to claim the Diwali offer on consultancy.")}`;
 
 export function DiwaliOffer() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
+  // Open automatically on larger screens; on phones show the small pill so content isn't covered.
+  useEffect(() => {
+    if (window.matchMedia("(min-width: 768px)").matches) setOpen(true);
+  }, []);
 
   if (!open) {
     return (
