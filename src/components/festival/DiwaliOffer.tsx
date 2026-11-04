@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { X, Sparkles } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { X, Sparkles, Gamepad2 } from "lucide-react";
 import { Diya } from "./DiwaliDecor";
 
 const WA = `https://wa.me/919870003748?text=${encodeURIComponent("Hi Mission Career! I want to claim the Diwali offer on consultancy.")}`;
