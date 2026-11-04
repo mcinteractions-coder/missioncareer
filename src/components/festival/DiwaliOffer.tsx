@@ -14,12 +14,20 @@ export function DiwaliOffer() {
 
   if (!open) {
     return (
-      <button
-        onClick={() => setOpen(true)}
-        className="fixed bottom-24 left-6 z-40 flex items-center gap-2 rounded-full bg-gradient-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-glow"
-      >
-        <Sparkles className="h-4 w-4" /> Diwali Offer
-      </button>
+      <div className="fixed bottom-24 left-6 z-40 flex flex-col items-start gap-2">
+        <button
+          onClick={() => setOpen(true)}
+          className="flex items-center gap-2 rounded-full bg-gradient-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-glow"
+        >
+          <Sparkles className="h-4 w-4" /> Diwali Offer
+        </button>
+        <Link
+          to="/diwali-games"
+          className="flex items-center gap-2 rounded-full border border-primary/40 bg-card px-4 py-2 text-sm font-bold text-primary shadow-soft"
+        >
+          <Gamepad2 className="h-4 w-4" /> Diwali Games
+        </Link>
+      </div>
     );
   }
 
