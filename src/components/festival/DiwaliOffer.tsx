@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { X, Sparkles } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { X, Sparkles, Gamepad2 } from "lucide-react";
 import { Diya } from "./DiwaliDecor";
 
 const WA = `https://wa.me/919870003748?text=${encodeURIComponent("Hi Mission Career! I want to claim the Diwali offer on consultancy.")}`;
@@ -13,12 +14,20 @@ export function DiwaliOffer() {
 
   if (!open) {
     return (
-      <button
-        onClick={() => setOpen(true)}
-        className="fixed bottom-24 left-6 z-40 flex items-center gap-2 rounded-full bg-gradient-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-glow"
-      >
-        <Sparkles className="h-4 w-4" /> Diwali Offer
-      </button>
+      <div className="fixed bottom-24 left-6 z-40 flex flex-col items-start gap-2">
+        <button
+          onClick={() => setOpen(true)}
+          className="flex items-center gap-2 rounded-full bg-gradient-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-glow"
+        >
+          <Sparkles className="h-4 w-4" /> Diwali Offer
+        </button>
+        <Link
+          to="/diwali-games"
+          className="flex items-center gap-2 rounded-full border border-primary/40 bg-card px-4 py-2 text-sm font-bold text-primary shadow-soft"
+        >
+          <Gamepad2 className="h-4 w-4" /> Diwali Games
+        </Link>
+      </div>
     );
   }
 
@@ -48,6 +57,12 @@ export function DiwaliOffer() {
       >
         Claim on WhatsApp
       </a>
+      <Link
+        to="/diwali-games"
+        className="mt-2 flex items-center justify-center gap-2 rounded-full border border-primary/40 bg-primary-soft py-2 text-center text-sm font-bold text-primary hover:bg-primary/15"
+      >
+        <Gamepad2 className="h-4 w-4" /> Play Diwali Games
+      </Link>
     </div>
   );
 }
