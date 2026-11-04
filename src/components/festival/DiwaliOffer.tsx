@@ -9,7 +9,6 @@ export function DiwaliOffer() {
   const [open, setOpen] = useState(false);
   // Open automatically on larger screens; on phones show the small pill so content isn't covered.
   useEffect(() => {
-    console.log("diwali-effect", window.innerWidth, window.matchMedia("(min-width: 768px)").matches);
     if (window.matchMedia("(min-width: 768px)").matches) setOpen(true);
   }, []);
 
