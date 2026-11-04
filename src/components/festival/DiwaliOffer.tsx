@@ -49,6 +49,12 @@ export function DiwaliOffer() {
       >
         Claim on WhatsApp
       </a>
+      <Link
+        to="/diwali-games"
+        className="mt-2 flex items-center justify-center gap-2 rounded-full border border-primary/40 bg-primary-soft py-2 text-center text-sm font-bold text-primary hover:bg-primary/15"
+      >
+        <Gamepad2 className="h-4 w-4" /> Play Diwali Games
+      </Link>
     </div>
   );
 }
