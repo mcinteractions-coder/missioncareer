@@ -13,7 +13,6 @@ import { useEffect } from "react";
 import appCss from "../styles.css?url";
 import smartTvLegacyCss from "../smart-tv-legacy.css?raw";
 import { ChatBot } from "@/components/ChatBot";
-import { DiwaliTheme } from "@/components/festival/DiwaliTheme";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
 import { VisitorTracker } from "@/components/VisitorTracker";
 import { SectionEngagementTracker } from "@/components/SectionEngagementTracker";
@@ -254,14 +253,12 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <DiwaliTheme>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-        <ChatBot />
-        <WhatsAppFloat />
-        <VisitorTracker />
-        <SectionEngagementTracker />
-      </DiwaliTheme>
+      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+      <Outlet />
+      <ChatBot />
+      <WhatsAppFloat />
+      <VisitorTracker />
+      <SectionEngagementTracker />
     </QueryClientProvider>
   );
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Flame, Grid3x3, Sparkles, Trophy } from "lucide-react";
-import { DIWALI_END } from "@/components/festival/DiwaliTheme";
+import { DIWALI_END } from "@/components/festival/diwali-season";
 
 const CHIPS = [
   { icon: Flame, label: "Light the Diyas" },
