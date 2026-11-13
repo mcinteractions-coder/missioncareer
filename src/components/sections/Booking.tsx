@@ -41,11 +41,7 @@ export function Booking() {
   useEffect(() => {
     let alive = true;
     (async () => {
-      const { data } = await supabase
-        .from("bookings")
-        .select("slot_time")
-        .eq("slot_date", toISO(date))
-        .eq("mode", mode);
+      const { data } = await supabase.rpc("get_taken_slots", { _date: toISO(date), _mode: mode });
       if (!alive) return;
       setTaken(new Set((data ?? []).map((r: { slot_time: string }) => r.slot_time)));
       setTime("");

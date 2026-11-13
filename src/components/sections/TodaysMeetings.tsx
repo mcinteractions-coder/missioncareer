@@ -56,36 +56,15 @@ export function TodaysMeetings() {
   useEffect(() => {
     const load = async () => {
       setLoading(true);
-      const { data } = await supabase
-        .from("bookings")
-        .select("id, full_name, phone, country, slot_time, slot_date, notes")
-        .eq("slot_date", todayISO())
-        .order("slot_time", { ascending: true });
-      setRows((data as Booking[]) ?? []);
+      const { data } = await supabase.rpc("get_todays_meetings", { _date: todayISO() });
+      setRows(((data ?? []) as Omit<Booking, "notes">[]).map((r) => ({ ...r, notes: null })));
       setLoading(false);
     };
     load();
 
     // Realtime updates
-    const channel = supabase
-      .channel("todays-meetings")
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "bookings" },
-        (payload) => {
-          const b = payload.new as Booking;
-          if (b.slot_date === todayISO()) {
-            setRows((prev) =>
-              [...prev, b].sort((a, z) => a.slot_time.localeCompare(z.slot_time))
-            );
-          }
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    const timer = setInterval(load, 30000);
+    return () => clearInterval(timer);
   }, []);
 
   return (

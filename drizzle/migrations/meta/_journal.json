@@ -15,6 +15,13 @@
       "when": 1792244233549,
       "tag": "0001_caller_meetings_verified",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794556909774,
+      "tag": "0002_tighten_public_form_policies",
+      "breakpoints": true
     }
   ]
 }
