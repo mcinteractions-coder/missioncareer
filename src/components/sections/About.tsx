@@ -1,9 +1,8 @@
-import { Search, MapPin, GraduationCap, DollarSign, Award, X, Quote } from "lucide-react";
+import { Search, MapPin, GraduationCap, DollarSign, Award, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { searchUniversities, type FinderFilters, BUDGET_BANDS } from "@/lib/universities";
 import { Counter } from "@/components/Counter";
 import { fetchPosts, type Post } from "@/lib/content-store";
-import { reviews as staticReviews } from "@/data/reviews";
 
 
 type FieldKey = keyof FinderFilters;
@@ -196,37 +195,6 @@ export function About() {
                   ))}
                 </div>
               </div>
-            </div>
-
-            <div className="relative bg-gradient-to-br from-primary/5 via-card to-accent/10 rounded-2xl md:rounded-3xl shadow-card p-5 md:p-6 overflow-hidden">
-              <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-primary/10 blur-2xl pointer-events-none" />
-              <div className="flex items-center justify-between mb-4 relative">
-                <p className="font-bold text-foreground flex items-center gap-2">
-                  <Quote className="h-4 w-4 text-primary" /> Student Reviews
-                </p>
-                <div className="flex items-center gap-1 text-xs font-semibold bg-amber-500/10 text-amber-600 rounded-full px-2.5 py-1">
-                  <span className="text-amber-500">★</span> 4.9 · {staticReviews.length}
-                </div>
-              </div>
-              <div className="relative">
-                <p className="text-sm text-foreground/80 leading-relaxed">
-                  Students rate Mission Career 4.9/5 for shortlisting, applications, IELTS prep and visa filing — with admits across the UK, USA, Canada, Australia and Europe.
-                </p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {staticReviews.slice(0, 6).map((r, i) => (
-                    <div key={`${r.name}-${i}`} className="flex items-center gap-2 rounded-full bg-card border border-border/60 pl-1 pr-3 py-1">
-                      <div className={`h-7 w-7 rounded-full bg-gradient-to-br ${r.gradient} text-white text-[11px] font-bold flex items-center justify-center shrink-0`}>
-                        {r.initials}
-                      </div>
-                      <span className="text-xs font-semibold text-foreground">{r.name}</span>
-                    </div>
-                  ))}
-                </div>
-                <a href="#reviews" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline">
-                  Read all student reviews →
-                </a>
-              </div>
-
             </div>
 
           </div>
