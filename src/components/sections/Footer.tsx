@@ -39,6 +39,16 @@ export function Footer() {
                   Student Success Stories
                 </Link>
               </li>
+              <li>
+                <Link to="/compare-countries" className="hover:text-primary transition-colors">
+                  Compare Countries
+                </Link>
+              </li>
+              <li>
+                <Link to="/budget-calculator" className="hover:text-primary transition-colors">
+                  Study Abroad Budget Calculator
+                </Link>
+              </li>
             </ul>
           </div>
 

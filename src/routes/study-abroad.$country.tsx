@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, Calendar, GraduationCap, Briefcase, Wallet, Home, CheckCircle2, Award, MessageCircle, Sparkles, Plane, HelpCircle, ChevronDown, Globe } from "lucide-react";
+import { ArrowLeft, ArrowRight, Calendar, GraduationCap, Briefcase, Wallet, Home, CheckCircle2, Award, MessageCircle, Sparkles, Plane, HelpCircle, ChevronDown, Globe, Calculator, Scale } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { getCountryGuide, COUNTRY_GUIDES } from "@/data/country-guides";
 import { CountryLeadForm } from "@/components/CountryLeadForm";
@@ -131,6 +131,14 @@ function CountryPage() {
         ))}
       </div>
       <p className="container mx-auto px-4 md:px-8 mt-3 text-xs text-muted-foreground">Figures are approximate and vary by course and university. Ask us for exact costs.</p>
+      <div className="container mx-auto px-4 md:px-8 mt-4 flex flex-wrap gap-3">
+        <Link to="/budget-calculator" search={{ country: g.slug }} className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-90">
+          <Calculator className="h-4 w-4" /> Calculate my budget for {short}
+        </Link>
+        <Link to="/compare-countries" search={{ c: g.slug }} className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold text-foreground shadow-card hover:border-primary hover:text-primary">
+          <Scale className="h-4 w-4" /> Compare {short} with other countries
+        </Link>
+      </div>
 
       <div className="container mx-auto px-4 md:px-8 py-10 md:py-14 grid lg:grid-cols-3 gap-10">
         <div className="lg:col-span-2 space-y-14">

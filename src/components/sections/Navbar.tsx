@@ -4,7 +4,7 @@ import { Link } from "@tanstack/react-router";
 const logoAsset = { url: "/mission-logo-transparent.png" };
 import { ThemeToggle } from "@/components/ThemeToggle";
 
-type NavItem = { label: string; href?: string; to?: "/success-stories" };
+type NavItem = { label: string; href?: string; to?: "/success-stories" | "/compare-countries" | "/budget-calculator" };
 
 const links: NavItem[] = [
   { label: "Home", href: "#home" },
@@ -14,6 +14,7 @@ const links: NavItem[] = [
   { label: "Process", href: "#process" },
   { label: "Reviews", href: "#reviews" },
   { label: "Success Stories", to: "/success-stories" },
+  { label: "Compare", to: "/compare-countries" },
   { label: "Globe", href: "#globe" },
   { label: "Deadlines", href: "#deadlines" },
   { label: "Contact", href: "#contact" },
