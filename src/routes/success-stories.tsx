@@ -97,7 +97,7 @@ export const Route = createFileRoute("/success-stories")({
     const image = `https://flagcdn.com/w1200/${topFlag}.png`;
     const title = "Study Abroad Success Stories — Students & Reviews | Mission Career";
     const desc = count
-      ? `${count} Mission Career students now studying at ${universities} universities in ${countries} — their universities, courses, Indian colleges and honest reviews. Free counselling in Mumbai.`
+      ? `${count} Mission Career students now studying at ${universities} universities in ${countries} — their universities, courses and honest reviews. Free counselling in Mumbai.`
       : "Real Mission Career students who got admitted and reached universities abroad — universities, courses, visa journeys and student reviews.";
     const url = `${SITE}/success-stories`;
     return {
@@ -378,18 +378,6 @@ function SuccessStoriesPage() {
   const stories = data.stories;
   const [country, setCountry] = useState("All");
 
-  const stats = useMemo(() => {
-    const universities = new Set(stories.map((s) => s.university).filter(Boolean));
-    const destinations = new Set(stories.map((s) => s.destination).filter(Boolean));
-    const colleges = new Set(stories.map((s) => s.prevCollege).filter(Boolean));
-    return {
-      students: stories.length,
-      universities: universities.size,
-      countries: destinations.size,
-      colleges: colleges.size,
-    };
-  }, [stories]);
-
   const destinationCounts = useMemo(() => {
     const map = new Map<string, number>();
     stories.forEach((s) => {
@@ -461,11 +449,10 @@ function SuccessStoriesPage() {
               </Link>
             </div>
 
-            <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 max-w-3xl">
-              <StatCard icon={Users} value={stats.students} label="Students placed" />
-              <StatCard icon={School} value={stats.universities} label="Universities" />
-              <StatCard icon={Globe2} value={stats.countries} label="Countries" />
-              <StatCard icon={Building2} value={stats.colleges} label="Indian colleges" />
+            <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 max-w-3xl">
+              <StatCard icon={Users} value="5000+" label="Students placed" />
+              <StatCard icon={School} value="500+" label="Universities" />
+              <StatCard icon={Globe2} value="30+" label="Countries" />
             </div>
           </div>
         </div>
