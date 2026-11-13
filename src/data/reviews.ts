@@ -6,6 +6,8 @@ export type Review = {
   date: string;
   gradient: string;
   destination?: string;
+  /** Optional real student photo URL (add when the student shares one). */
+  photo?: string;
 };
 
 export const reviews: Review[] = [

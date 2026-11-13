@@ -324,6 +324,55 @@ function StoryCard({ s, index }: { s: SuccessStory; index: number }) {
   );
 }
 
+function ReviewCard({ r }: { r: (typeof reviews)[number] }) {
+  const [open, setOpen] = useState(false);
+  const long = r.text.length > 230;
+  return (
+    <figure className="bg-card rounded-2xl p-5 md:p-6 shadow-card border border-border/60 flex flex-col">
+      <figcaption className="flex items-center gap-3">
+        {r.photo ? (
+          <img
+            src={r.photo}
+            alt={`Photo of ${r.name}, Mission Career student`}
+            loading="lazy"
+            className="h-14 w-14 shrink-0 rounded-full object-cover ring-2 ring-primary/30"
+          />
+        ) : (
+          <span
+            aria-hidden
+            className={`h-14 w-14 shrink-0 rounded-full bg-gradient-to-br ${r.gradient} flex items-center justify-center text-base font-extrabold text-primary-foreground ring-2 ring-primary/20`}
+          >
+            {r.initials}
+          </span>
+        )}
+        <span className="min-w-0">
+          <span className="block text-base font-bold text-foreground truncate">{r.name}</span>
+          <span className="block text-xs text-muted-foreground truncate">
+            {r.destination ? `Studying in ${r.destination}` : "Mission Career student"} · {r.date}
+          </span>
+          <span className="mt-1 flex items-center gap-0.5" aria-label={`${r.rating} out of 5 stars`}>
+            {Array.from({ length: r.rating }).map((_, k) => (
+              <Star key={k} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+            ))}
+          </span>
+        </span>
+      </figcaption>
+      <blockquote className="mt-4 text-sm text-foreground/90 leading-relaxed flex-1">
+        “{open || !long ? r.text : excerpt(r.text)}”
+      </blockquote>
+      {long && (
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          className="mt-3 self-start text-sm font-semibold text-primary hover:underline"
+        >
+          {open ? "Show less" : "Read full review"}
+        </button>
+      )}
+    </figure>
+  );
+}
+
 function SuccessStoriesPage() {
   const { data } = useSuspenseQuery(successStoriesQueryOptions);
   const stories = data.stories;
@@ -536,37 +585,22 @@ function SuccessStoriesPage() {
             title="What students say after landing"
             sub="Reviews written by students who completed their admission and visa with Mission Career."
           />
+          <div className="mb-6 flex flex-wrap items-center gap-3 rounded-2xl bg-card border border-border/60 px-5 py-4 shadow-card">
+            <div className="flex" aria-hidden>
+              {Array.from({ length: 5 }).map((_, k) => (
+                <Star key={k} className="h-5 w-5 fill-amber-400 text-amber-400" />
+              ))}
+            </div>
+            <p className="text-sm font-bold text-foreground">
+              {(reviews.reduce((t, r) => t + r.rating, 0) / reviews.length).toFixed(1)} / 5
+            </p>
+            <p className="text-sm text-muted-foreground">
+              from {reviews.length} verified Google reviews by real Mission Career students
+            </p>
+          </div>
           <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
             {reviews.map((r, i) => (
-              <figure
-                key={`${r.name}-${i}`}
-                className="bg-card rounded-2xl p-5 md:p-6 shadow-card border border-border/60 flex flex-col"
-              >
-                <div className="flex items-center gap-1" aria-label={`${r.rating} out of 5 stars`}>
-                  {Array.from({ length: r.rating }).map((_, k) => (
-                    <Star key={k} className="h-4 w-4 fill-amber-400 text-amber-400" />
-                  ))}
-                </div>
-                <blockquote className="mt-3 text-sm text-foreground/90 leading-relaxed flex-1">
-                  “{excerpt(r.text)}”
-                </blockquote>
-                <figcaption className="mt-4 pt-4 border-t border-border/60 flex items-center gap-3">
-                  <span
-                    aria-hidden
-                    className={`h-10 w-10 shrink-0 rounded-full bg-gradient-to-br ${r.gradient} flex items-center justify-center text-xs font-extrabold text-white`}
-                  >
-                    {r.initials}
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-sm font-bold text-foreground truncate">
-                      {r.name}
-                    </span>
-                    <span className="block text-xs text-muted-foreground truncate">
-                      {r.destination || "Mission Career student"}
-                    </span>
-                  </span>
-                </figcaption>
-              </figure>
+              <ReviewCard key={`${r.name}-${i}`} r={r} />
             ))}
           </div>
           <p className="mt-6 text-sm text-muted-foreground">
