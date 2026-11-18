@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
-import { ArrowRight, Award, Briefcase, Calculator, Calendar, GraduationCap, Home, MessageCircle, Plane, Plus, Trophy, Wallet, X } from "lucide-react";
+import { ArrowRight, Award, Briefcase, Calculator, Calendar, FileCheck, GraduationCap, Home, MessageCircle, PlaneTakeoff, Plus, Stamp, Trophy, Wallet, X } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { CountrySelect, ToolHeader } from "@/components/tools/ToolHeader";
 import { getCountryGuide, type CountryGuide } from "@/data/country-guides";
-import { BUDGET_COUNTRIES, COUNTRY_COSTS, formatInr, plainName, yearlyCostInr } from "@/lib/study-budget";
+import { CostSources, SourceLink, tuitionLabel } from "@/components/tools/CostSources";
+import { BUDGET_COUNTRIES, COST_DATA, COUNTRY_COSTS, formatInr, formatMoney, plainName, yearlyCostInr } from "@/lib/study-budget";
 
 const SITE = "https://www.missioncareer.net";
 const TITLE = "Compare Study Abroad Countries Side by Side | Mission Career";
@@ -44,12 +45,46 @@ function initialSlugs(c?: string) {
 
 type Row = { icon: LucideIcon; label: string; render: (g: CountryGuide) => ReactNode };
 
+function Sourced({ main, inr, source }: { main: string; inr?: string; source: Parameters<typeof SourceLink>[0]["source"] }) {
+  return (
+    <div className="space-y-1">
+      <p className="font-semibold">{main}</p>
+      {inr && <p className="text-xs text-muted-foreground">{inr}</p>}
+      <SourceLink source={source} />
+    </div>
+  );
+}
+
 const ROWS: Row[] = [
-  { icon: Wallet, label: "Tuition", render: (g) => g.tuition },
-  { icon: Home, label: "Living costs", render: (g) => g.living },
+  {
+    icon: Wallet,
+    label: "Tuition",
+    render: (g) => {
+      const c = COUNTRY_COSTS[g.slug];
+      const inr = c.tuitionMin === c.tuitionMax
+        ? `≈ ${formatInr(c.tuitionMin * c.inrRate)} a year`
+        : `≈ ${formatInr(c.tuitionMin * c.inrRate)} – ${formatInr(c.tuitionMax * c.inrRate)}`;
+      return <Sourced main={tuitionLabel(g.slug)} inr={inr} source={COST_DATA[g.slug].tuition.source} />;
+    },
+  },
+  {
+    icon: Home,
+    label: "Living costs",
+    render: (g) => <Sourced main={`${formatMoney(g.slug, COST_DATA[g.slug].living)} a year`} inr={`≈ ${formatInr(COUNTRY_COSTS[g.slug].livingInr)}`} source={COST_DATA[g.slug].living.source} />,
+  },
+  {
+    icon: Stamp,
+    label: "Visa fee",
+    render: (g) => <Sourced main={formatMoney(g.slug, COST_DATA[g.slug].visa)} inr={COST_DATA[g.slug].visa.currency === "INR" ? undefined : `≈ ${formatInr(COUNTRY_COSTS[g.slug].visaInr)}`} source={COST_DATA[g.slug].visa.source} />,
+  },
+  {
+    icon: PlaneTakeoff,
+    label: "Flight from India",
+    render: (g) => <Sourced main={`from ${formatInr(COST_DATA[g.slug].flight.inr)}`} inr="one-way, economy" source={COST_DATA[g.slug].flight.source} />,
+  },
   { icon: Calendar, label: "Intakes", render: (g) => g.intakes },
   { icon: Briefcase, label: "Work rights", render: (g) => g.workRights },
-  { icon: Plane, label: "Visa", render: (g) => g.visaName },
+  { icon: FileCheck, label: "Visa type", render: (g) => g.visaName },
   {
     icon: GraduationCap,
     label: "Top universities",
@@ -116,12 +151,12 @@ function ComparePage() {
                     <CountrySelect id={`country-${i}`} label={`Country ${i + 1}`} value={g.slug} onChange={(v) => setAt(i, v)} options={OPTIONS.filter((o) => o.slug === g.slug || !slugs.includes(o.slug))} />
                   </div>
                 </div>
-                <p className="mt-5 text-xs font-bold uppercase tracking-wider text-muted-foreground">Approx. cost per year</p>
+                <p className="mt-5 text-xs font-bold uppercase tracking-wider text-muted-foreground">Cost per year</p>
                 <p className="mt-1 text-3xl font-extrabold text-foreground">{formatInr(costs[i])}</p>
                 <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-primary/10">
                   <div className="h-full rounded-full bg-gradient-primary transition-all duration-500" style={{ width: `${(costs[i] / max) * 100}%` }} />
                 </div>
-                <p className="mt-2 text-xs text-muted-foreground">Average fees + standard living + insurance</p>
+                <p className="mt-2 text-xs text-muted-foreground">Mid-range fees + standard living + insurance</p>
                 <div className="mt-4 grid grid-cols-2 gap-2">
                   <Link to="/study-abroad/$country" params={{ country: g.slug }} className="flex items-center justify-center gap-1 rounded-xl border border-border px-3 py-2 text-sm font-semibold text-foreground hover:border-primary hover:text-primary">
                     Full guide <ArrowRight className="h-4 w-4" />
@@ -162,7 +197,12 @@ function ComparePage() {
           ))}
         </section>
 
-        <p className="text-center text-xs text-muted-foreground">Figures are approximate and vary by course, city and university. Rupee amounts use approximate exchange rates.</p>
+        <p className="text-center text-xs text-muted-foreground">
+          Fees come from official websites; real costs still vary by course, city and university.{" "}
+          <a href="#sources" className="font-semibold text-primary hover:underline">See every source</a>
+        </p>
+
+        <CostSources slugs={slugs} />
 
         <section className="relative overflow-hidden rounded-3xl bg-gradient-primary p-6 md:p-10 text-center text-primary-foreground shadow-soft">
           <div className="pointer-events-none absolute -right-10 -bottom-10 h-48 w-48 rounded-full bg-primary-foreground/10" />

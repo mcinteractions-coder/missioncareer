@@ -5,6 +5,7 @@ import type { LucideIcon } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { CountrySelect, ToolHeader } from "@/components/tools/ToolHeader";
+import { CostSources } from "@/components/tools/CostSources";
 import { getCountryGuide } from "@/data/country-guides";
 import { BUDGET_COUNTRIES, COUNTRY_COSTS, LIFESTYLES, estimateBudget, formatInr, formatLocal, plainName, type Lifestyle } from "@/lib/study-budget";
 
@@ -52,6 +53,7 @@ function BudgetCalculatorPage() {
     () => estimateBudget({ slug, years, tuitionLevel: level / 100, lifestyle, scholarshipInr: Number(scholarship) || 0, includeFlights: flights })!,
     [slug, years, level, lifestyle, scholarship, flights],
   );
+  const fixedFee = cost.tuitionMin === cost.tuitionMax;
   const tuitionLocal = cost.tuitionMin + ((cost.tuitionMax - cost.tuitionMin) * level) / 100;
 
   const changeCountry = (s: string) => {
@@ -111,11 +113,17 @@ function BudgetCalculatorPage() {
                 {formatLocal(slug, tuitionLocal)} <span className="text-muted-foreground font-medium">≈ {formatInr(tuitionLocal * cost.inrRate)}</span>
               </p>
             </div>
-            <Slider className="mt-4" value={[level]} min={0} max={100} step={5} onValueChange={(v) => setLevel(v[0])} aria-label="Tuition level" />
-            <div className="mt-2 flex justify-between text-xs text-muted-foreground">
-              <span>Lower fees · {formatLocal(slug, cost.tuitionMin)}</span>
-              <span>Top universities · {formatLocal(slug, cost.tuitionMax)}</span>
-            </div>
+            {fixedFee ? (
+              <p className="mt-2 text-xs text-muted-foreground">Public universities in {name} charge one standard fee for international students, so there is nothing to adjust.</p>
+            ) : (
+              <>
+                <Slider className="mt-4" value={[level]} min={0} max={100} step={5} onValueChange={(v) => setLevel(v[0])} aria-label="Tuition level" />
+                <div className="mt-2 flex justify-between text-xs text-muted-foreground">
+                  <span>Lower fees · {formatLocal(slug, cost.tuitionMin)}</span>
+                  <span>Top universities · {formatLocal(slug, cost.tuitionMax)}</span>
+                </div>
+              </>
+            )}
           </div>
 
           <div>
@@ -180,7 +188,10 @@ function BudgetCalculatorPage() {
                 <span className="font-bold text-whatsapp">− {formatInr(result.scholarship)}</span>
               </div>
             )}
-            <p className="text-xs text-muted-foreground">Rough estimate using approximate fees and exchange rates. Real costs depend on your course, city and university.</p>
+            <p className="text-xs text-muted-foreground">
+              Based on official fees and exchange rates. Real costs depend on your course, city and university.{" "}
+              <a href="#sources" className="font-semibold text-primary hover:underline">See sources</a>
+            </p>
             <a
               href={`https://wa.me/919870003748?text=${encodeURIComponent(waText)}`}
               target="_blank"
@@ -199,6 +210,10 @@ function BudgetCalculatorPage() {
             </div>
           </div>
         </aside>
+
+        <div className="lg:col-span-5">
+          <CostSources slugs={[slug]} />
+        </div>
       </div>
     </main>
   );
