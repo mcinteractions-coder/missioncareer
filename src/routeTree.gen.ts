@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as BudgetCalculatorRouteImport } from './routes/budget-calculator'
 import { Route as CompareCountriesRouteImport } from './routes/compare-countries'
+import { Route as LoanCalculatorRouteImport } from './routes/loan-calculator'
 import { Route as MbaMasterOfBusinessAdministrationRouteImport } from './routes/mba-master-of-business-administration'
 import { Route as Post2RouteImport } from './routes/post-2'
 import { Route as SatScholasticAssessmentTestRouteImport } from './routes/sat-scholastic-assessment-test'
@@ -41,6 +42,11 @@ const BudgetCalculatorRoute = BudgetCalculatorRouteImport.update({
 const CompareCountriesRoute = CompareCountriesRouteImport.update({
   id: '/compare-countries',
   path: '/compare-countries',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoanCalculatorRoute = LoanCalculatorRouteImport.update({
+  id: '/loan-calculator',
+  path: '/loan-calculator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MbaMasterOfBusinessAdministrationRoute =
@@ -96,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/budget-calculator': typeof BudgetCalculatorRoute
   '/compare-countries': typeof CompareCountriesRoute
+  '/loan-calculator': typeof LoanCalculatorRoute
   '/mba-master-of-business-administration': typeof MbaMasterOfBusinessAdministrationRoute
   '/post-2': typeof Post2Route
   '/sat-scholastic-assessment-test': typeof SatScholasticAssessmentTestRoute
@@ -111,6 +118,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/budget-calculator': typeof BudgetCalculatorRoute
   '/compare-countries': typeof CompareCountriesRoute
+  '/loan-calculator': typeof LoanCalculatorRoute
   '/mba-master-of-business-administration': typeof MbaMasterOfBusinessAdministrationRoute
   '/post-2': typeof Post2Route
   '/sat-scholastic-assessment-test': typeof SatScholasticAssessmentTestRoute
@@ -127,6 +135,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/budget-calculator': typeof BudgetCalculatorRoute
   '/compare-countries': typeof CompareCountriesRoute
+  '/loan-calculator': typeof LoanCalculatorRoute
   '/mba-master-of-business-administration': typeof MbaMasterOfBusinessAdministrationRoute
   '/post-2': typeof Post2Route
   '/sat-scholastic-assessment-test': typeof SatScholasticAssessmentTestRoute
@@ -144,6 +153,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/budget-calculator'
     | '/compare-countries'
+    | '/loan-calculator'
     | '/mba-master-of-business-administration'
     | '/post-2'
     | '/sat-scholastic-assessment-test'
@@ -159,6 +169,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/budget-calculator'
     | '/compare-countries'
+    | '/loan-calculator'
     | '/mba-master-of-business-administration'
     | '/post-2'
     | '/sat-scholastic-assessment-test'
@@ -174,6 +185,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/budget-calculator'
     | '/compare-countries'
+    | '/loan-calculator'
     | '/mba-master-of-business-administration'
     | '/post-2'
     | '/sat-scholastic-assessment-test'
@@ -190,6 +202,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   BudgetCalculatorRoute: typeof BudgetCalculatorRoute
   CompareCountriesRoute: typeof CompareCountriesRoute
+  LoanCalculatorRoute: typeof LoanCalculatorRoute
   MbaMasterOfBusinessAdministrationRoute: typeof MbaMasterOfBusinessAdministrationRoute
   Post2Route: typeof Post2Route
   SatScholasticAssessmentTestRoute: typeof SatScholasticAssessmentTestRoute
@@ -229,6 +242,13 @@ declare module '@tanstack/react-router' {
       path: '/compare-countries'
       fullPath: '/compare-countries'
       preLoaderRoute: typeof CompareCountriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/loan-calculator': {
+      id: '/loan-calculator'
+      path: '/loan-calculator'
+      fullPath: '/loan-calculator'
+      preLoaderRoute: typeof LoanCalculatorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mba-master-of-business-administration': {
@@ -302,6 +322,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   BudgetCalculatorRoute: BudgetCalculatorRoute,
   CompareCountriesRoute: CompareCountriesRoute,
+  LoanCalculatorRoute: LoanCalculatorRoute,
   MbaMasterOfBusinessAdministrationRoute:
     MbaMasterOfBusinessAdministrationRoute,
   Post2Route: Post2Route,

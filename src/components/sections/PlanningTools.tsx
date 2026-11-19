@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Calculator, Scale } from "lucide-react";
+import { ArrowRight, Calculator, Landmark, Scale } from "lucide-react";
 
 const TOOLS = [
   {
@@ -16,6 +16,13 @@ const TOOLS = [
     desc: "Find out roughly how much your whole degree abroad will cost — tuition, living, visa and flights.",
     cta: "Calculate my budget",
   },
+  {
+    to: "/loan-calculator" as const,
+    icon: Landmark,
+    title: "Loan EMI calculator",
+    desc: "See your monthly EMI and total interest on an education loan, using SBI's latest official rates.",
+    cta: "Check my EMI",
+  },
 ];
 
 export function PlanningTools() {
@@ -26,7 +33,7 @@ export function PlanningTools() {
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">Free planning tools</p>
           <h2 className="mt-2 text-3xl md:text-4xl font-extrabold text-foreground">Plan your study abroad <span className="text-gradient">in 2 minutes</span></h2>
         </div>
-        <div className="mt-10 grid md:grid-cols-2 gap-5">
+        <div className="mt-10 grid md:grid-cols-3 gap-5">
           {TOOLS.map((t) => (
             <Link key={t.to} to={t.to} className="group relative overflow-hidden rounded-3xl bg-card p-6 md:p-8 shadow-card border border-border/60 transition-all duration-300 hover:-translate-y-1 hover:shadow-soft hover:border-primary/40">
               <div className="pointer-events-none absolute -top-12 -right-12 h-40 w-40 rounded-full bg-primary/10 transition-transform duration-500 group-hover:scale-125" />

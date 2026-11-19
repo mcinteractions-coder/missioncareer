@@ -49,6 +49,11 @@ export function Footer() {
                   Study Abroad Budget Calculator
                 </Link>
               </li>
+              <li>
+                <Link to="/loan-calculator" className="hover:text-primary transition-colors">
+                  Education Loan EMI Calculator
+                </Link>
+              </li>
             </ul>
           </div>
 

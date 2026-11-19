@@ -8,12 +8,13 @@ export function ToolHeader({ kicker, title, intro, children }: { kicker: string;
       <div className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-primary/20 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-32 -left-20 h-80 w-80 rounded-full bg-primary/15 blur-3xl" />
       <div className="relative container mx-auto px-4 md:px-8 py-4 flex items-center justify-between gap-3">
-        <Link to="/" className="flex items-center gap-2 rounded-full bg-card/70 backdrop-blur px-4 py-2 text-sm font-semibold text-foreground shadow-card hover:text-primary">
-          <ArrowLeft className="h-4 w-4" /> Mission Career
+        <Link to="/" aria-label="Back to Mission Career home" className="flex shrink-0 items-center gap-2 rounded-full bg-card/70 backdrop-blur px-3 sm:px-4 py-2 text-sm font-semibold text-foreground shadow-card hover:text-primary">
+          <ArrowLeft className="h-4 w-4" /> <span className="hidden sm:inline">Mission Career</span>
         </Link>
-        <nav className="flex items-center gap-2 text-sm font-semibold">
-          <Link to="/compare-countries" className="rounded-full px-3 py-2 text-foreground hover:text-primary" activeProps={{ className: "rounded-full px-3 py-2 bg-card/80 text-primary shadow-card" }}>Compare</Link>
-          <Link to="/budget-calculator" className="rounded-full px-3 py-2 text-foreground hover:text-primary" activeProps={{ className: "rounded-full px-3 py-2 bg-card/80 text-primary shadow-card" }}>Budget</Link>
+        <nav className="flex items-center gap-0.5 sm:gap-2 text-sm font-semibold whitespace-nowrap">
+          <Link to="/compare-countries" className="rounded-full px-2.5 sm:px-3 py-2 text-foreground hover:text-primary" activeProps={{ className: "rounded-full px-2.5 sm:px-3 py-2 bg-card/80 text-primary shadow-card" }}>Compare</Link>
+          <Link to="/budget-calculator" className="rounded-full px-2.5 sm:px-3 py-2 text-foreground hover:text-primary" activeProps={{ className: "rounded-full px-2.5 sm:px-3 py-2 bg-card/80 text-primary shadow-card" }}>Budget</Link>
+          <Link to="/loan-calculator" className="rounded-full px-2.5 sm:px-3 py-2 text-foreground hover:text-primary" activeProps={{ className: "rounded-full px-2.5 sm:px-3 py-2 bg-card/80 text-primary shadow-card" }}>Loan EMI</Link>
         </nav>
       </div>
       <div className="relative container mx-auto px-4 md:px-8 pt-6 pb-12 md:pt-10 md:pb-16 text-center">

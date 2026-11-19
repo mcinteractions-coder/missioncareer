@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ArrowRight, Calculator, GraduationCap, Home, Plane, ShieldCheck, Stamp, Gift, MessageCircle, Scale } from "lucide-react";
+import { ArrowRight, Calculator, GraduationCap, Home, Landmark, Plane, ShieldCheck, Stamp, Gift, MessageCircle, Scale } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
@@ -200,6 +200,13 @@ function BudgetCalculatorPage() {
             >
               <MessageCircle className="h-5 w-5" /> Plan my budget with an expert
             </a>
+            <Link
+              to="/loan-calculator"
+              search={{ amount: result.total, years }}
+              className="flex items-center justify-center gap-2 rounded-2xl bg-primary/10 px-4 py-3 font-semibold text-primary hover:bg-gradient-primary hover:text-primary-foreground"
+            >
+              <Landmark className="h-5 w-5" /> See loan EMI for {formatInr(result.total)}
+            </Link>
             <div className="grid grid-cols-2 gap-2">
               <Link to="/study-abroad/$country" params={{ country: slug }} className="flex items-center justify-center gap-1 rounded-xl border border-border px-3 py-2.5 text-sm font-semibold text-foreground hover:border-primary hover:text-primary">
                 {name} guide <ArrowRight className="h-4 w-4" />
