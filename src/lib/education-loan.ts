@@ -27,6 +27,7 @@ export const DEFAULT_GRACE_MONTHS = 6;
 
 /** SBI Global Ed-Vantage processing fee: 0.50% of the loan, min ₹10,000, max ₹50,000, plus 18% GST. */
 export function processingFee(amount: number) {
+  if (amount <= 0) return 0;
   const fee = Math.min(50000, Math.max(10000, amount * 0.005));
   return Math.round(fee * 1.18);
 }

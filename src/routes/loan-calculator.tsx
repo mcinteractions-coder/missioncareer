@@ -68,7 +68,7 @@ function LoanCalculatorPage() {
   const other = useMemo(() => calculateLoan({ ...input, payInterestWhileStudying: !payWhileStudying }), [amount, rate, years, grace, tenure, payWhileStudying]);
   const saving = Math.abs(other.totalInterest - result.totalInterest);
   const fee = processingFee(amount);
-  const principalShare = (amount / result.totalPaid) * 100;
+  const principalShare = result.totalPaid > 0 ? (amount / result.totalPaid) * 100 : 100;
 
   const pickPreset = (id: string) => {
     const p = RATE_PRESETS.find((x) => x.id === id)!;
