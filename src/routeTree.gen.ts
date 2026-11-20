@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as BudgetCalculatorRouteImport } from './routes/budget-calculator'
 import { Route as CompareCountriesRouteImport } from './routes/compare-countries'
+import { Route as CountryQuizRouteImport } from './routes/country-quiz'
 import { Route as LoanCalculatorRouteImport } from './routes/loan-calculator'
 import { Route as MbaMasterOfBusinessAdministrationRouteImport } from './routes/mba-master-of-business-administration'
 import { Route as Post2RouteImport } from './routes/post-2'
@@ -42,6 +43,11 @@ const BudgetCalculatorRoute = BudgetCalculatorRouteImport.update({
 const CompareCountriesRoute = CompareCountriesRouteImport.update({
   id: '/compare-countries',
   path: '/compare-countries',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CountryQuizRoute = CountryQuizRouteImport.update({
+  id: '/country-quiz',
+  path: '/country-quiz',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoanCalculatorRoute = LoanCalculatorRouteImport.update({
@@ -102,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/budget-calculator': typeof BudgetCalculatorRoute
   '/compare-countries': typeof CompareCountriesRoute
+  '/country-quiz': typeof CountryQuizRoute
   '/loan-calculator': typeof LoanCalculatorRoute
   '/mba-master-of-business-administration': typeof MbaMasterOfBusinessAdministrationRoute
   '/post-2': typeof Post2Route
@@ -118,6 +125,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/budget-calculator': typeof BudgetCalculatorRoute
   '/compare-countries': typeof CompareCountriesRoute
+  '/country-quiz': typeof CountryQuizRoute
   '/loan-calculator': typeof LoanCalculatorRoute
   '/mba-master-of-business-administration': typeof MbaMasterOfBusinessAdministrationRoute
   '/post-2': typeof Post2Route
@@ -135,6 +143,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/budget-calculator': typeof BudgetCalculatorRoute
   '/compare-countries': typeof CompareCountriesRoute
+  '/country-quiz': typeof CountryQuizRoute
   '/loan-calculator': typeof LoanCalculatorRoute
   '/mba-master-of-business-administration': typeof MbaMasterOfBusinessAdministrationRoute
   '/post-2': typeof Post2Route
@@ -153,6 +162,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/budget-calculator'
     | '/compare-countries'
+    | '/country-quiz'
     | '/loan-calculator'
     | '/mba-master-of-business-administration'
     | '/post-2'
@@ -169,6 +179,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/budget-calculator'
     | '/compare-countries'
+    | '/country-quiz'
     | '/loan-calculator'
     | '/mba-master-of-business-administration'
     | '/post-2'
@@ -185,6 +196,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/budget-calculator'
     | '/compare-countries'
+    | '/country-quiz'
     | '/loan-calculator'
     | '/mba-master-of-business-administration'
     | '/post-2'
@@ -202,6 +214,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   BudgetCalculatorRoute: typeof BudgetCalculatorRoute
   CompareCountriesRoute: typeof CompareCountriesRoute
+  CountryQuizRoute: typeof CountryQuizRoute
   LoanCalculatorRoute: typeof LoanCalculatorRoute
   MbaMasterOfBusinessAdministrationRoute: typeof MbaMasterOfBusinessAdministrationRoute
   Post2Route: typeof Post2Route
@@ -242,6 +255,13 @@ declare module '@tanstack/react-router' {
       path: '/compare-countries'
       fullPath: '/compare-countries'
       preLoaderRoute: typeof CompareCountriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/country-quiz': {
+      id: '/country-quiz'
+      path: '/country-quiz'
+      fullPath: '/country-quiz'
+      preLoaderRoute: typeof CountryQuizRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/loan-calculator': {
@@ -322,6 +342,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   BudgetCalculatorRoute: BudgetCalculatorRoute,
   CompareCountriesRoute: CompareCountriesRoute,
+  CountryQuizRoute: CountryQuizRoute,
   LoanCalculatorRoute: LoanCalculatorRoute,
   MbaMasterOfBusinessAdministrationRoute:
     MbaMasterOfBusinessAdministrationRoute,

@@ -7,6 +7,7 @@ import { About } from "@/components/sections/About";
 import { Services } from "@/components/sections/Services";
 import { Destinations } from "@/components/sections/Destinations";
 import { PlanningTools } from "@/components/sections/PlanningTools";
+import { CountryQuizPromo } from "@/components/sections/CountryQuizPromo";
 import { WorldMap } from "@/components/sections/WorldMap";
 import { Process } from "@/components/sections/Process";
 import { Success } from "@/components/sections/Success";
@@ -47,6 +48,7 @@ function Index() {
     <About key="about" />,
     <Services key="services" />,
     <Destinations key="destinations" />,
+    <CountryQuizPromo key="country-quiz" />,
     <PlanningTools key="planning-tools" />,
     <WorldMap key="worldmap" />,
     <Globe3D key="globe" />,

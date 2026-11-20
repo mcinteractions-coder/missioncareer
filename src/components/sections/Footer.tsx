@@ -54,6 +54,11 @@ export function Footer() {
                   Education Loan EMI Calculator
                 </Link>
               </li>
+              <li>
+                <Link to="/country-quiz" className="hover:text-primary transition-colors">
+                  Which Country Suits You? Quiz
+                </Link>
+              </li>
             </ul>
           </div>
 

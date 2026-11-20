@@ -11,10 +11,11 @@ export function ToolHeader({ kicker, title, intro, children }: { kicker: string;
         <Link to="/" aria-label="Back to Mission Career home" className="flex shrink-0 items-center gap-2 rounded-full bg-card/70 backdrop-blur px-3 sm:px-4 py-2 text-sm font-semibold text-foreground shadow-card hover:text-primary">
           <ArrowLeft className="h-4 w-4" /> <span className="hidden sm:inline">Mission Career</span>
         </Link>
-        <nav className="flex items-center gap-0.5 sm:gap-2 text-sm font-semibold whitespace-nowrap">
+        <nav className="flex min-w-0 items-center gap-0.5 sm:gap-2 overflow-x-auto text-sm font-semibold whitespace-nowrap [scrollbar-width:none]">
           <Link to="/compare-countries" className="rounded-full px-2.5 sm:px-3 py-2 text-foreground hover:text-primary" activeProps={{ className: "rounded-full px-2.5 sm:px-3 py-2 bg-card/80 text-primary shadow-card" }}>Compare</Link>
           <Link to="/budget-calculator" className="rounded-full px-2.5 sm:px-3 py-2 text-foreground hover:text-primary" activeProps={{ className: "rounded-full px-2.5 sm:px-3 py-2 bg-card/80 text-primary shadow-card" }}>Budget</Link>
           <Link to="/loan-calculator" className="rounded-full px-2.5 sm:px-3 py-2 text-foreground hover:text-primary" activeProps={{ className: "rounded-full px-2.5 sm:px-3 py-2 bg-card/80 text-primary shadow-card" }}>Loan EMI</Link>
+          <Link to="/country-quiz" className="rounded-full px-2.5 sm:px-3 py-2 text-foreground hover:text-primary" activeProps={{ className: "rounded-full px-2.5 sm:px-3 py-2 bg-card/80 text-primary shadow-card" }}>Quiz</Link>
         </nav>
       </div>
       <div className="relative container mx-auto px-4 md:px-8 pt-6 pb-12 md:pt-10 md:pb-16 text-center">
