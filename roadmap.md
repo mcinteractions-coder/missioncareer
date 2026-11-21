@@ -6,3 +6,4 @@
 - [x] Add Country Comparison page (up to 3 countries, yearly cost in INR) and Budget Calculator page; link from homepage, menu, footer, country pages and sitemap.
 - [x] Replace comparison and calculator figures with official sourced numbers, show sources on both pages, add visa fee and flight rows, update tests.
 - [x] Add Education Loan EMI Calculator (SBI official rates, interest during study, budget calculator hand-off); link from homepage, tool menu, footer and sitemap.
+- [x] Add "Which country suits you?" quiz (8 questions, top 3 with match %, name + phone before full result saved as enquiries, shareable result card) with a homepage section.

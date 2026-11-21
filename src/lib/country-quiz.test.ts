@@ -35,4 +35,10 @@ describe("country quiz", () => {
     const r = rankCountries({ ...base, budget: "10" });
     for (const m of r) if (m.yearlyCost > 10e5) expect(m.reasons.join(" ")).not.toMatch(/fits your budget/);
   });
+
+  it("does not claim English-taught courses for countries that mostly teach in the local language", () => {
+    const r = rankCountries({ ...base, field: "medicine", budget: "10", language: "yes" });
+    const russia = r.find((m) => m.slug === "russia")!;
+    expect(russia.reasons).not.toContain("Many courses taught in English");
+  });
 });

@@ -53,6 +53,14 @@ function CountryQuizPage() {
     try { setUnlocked(localStorage.getItem(UNLOCK_KEY) === "1"); } catch { /* ignore */ }
   }, []);
 
+  const panelRef = useRef<HTMLDivElement>(null);
+  const firstRender = useRef(true);
+  useEffect(() => {
+    if (firstRender.current) { firstRender.current = false; return; }
+    const el = panelRef.current;
+    if (el && el.getBoundingClientRect().top < 0) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [step]);
+
   const complete = QUESTIONS.every((q) => answers[q.id]);
   const ranked = useMemo(() => (complete ? rankCountries(answers as Answers) : []), [answers, complete]);
 
@@ -73,8 +81,8 @@ function CountryQuizPage() {
         title={<>Which country <span className="text-gradient">suits you?</span></>}
         intro="Answer 8 quick questions about your course, marks, budget and plans. We match you with the best of 30 study abroad countries."
       />
-      <div className="container mx-auto px-4 md:px-8 -mt-8 pb-16">
-        <div className="mx-auto max-w-3xl">
+      <div className="container mx-auto px-4 md:px-8 -mt-8 pb-32 md:pb-16">
+        <div ref={panelRef} className="mx-auto max-w-3xl scroll-mt-4">
           {step === "intro" && <Intro onStart={start} />}
           {typeof step === "number" && (
             <QuestionCard

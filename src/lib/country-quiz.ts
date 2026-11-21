@@ -170,7 +170,7 @@ function scoreCountry(slug: string, a: Answers): CountryMatch {
     marks: "Your marks fit typical entry requirements",
     budget: `About ${formatInr(cost)} a year — fits your budget`,
     english: "Your English score fits what universities ask",
-    language: pr.english >= 0.9 ? "Fully English-speaking" : "Many courses taught in English",
+    language: pr.english >= 0.9 ? "Fully English-speaking" : pr.english >= 0.6 ? "Many courses taught in English" : "A great fit since you are happy to learn the local language",
     plan: a.plan === "settle" ? "Good path to settle (PR) after studies" : a.plan === "work" ? "Good post-study work visa" : "Degree well valued by employers in India",
     work: "Part-time work allowed while studying",
     priority: a.priority === "cost" ? "One of the more affordable options" : a.priority === "ranking" ? "Home to top-ranked universities" : a.priority === "safety" ? "Very safe, with a smooth visa process" : "A short flight from India",
