@@ -1013,7 +1013,7 @@ function PostForm({
             value={text}
             onChange={(e) => setText(e.target.value)}
             required
-            maxLength={5000}
+            maxLength={10000}
             rows={5}
             className="mt-1 w-full rounded-xl border border-input bg-background px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary"
           />
