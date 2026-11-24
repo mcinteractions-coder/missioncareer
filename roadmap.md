@@ -7,3 +7,4 @@
 - [x] Replace comparison and calculator figures with official sourced numbers, show sources on both pages, add visa fee and flight rows, update tests.
 - [x] Add Education Loan EMI Calculator (SBI official rates, interest during study, budget calculator hand-off); link from homepage, tool menu, footer and sitemap.
 - [x] Add "Which country suits you?" quiz (8 questions, top 3 with match %, name + phone before full result saved as enquiries, shareable result card) with a homepage section.
+- [x] Expand University Finder to 500+ universities across all 30 study countries, with name/city search, more courses, university type filter, official website links and "show more".
