@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { UNIVERSITIES, FINDER_COUNTRIES, searchUniversities, type University } from "./universities";
+import { UNIVERSITIES, FINDER_COUNTRIES, searchUniversities, applyLinks, type University } from "./universities";
 
 const uni = (over: Partial<University>): University => ({
   id: "x", name: "Test University", country: "Germany", city: "Berlin", type: "Public",
@@ -47,5 +47,20 @@ describe("searchUniversities", () => {
   it("keeps only universities inside the chosen tuition band", () => {
     const list = [uni({ id: "free", tuitionUSD: 700 }), uni({ id: "mid", tuitionUSD: 20000 })];
     expect(searchUniversities({ budget: "Very Low" }, list).map((u) => u.id)).toEqual(["free"]);
+  });
+});
+
+
+describe("applyLinks", () => {
+  it("always starts with the university's own https site", () => {
+    for (const u of UNIVERSITIES) {
+      const l = applyLinks(u);
+      expect(l[0]?.url).toBe(u.website);
+      expect(l.every((x) => x.url.startsWith("https://"))).toBe(true);
+    }
+  });
+  it("adds UCAS for UK bachelor's universities", () => {
+    const uk = UNIVERSITIES.find((u) => u.country === "UK" && u.levels.includes("Bachelors"));
+    expect(uk && applyLinks(uk).some((l) => l.url.includes("ucas.com"))).toBe(true);
   });
 });

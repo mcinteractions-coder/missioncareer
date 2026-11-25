@@ -95,3 +95,24 @@ export function searchUniversities(f: FinderFilters, list: University[] = UNIVER
     })
     .sort((a, b) => (a.ranking ?? Infinity) - (b.ranking ?? Infinity) || a.name.localeCompare(b.name));
 }
+
+/** Official national application portals (used for bachelor's where a central system exists). */
+const NATIONAL_PORTALS: Record<string, { label: string; url: string; levels: Level[] }> = {
+  UK: { label: "Apply via UCAS", url: "https://www.ucas.com/undergraduate/applying-to-university", levels: ["Bachelors"] },
+  Ireland: { label: "Apply via CAO", url: "https://www.cao.ie/", levels: ["Bachelors"] },
+  Netherlands: { label: "Apply via Studielink", url: "https://www.studielink.nl/", levels: ["Bachelors", "Masters"] },
+  Sweden: { label: "Apply via University Admissions", url: "https://www.universityadmissions.se/", levels: ["Bachelors", "Masters"] },
+  Finland: { label: "Apply via Studyinfo", url: "https://studyinfo.fi/", levels: ["Bachelors", "Masters"] },
+  Denmark: { label: "Apply via Optagelse.dk", url: "https://optagelse.dk/", levels: ["Bachelors"] },
+  France: { label: "Apply via Campus France", url: "https://www.campusfrance.org/en/application-procedures-studies-in-France", levels: ["Bachelors", "Masters"] },
+};
+
+export type ApplyLink = { label: string; url: string };
+
+/** Direct apply links: the university's official site, plus a national portal when one exists. */
+export function applyLinks(u: University): ApplyLink[] {
+  const links: ApplyLink[] = [{ label: "Apply on university site", url: u.website }];
+  const portal = NATIONAL_PORTALS[u.country];
+  if (portal && portal.levels.some((l) => u.levels.includes(l))) links.push({ label: portal.label, url: portal.url });
+  return links;
+}

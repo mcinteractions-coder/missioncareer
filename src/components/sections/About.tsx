@@ -1,6 +1,7 @@
 import { Search, MapPin, GraduationCap, DollarSign, Award, X, ExternalLink, Building2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { searchUniversities, type FinderFilters, BUDGET_BANDS, FINDER_COUNTRIES, FINDER_COURSES, UNIVERSITIES } from "@/lib/universities";
+import { searchUniversities, type FinderFilters, type University, BUDGET_BANDS, FINDER_COUNTRIES, FINDER_COURSES, UNIVERSITIES } from "@/lib/universities";
+import { ApplyDialog } from "@/components/finder/ApplyDialog";
 import { Counter } from "@/components/Counter";
 import { fetchPosts, type Post } from "@/lib/content-store";
 
@@ -37,6 +38,7 @@ export function About() {
   const [filters, setFilters] = useState<FinderFilters>({});
   const [submitted, setSubmitted] = useState(false);
   const [shown, setShown] = useState(PAGE);
+  const [applyTo, setApplyTo] = useState<University | null>(null);
   const [admits, setAdmits] = useState<Post[]>([]);
 
   useEffect(() => {
@@ -179,6 +181,9 @@ export function About() {
                             Official website <ExternalLink className="h-3 w-3" />
                           </a>
                         </div>
+                        <button type="button" onClick={() => setApplyTo(u)} className="mt-3 w-full rounded-xl bg-primary py-2 text-xs font-semibold text-primary-foreground hover:opacity-90">
+                          Apply now
+                        </button>
                       </div>
                     ))}
                     {results.length > shown && (
@@ -191,6 +196,7 @@ export function About() {
                     )}
                   </div>
                 )}
+                <ApplyDialog uni={applyTo} onClose={() => setApplyTo(null)} />
                 <p className="mt-4 text-[11px] leading-relaxed text-muted-foreground">
                   Ranks are from the QS World University Rankings 2026. Fees and test scores are typical figures for international students and change every year, so please check the university website or ask our counsellors before applying.
                 </p>
